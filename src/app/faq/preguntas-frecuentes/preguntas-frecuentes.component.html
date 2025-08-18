@@ -1,0 +1,53 @@
+<section class="faq-wrapper">
+  <div class="faq-container">
+
+    <!-- Logo dentro del contenedor -->
+    <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 1rem;">
+      <img
+        [src]="logoUrl" 
+        alt="Logo de la rifa"
+        style="width: 100px; height: auto; object-fit: contain; filter: drop-shadow(0 0 4px #ffc107);"
+      />
+    </div>
+
+    <h1>Preguntas Frecuentes</h1>
+
+    <div class="faq-item">
+      <h2>¿Cómo se elige al ganador?</h2>
+      <p>
+        El ganador se selecciona con base en los números de la Lotería Nacional en la fecha indicada del sorteo.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h2>¿Qué pasa si el boleto ganador no está vendido?</h2>
+      <p>
+        Si el número ganador no fue adquirido, se seleccionará el boleto más cercano en orden ascendente.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h2>¿Cómo puedo pagar mis boletos?</h2>
+      <p>
+        Puedes realizar tu pago por transferencia bancaria, depósito en OXXO o mediante otros métodos indicados en la sección Métodos de Pago.
+      </p>
+    </div>
+
+    <div class="faq-item">
+      <h2>¿Dónde se publican los resultados?</h2>
+      <p>
+        Los resultados se publicarán en esta página web y se notificarán por WhatsApp.
+      </p>
+    </div>
+
+    <button class="whatsapp" (click)="contactarWhatsApp()">
+      Contactar por WhatsApp
+    </button>
+  </div>
+</section>
+
+<section style="background-color: #000; padding: 2rem 0;">
+ <app-dibek-information></app-dibek-information>
+</section>
+
+<app-bottom-nav></app-bottom-nav>

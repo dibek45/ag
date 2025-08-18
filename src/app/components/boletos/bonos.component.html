@@ -1,0 +1,25 @@
+<section class="bonos">
+  <h2>Precio de Boletos</h2>
+  <ul>
+    <li *ngFor="let b of boletos">
+      <span class="icono-boleto">🎟️</span>
+      <strong>{{ b.cantidad }} boleto{{ b.cantidad > 1 ? 's' : '' }}</strong>:
+      <span class="precio">${{ b.precio }} MXN</span>
+    </li>
+  </ul>
+
+<p class="fb-link" *ngIf="sorteo && sorteo.linkfacebook">
+  <a [href]="sorteo.linkfacebook" target="_blank">
+    <img style="width: 50px;"
+      src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
+      alt="Facebook"
+      width="20"
+    />
+    <strong>{{ sorteo.nombreEmpresa || 'Sorteo' }}</strong>
+  </a>
+</p>
+
+</section>
+
+
+

@@ -1,0 +1,27 @@
+<div>
+ 
+
+  <app-menu-settings 
+    *ngIf="mostrarMenu && menuAbierto" 
+    (cerrar)="toggleMenu()">
+  </app-menu-settings>
+
+  <button 
+    *ngIf="mostrarMenu" 
+    class="menu-icon" 
+    (click)="toggleMenu()">
+    ☰
+  </button>
+
+  <button class="btn-buscar" (click)="buscarBoleto()">
+    🔍 Buscar Cita
+  </button>
+
+  <div class="boletos-container">
+    <!-- Aquí va el calendario -->
+<router-outlet></router-outlet>
+  </div>
+
+  <app-whatsapp-button></app-whatsapp-button>
+  <app-bottom-nav></app-bottom-nav>
+</div>

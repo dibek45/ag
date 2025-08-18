@@ -1,0 +1,10 @@
+<div class="dashboard-container" *ngIf="!hideContent">
+  <!-- Header -->
+  <div class="header">
+
+   <app-view-toggle (today)="goToToday()"></app-view-toggle>
+
+  </div>
+
+  <router-outlet></router-outlet>
+</div>

@@ -1,0 +1,104 @@
+.container {
+  padding: 16px;
+  text-align: center;
+  font-family: sans-serif;
+}
+
+h2 {
+  margin-bottom: 8px;
+  font-size: 20px;
+}
+
+h3 {
+  margin-bottom: 16px;
+  font-weight: normal;
+  color: #6b7280;
+}
+
+.slots {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0;
+
+  button {
+    padding: 14px;
+    border-radius: 10px;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    background: #f3f4f6;
+    transition: 0.2s;
+
+    &.selected {
+      background: #7c3aed;
+      color: white;
+      font-weight: bold;
+    }
+
+    &.occupied {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.modal input {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+
+  button {
+    flex: 1;
+    margin: 0 5px;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .cancel {
+    background: #f87171;
+    color: white;
+  }
+
+  .confirm {
+    background: #34d399;
+    color: white;
+  }
+}

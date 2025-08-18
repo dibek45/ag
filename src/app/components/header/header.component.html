@@ -1,0 +1,24 @@
+<!-- Menú superior -->
+<header *ngIf="tipoMenu === 1 && numeroSorteo" class="header">
+  <div class="logo">
+    <a [routerLink]="['/', numeroSorteo]">
+<img [src]="logoUrl" alt="Logo de la rifa" width="100" (error)="logoFallback()" />
+    </a>
+  </div>
+  <nav class="nav">
+    <a [routerLink]="['/', numeroSorteo]" routerLinkActive="active">Inicio</a>
+    <a [routerLink]="['/', numeroSorteo, 'boletos']" routerLinkActive="active">Boletos</a>
+    <a [routerLink]="['/', numeroSorteo, 'pagos']" routerLinkActive="active">Pago</a>
+    <a [routerLink]="['/', numeroSorteo, 'faq']" routerLinkActive="active">FAQ</a>
+    <a [routerLink]="['/', numeroSorteo, 'contacto']" routerLinkActive="active">Contacto</a>
+  </nav>
+</header>
+
+<!-- Menú inferior -->
+<nav *ngIf="tipoMenu === 2 && numeroSorteo" class="bottom-nav">
+  <a [routerLink]="['/', numeroSorteo]" routerLinkActive="active"><i class="fa fa-home"></i><span>Inicio</span></a>
+  <a [routerLink]="['/', numeroSorteo, 'boletos']" routerLinkActive="active"><i class="fa fa-ticket"></i><span>Boletos</span></a>
+  <a [routerLink]="['/', numeroSorteo, 'pagos']" routerLinkActive="active"><i class="fa fa-credit-card"></i><span>Pago</span></a>
+  <a [routerLink]="['/', numeroSorteo, 'faq']" routerLinkActive="active"><i class="fa fa-question-circle"></i><span>FAQ</span></a>
+  <a [routerLink]="['/', numeroSorteo, 'contacto']" routerLinkActive="active"><i class="fa fa-phone"></i><span>Contacto</span></a>
+</nav>

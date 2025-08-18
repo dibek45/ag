@@ -1,0 +1,30 @@
+<div class="machine">
+  <div class="status" *ngIf="!rolling">
+    Máquina de 🎲 
+  </div>
+  <div class="status" *ngIf="rolling">rolling...</div>
+
+<div class="slots">
+  <div class="highlight-markers">❯</div>
+
+  <div class="reel" *ngFor="let r of reels; let i = index">
+    <div
+      class="reel-inner"
+      [style.transform]="reelTransforms[i]"
+      [ngClass]="reelClasses[i]"
+    >
+      <div class="digit" *ngFor="let n of numbers">{{ n }}</div>
+    </div>
+  </div>
+
+  <div class="highlight-markers">❮</div>
+</div>
+
+
+
+
+</div>
+
+
+
+

@@ -1,0 +1,25 @@
+<div class="full-menu">
+  <div class="menu-header">
+    <h2><i class="fa-solid fa-bars"></i> </h2>
+    <button class="close-btn" (click)="onCerrar()">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
+  </div>
+<div class="menu-section">
+  <h3><i class="fa-solid fa-calendar-check" (click)="goToSorteo()"></i> Ver mi agenda</h3>
+  <ul>
+    <li><i class="fa-solid fa-calendar-day"></i> Citas del día de hoy</li>
+    <li><i class="fa-solid fa-clock"></i> Cambiar tiempo de cita</li>
+    <li><i class="fa-solid fa-business-time"></i> Cambiar horarios</li>
+    <li><i class="fa-solid fa-ban"></i> Días inhábiles</li>
+    <li><i class="fa-solid fa-file-export"></i> Exportar datos</li>
+  </ul>
+</div>
+
+
+  <div class="menu-section">
+    <ul>
+      <li (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</li>
+    </ul>
+  </div>
+</div>

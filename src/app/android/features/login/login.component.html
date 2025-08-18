@@ -1,0 +1,60 @@
+<div class="screen">
+  <app-btn-regresar [url]="'/'" class="back"></app-btn-regresar>
+
+  <div class="login-container">
+    <img src="assets/icon/tiket.svg" alt="Ticket" class="ticket-icon" />
+
+    <h1>{{ modoRegistro ? 'Crea tu cuenta' : 'Inicia sesión' }}</h1>
+    <p class="subtitle">
+      {{ modoRegistro ? 'Regístrate para administrar tus rifas'
+                      : 'Accede para crear y administrar tus rifas' }}
+    </p>
+
+    <form #f="ngForm" (ngSubmit)="onSubmit(f)">
+      <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          [(ngModel)]="username"
+          required
+          placeholder="tuemail@ejemplo.com" />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Contraseña</label>
+        <input
+          id="password"
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          required
+          placeholder="••••••••" />
+      </div>
+
+
+   <!-- Botón para enviar el formulario de inicio de sesión o registro.
+     - Si `modoRegistro` es true, el texto del botón será "Registrarme".
+     - Si `modoRegistro` es false, el texto del botón será "Entrar".
+     El tipo "submit" permite que, al hacer clic, se envíe el formulario asociado. 
+
+      <p class="register-text">
+      <a (click)="toggleModo()" role="button">
+        {{ modoRegistro ? '¿Ya tienes cuenta? Inicia sesión'
+                        : '¿No tienes cuenta? Regístrate' }}
+      </a>
+    </p>
+-->
+    <button type="submit" class="btn-login">
+  {{ modoRegistro ? 'Registrarme' : 'Entrar' }}
+</button>
+    </form>
+
+   
+
+    <button type="button" class="btn-invitado" (click)="usarSinRegistrarse()">
+      Usar sin registrarse (Gratis)
+    </button>
+  </div>
+</div>

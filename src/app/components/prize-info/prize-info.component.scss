@@ -1,0 +1,46 @@
+.prize-info {
+  text-align: center;
+    margin-bottom: -20px;
+
+  .title {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .date {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .image img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 8px;
+  }
+
+  .price {
+    margin-top: 1rem;
+    font-size: 1.2rem;
+  }
+}
+.bono {
+  background-color: #1a1a1a;
+  color: #ccc;
+  padding: 0.8rem;
+  font-size: 0.95rem;
+  border-radius: 8px;
+  line-height: 1.5;
+  animation: shine 3s ease-in-out infinite;
+  box-shadow: 0 0 10px #ffc10733; // sutil brillo inicial
+  transition: all 0.3s ease;
+}
+
+/* ✨ Brillo suave */
+@keyframes shine {
+  0%, 100% {
+    box-shadow: 0 0 10px #ffc10733;
+  }
+  50% {
+    box-shadow: 0 0 20px #ffc107aa, 0 0 30px #ffc10766;
+  }
+}

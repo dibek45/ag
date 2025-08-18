@@ -1,0 +1,42 @@
+<div *ngIf="boleto" class="boleto-card"  [ngClass]="boleto.estado">
+  <div class="icon-header">
+    <span class="emoji">🎟️</span>
+    <span class="title">BOLETO GENERADO</span>
+  </div>
+
+  <h2 class="pelirroja">🧑‍🦰 {{ boleto.sorteo?.nombre || 'SORTEO DESCONOCIDO' }}</h2>
+  <hr class="divider" />
+
+  <div class="contenido-boleto">
+    <h3>🎫 BOLETO GENERADO</h3>
+    <h2>🧑‍🦰 {{ boleto.sorteo?.nombre || 'SORTEO DESCONOCIDO' }}</h2>
+
+    <p>
+      <span class="label">Número del boleto:</span><br />
+      <span class="valor">{{ boleto.numero }}</span>
+    </p>
+
+    <p>
+      <span class="label">Nombre del participante:</span><br />
+      👤 {{ boleto.comprador?.nombre || 'Sin nombre' }}
+    </p>
+
+    <p>
+      <span class="label">Estado:</span><br />
+      📍 
+      <span [ngClass]="{
+  'text-green': boleto.estado === 'disponible',
+  'text-yellow': boleto.estado === 'ocupado',
+  'text-red': boleto.estado === 'pagado'
+}">
+  {{ boleto.estado === 'ocupado' ? 'apartado' : boleto.estado }}
+</span>
+
+    </p>
+
+    <p>
+      <span class="label">Fecha de compra:</span><br />
+      🗓️ {{ boleto.fechaCompra ? (boleto.fechaCompra | date: 'long') : 'Sin registrar' }}
+    </p>
+  </div>
+</div>

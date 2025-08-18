@@ -1,0 +1,27 @@
+<!-- Rango de la semana -->
+<h2>{{ currentWeekRange }}</h2>
+
+<!-- Días de la semana -->
+<div class="week-days">
+  <div
+    class="day"
+    *ngFor="let day of weekDays"
+    [class.selected]="selectedDay?.toDateString() === day.date.toDateString()"
+    (click)="selectDay(day.date)"
+  >
+    <div class="day-name">{{ day.name }}</div>
+    <div class="day-number">{{ day.date | date: 'd' }}</div>
+  </div>
+</div>
+
+<!-- Eventos -->
+<div class="event-list" *ngIf="selectedEvents.length > 0">
+  <h3>Eventos del día</h3>
+  <div class="event-card" *ngFor="let event of selectedEvents">
+    <div class="event-title">{{ event.title }}</div>
+    <div class="event-time">{{ event.time }}</div>
+  </div>
+</div>
+
+<!-- Apartado de citas (componente hijo) -->
+<app-today-view-apartar *ngIf="selectedDay" [inputDate]="selectedDay"></app-today-view-apartar>

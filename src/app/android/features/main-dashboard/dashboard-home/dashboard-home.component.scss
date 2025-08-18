@@ -1,0 +1,121 @@
+:host {
+  display: block;
+  background-color: #f1f5f9; // gris azulado claro
+  min-height: 110vh;
+   display: flex;
+  flex-direction: column;
+  background-color: #f1f5f9;
+  height: 100vh; // <-- exactamente el alto de la pantalla
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenedor general de cada sorteo */
+.dashboard-container {
+  padding: 1.5rem;
+  margin: 2rem 1rem;
+  border-radius: 1rem;
+  background-color: white;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Título arriba de cada bloque */
+.sorteo-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1e293b; // slate-800
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* Organización horizontal */
+.top-wrapper {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.top-wrapper app-top-buyers,
+.top-wrapper app-top-sellers {
+  flex: 1 1 calc(50% - 0.5rem);
+  min-width: 50px;
+}
+.sorteo-header {
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  text-align: left;
+  width: 100%;
+  padding: 1rem;
+  border-radius: 1rem;
+  color: #1e293b;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+.total-raffles-card {
+  background-color: white;
+  border-radius: 1.25rem;
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.sorteo-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; // Ajusta si quieres más o menos separación
+  padding-top: 1rem;
+}
+.card {
+  background-color: #f8fafc; // slate-50, un gris azul muy claro
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+.menu-icon {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 3000;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+}
+.btn-ir {
+  background: linear-gradient(135deg, #ff9800, #ff5722); /* degradado naranja */
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+
+.btn-ir:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.25);
+}
+
+.btn-ir:active {
+  transform: scale(0.97);
+}
+
+.btn-ir:focus {
+  outline: none;
+}

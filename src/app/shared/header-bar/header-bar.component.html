@@ -1,0 +1,15 @@
+<div
+  class="header-bar"
+  [ngStyle]="backgroundColor ? { 'background-color': backgroundColor } : {}"
+>
+  <button (click)="goBack()">
+    <span class="material-icons">arrow_back</span>
+  </button>
+  <h2>{{ title }}</h2>
+  
+  
+  <button (click)="onHelpClick()">
+  <span class="material-icons">{{ icon }}</span>
+</button>
+
+</div>

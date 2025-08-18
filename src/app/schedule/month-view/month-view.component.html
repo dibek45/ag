@@ -1,0 +1,32 @@
+<div class="nav-controls">
+  <!-- Fila superior: mes centrado -->
+  <div class="month-label">
+    {{ currentMonthLabel | titlecase }}
+  </div>
+
+  <!-- Fila inferior: botones -->
+  <div class="nav-buttons">
+    <button (click)="prevMonth()">← Prev</button>
+    <button (click)="setToday()">Hoy</button>
+    <button (click)="nextMonth()">Next →</button>
+  </div>
+</div>
+
+<div class="calendar">
+  <!-- encabezado con días de la semana -->
+  <div class="calendar-header">
+    <span *ngFor="let d of ['Dom','Lun','Mar','Mié','Jue','Vie','Sáb']">
+      {{ d }}
+    </span>
+  </div>
+
+  <!-- días del mes -->
+  <div class="calendar-days">
+    <div *ngFor="let day of daysInMonth"
+         class="calendar-day"
+         [class.today]="isToday(day)"
+         (click)="day && goToDay(day)">
+      <span>{{ day ? (day | date:'d') : '' }}</span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,188 @@
+.buscar-boleto {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem;
+  background: #000;
+  min-height: 100vh;
+
+  .search-bar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    max-width: 360px;
+    gap: 0.5rem;
+    background: #072c5d;
+    border-radius: 12px;
+    padding: 10px 12px;
+    box-shadow: 0 3px 6px rgba(255, 193, 7, 0.2);
+
+    .input-container {
+      position: relative;
+      flex: 1;
+
+      input {
+        width: 100%;
+        padding: 10px 36px 10px 12px;
+        border-radius: 8px;
+        border: none;
+        font-size: 1rem;
+        background: #001a38;
+        color: #ffc107;
+      }
+
+      .clear-btn {
+        position: absolute;
+        top: 50%;
+        right: -40px;
+        transform: translateY(-50%);
+        background: transparent;
+        border: none;
+        font-size: 1.2rem;
+        color: #ffc107;
+        cursor: pointer;
+
+        &:hover {
+          color: #f87171;
+        }
+      }
+    }
+
+    .generar-btn {
+      margin-left: 50px;
+      padding: 10px 14px;
+      background: #ffc107;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #072c5d;
+      white-space: nowrap;
+    }
+  }
+
+  app-boleto-item-information {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .boleto {
+    background: #072c5d;
+    color: #ffc107;
+    border: 3px solid #ffc107;
+    border-radius: 20px;
+    padding: 24px 20px;
+    width: 360px;
+    font-family: 'Segoe UI', sans-serif;
+    position: relative;
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.35);
+
+    clip-path: polygon(
+      0% 0%, 100% 0%, 100% 100%, 0% 100%,
+      0% calc(100% - 20px), 5% calc(100% - 20px),
+      5% 20px, 0% 20px
+    );
+
+    h3 {
+      margin: 0;
+      font-size: 1.1rem;
+      font-weight: bold;
+    }
+
+    h2 {
+      margin: 6px 0 18px;
+      font-size: 1.35rem;
+      font-weight: bold;
+    }
+
+    .big {
+      font-size: 2.1rem;
+      font-weight: bold;
+    }
+
+    p {
+      margin: 12px 0;
+      line-height: 1.4;
+      word-wrap: break-word;
+    }
+  }
+}
+
+// Centrar el componente del boleto
+app-boleto-item-information {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+// Estilo para input + botón de limpiar
+.input-container {
+  position: relative;
+  width: 100%;
+  max-width: 360px;
+
+  input {
+    width: 100%;
+    padding: 0.6rem 2.5rem 0.6rem 0.8rem;
+    border-radius: 12px;
+    border: none;
+    font-size: 1rem;
+    background: #001a38;
+    color: #ffc107;
+  }
+
+  .clear-btn {
+    position: absolute;
+    right: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #888;
+
+    &:hover {
+      color: #f87171;
+    }
+  }
+}
+.top-bar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.btn-back {
+  background: transparent;
+  border: none;
+  color: #ffc107;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.2);
+  }
+}
+.boleto-libre-alerta {
+  text-align: center;
+  margin-top: 1rem;
+
+  .btn-apartar {
+    background-color: #22c55e;
+    color: white;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 999px;
+    font-weight: bold;
+    cursor: pointer;
+
+    &:hover {
+      background-color: #16a34a;
+    }
+  }
+}

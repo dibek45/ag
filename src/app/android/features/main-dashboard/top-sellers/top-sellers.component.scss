@@ -1,0 +1,54 @@
+.top-card {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  font-family: 'Segoe UI', sans-serif;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 110px;
+}
+
+.icon-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+.text .title {
+  margin: 0;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+.text .subtitle {
+  margin: 0;
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.result {
+  text-align: right;
+}
+
+.name {
+  display: block;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.count {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+.card {
+  background-color: #f8fafc; // slate-50, un gris azul muy claro
+  border-radius: 1rem;
+  padding: 1rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}

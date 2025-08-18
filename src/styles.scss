@@ -1,0 +1,61 @@
+:root {
+  --color-primary: #1A73E8;
+  --color-secondary: #F4B63F;
+  --color-text-main: #1E1E1E;
+  --color-text-secondary: #555555;
+  --color-bg-main: #FFFFFF;
+  --color-bg-alt: #F8F9FA;
+  --color-error: #E53935;
+  --color-success: #43A047;
+}
+
+body {
+  background-color: var(--color-bg-main);
+  color: var(--color-text-main);
+  font-family: 'Inter', sans-serif;
+}
+
+button.primary {
+  background-color: var(--color-primary);
+  color: var(--color-bg-main);
+  border: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.secondary {
+  background-color: var(--color-bg-main);
+  color: var(--color-primary);
+  border: 2px solid var(--color-primary);
+  padding: 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+/* Elimina bordes y márgenes globales */
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+/* Si algún contenedor general tenía blanco */
+* {
+  box-sizing: border-box;
+}
+
+.sorteo-card,
+.sorteo-container {
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+/* Asegurar que las imágenes ocupen todo sin borde */
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+}

@@ -1,0 +1,25 @@
+body {
+  min-height: 100vh; /* se asegura de llenar la pantalla */
+  background-color: #fff;
+}
+.main-app {
+  position: relative;
+  padding-bottom: 60px; // espacio para el banner
+}
+
+.premium-btn {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  background: gold;
+  color: black;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.premium-btn:hover {
+  background: orange;
+}

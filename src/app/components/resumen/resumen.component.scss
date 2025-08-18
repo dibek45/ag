@@ -1,0 +1,69 @@
+.boletos-generados {
+  position: fixed;
+  bottom: 140px; // un poco arriba del botón
+  left: 50%;
+  transform: translateX(-50%);
+  background: #2e3b48;
+  padding: 1rem;
+  border-radius: 1rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  z-index: 999;
+
+  width: 83%;
+  max-width: 400px; // 💥 igual que el botón
+
+  h3 {
+    margin-bottom: 10px;
+    color: white;
+  }
+
+  .boletos-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); // 💥 5 por fila
+    gap: 10px;
+    justify-items: center;
+  }
+
+  app-boleto-item {
+    width: 100%;
+    max-width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.start-button {
+  background-color: #30a179;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+  width: 90%;
+  max-width: 400px;
+  margin-top: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+
+.confirmar {
+  position: fixed;
+  bottom: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 400px;
+  padding: 1rem 2rem;
+  background-color: #30a179;
+  border-radius: 15px;
+  color: white;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+

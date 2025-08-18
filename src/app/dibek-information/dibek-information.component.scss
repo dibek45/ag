@@ -1,0 +1,74 @@
+.splash-card-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: transparent; // o el color base
+  padding: 1.5rem 0 2rem;
+  margin: 0 auto; // ❌ elimina margin-top negativo
+}
+
+.splash-card {
+  background: #0e1621;
+  color: white;
+  padding: 2rem;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  text-align: center;
+  max-width: 90%;
+  width: 220px;
+  margin: 0 auto;
+
+  .ticket-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: #ff3e9e;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .nombre {
+    font-size: 1.1rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .telefono {
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+
+    img.icono-wp {
+      width: 20px;
+      height: 20px;
+      filter: drop-shadow(0 0 2px #00e676);
+    }
+  }
+
+  .dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 1rem;
+
+    span {
+      width: 10px;
+      height: 10px;
+      background: rgb(13, 8, 8);
+      border-radius: 50%;
+      animation: bounce 1.4s infinite ease-in-out;
+    }
+
+    span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+  }
+}

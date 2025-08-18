@@ -1,0 +1,130 @@
+.screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #1f1f1f; // fondo general oscuro
+  color: white;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  font-family: 'Segoe UI', sans-serif;
+    padding-bottom: 120px; // 🟢 Asegura espacio al fondo para ver botones
+
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.amount-section {
+  background-color: #2b2b2e;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  text-align: center;
+  width: 100%;
+  max-width: 300px;
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  color: #ccc;
+  font-size: 0.9rem;
+  letter-spacing: 1px;
+}
+
+.value {
+  font-size: 3.5rem;
+  font-weight: bold;
+  color: #30a179;
+  margin-top: 0.3rem;
+  letter-spacing: -2px;
+}
+
+.instruction {
+  color: #eee;
+  font-size: 1rem;
+  text-align: center;
+}
+
+app-tombola {
+  margin-top: 1rem;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.total {
+  margin-top: 1rem;
+  font-weight: bold;
+  font-size: 1rem;
+  color: white;
+}
+
+.start-button {
+  background-color: #30a179;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+  width: 90%;
+  max-width: 400px;
+  margin-top: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+.boletos-generados {
+  margin-top: -10px;
+  text-align: center;
+
+  h3 {
+    margin-bottom: 10px;
+    color: white;
+  }
+
+  .boletos-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    justify-items: center;
+  }
+}
+.boletos-generados {
+  text-align: center;
+  margin-top: 1rem;
+
+  .boletos-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px; // controla espacio entre boletos
+  }
+
+  app-boleto-item {
+    flex: 0 1 calc(20% - 8px); // 5 por fila considerando el gap
+    max-width: 60px;
+    box-sizing: border-box;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    // Si necesitas reducir visualmente el tamaño sin afectar layout:
+
+  }
+}
+
+
+@keyframes resplandor {
+  0%, 100% {
+    box-shadow: 0 0 10px #30a179, 0 0 20px #30a179, 0 0 30px #30a179;
+  }
+  50% {
+    box-shadow: 0 0 20px #4fe4b2, 0 0 30px #4fe4b2, 0 0 40px #4fe4b2;
+  }
+}
+
+.boton-animado {
+  animation: resplandor 1.2s ease-in-out infinite;
+}
+

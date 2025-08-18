@@ -1,0 +1,23 @@
+<div class="overlay">
+  <div class="modal">
+    <h2>📲 Datos para confirmar</h2>
+
+    <label>Nombre</label>
+    <input [(ngModel)]="nombre" placeholder="Tu nombre completo" />
+    <small *ngIf="nombreInvalido" class="error">Nombre muy corto (mínimo 3 letras).</small>
+
+    <label>Teléfono</label>
+    <input [(ngModel)]="telefono" placeholder="10 dígitos" />
+    <small *ngIf="telefonoInvalido" class="error">Debe tener exactamente 10 dígitos.</small>
+
+    <div class="acciones">
+      <button (click)="cancelar()">Cancelar</button>
+      <button
+        [disabled]="nombreInvalido || telefonoInvalido"
+        (click)="confirmar()"
+      >
+        Confirmar
+      </button>
+    </div>
+  </div>
+</div>

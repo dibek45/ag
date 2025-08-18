@@ -1,0 +1,32 @@
+<div class="container">
+  <h2>📅 {{ date }}</h2>
+  <h3>Selecciona tu horario</h3>
+
+  <div class="slots">
+    <button
+      *ngFor="let slot of timeSlots"
+      [disabled]="!slot.available"
+      [class.selected]="slot.selected"
+      [class.occupied]="!slot.available"
+      (click)="selectSlot(slot)"
+    >
+      {{ slot.time }}
+    </button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal-backdrop" *ngIf="showModal">
+    <div class="modal">
+      <h3>Confirmar cita</h3>
+      <p>¿Deseas apartar la cita a las <b>{{ selectedTime }}</b>?</p>
+
+      <input type="text" placeholder="Nombre del cliente" [(ngModel)]="clientName" />
+      <input type="tel" placeholder="Teléfono del cliente" [(ngModel)]="clientPhone" />
+
+      <div class="modal-actions">
+        <button class="cancel" (click)="closeModal()">Cancelar</button>
+        <button class="confirm" (click)="confirmBooking()">Confirmar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="codigo-container">
+  <app-btn-regresar [url]="'/'"></app-btn-regresar>
+
+  <img src="assets/icon/tiket.svg" alt="Ticket" class="ticket-icon" />
+
+  <h1>Ingresar código</h1>
+  <p class="subtitle">Ingresa el código que te dio el organizador</p>
+
+  <form (ngSubmit)="continuar()" #f="ngForm">
+    <input
+      type="text"
+      placeholder="Ingresa el código"
+      class="codigo-input"
+      name="codigo"
+      [(ngModel)]="codigo"
+      required
+    />
+    <button type="submit" class="btn-continuar" [disabled]="!f.valid">
+      Continuar
+    </button>
+  </form>
+</div>

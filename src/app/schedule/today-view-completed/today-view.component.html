@@ -1,0 +1,15 @@
+<div class="today-container">
+  <h2>Appointments</h2>
+  <p>{{ date | date:'fullDate' }}</p>
+
+  <div class="appointment-card" *ngFor="let a of appointments" [style.background]="a.color">
+    <div class="time">{{ a.time }}</div>
+    <div class="details">
+      <div class="service">{{ a.service }}</div>
+      <div class="duration">{{ a.duration }}</div>
+      <div class="client">{{ a.client }}</div>
+    </div>
+  </div>
+
+  <button class="add-btn">+</button>
+</div>

@@ -1,0 +1,64 @@
+:host {
+  display: block;
+  background: #111;
+  color: #fff;
+  min-height: 100vh;
+  font-family: 'Arial', sans-serif;
+}
+
+.home-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.2rem;
+  text-align: center;
+}
+
+.logo {
+  width: 80px;
+  margin-bottom: 1rem;
+}
+
+.titulo {
+  font-size: 1.8rem;
+  margin: 1rem 0;
+  font-weight: 700;
+}
+
+
+.imagen-premio img {
+  width: 100%;
+  max-width: 400px;
+  border-radius: 10px;
+  margin: 1.5rem 0;
+}
+
+.btn-ver-boletos {
+  display: block;
+  background: #eab308;
+  color: #111;
+  text-decoration: none;
+  padding: 1rem;
+  border-radius: 8px;
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+.whatsapp {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: #25d366;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    color: white;
+    font-size: 1.8rem;
+  }
+}
+

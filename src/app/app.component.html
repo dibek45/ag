@@ -1,0 +1,4 @@
+<app-splash-screen *ngIf="cargando"></app-splash-screen>
+
+<!-- Contenido de la aplicación -->
+<router-outlet *ngIf="!cargando"></router-outlet>

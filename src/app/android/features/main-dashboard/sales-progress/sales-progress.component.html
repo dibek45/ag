@@ -1,0 +1,8 @@
+<div class="card sales-progress-card " *ngIf="progress.length > 0">
+  <h3>Progreso de ventas</h3>
+  <div class="progress-bar">
+    <div class="progress-fill" [style.width.%]="progress[progress.length - 1]">
+      {{ progress[progress.length - 1] }}%
+    </div>
+  </div>
+</div>

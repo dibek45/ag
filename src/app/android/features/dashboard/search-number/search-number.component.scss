@@ -1,0 +1,114 @@
+.search-container {
+  position: relative;
+  padding: 10px;
+
+  input {
+    width: 100%;
+    padding: 12px 36px 12px 12px; // ← espacio a la derecha para la ❌
+    border-radius: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+  }
+
+  .clear-btn {
+    position: absolute;
+    right: 22px; // ← dentro del input
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: #999;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      color: #333;
+    }
+  }
+}
+
+
+.resultados {
+  margin-top: 10px;
+
+  .item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+
+    .avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      margin-right: 12px;
+    }
+
+    .info {
+      flex: 1;
+      strong {
+        display: block;
+      }
+      small {
+        color: gray;
+      }
+    }
+
+    .estado {
+      font-weight: bold;
+      &.pagado {
+        color: green;
+      }
+      &.ocupado {
+        color: orange;
+      }
+      &.disponible {
+        color: blue;
+      }
+    }
+  }
+}
+
+
+.item {
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+.item:hover {
+  background: #f0f0f0;
+}
+.resultados {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  margin-top: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.item {
+  padding: 8px 12px;
+  border-bottom: 1px solid #eee;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+
+  &:hover {
+    background: #efefef;
+  }
+
+  .info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .badge {
+    background-color: #2196f3;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    height: fit-content;
+    align-self: center;
+  }
+}

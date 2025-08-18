@@ -1,0 +1,36 @@
+<!-- Card principal -->
+<div class="top-card purple card" (click)="openModal()">
+  <div class="icon-label">
+    <span class="icon">👥</span>
+    <div class="text">
+      <p class="title">Top</p>
+      <p class="subtitle">compradores</p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal con top 10 -->
+<div class="modal-overlay" *ngIf="modalVisible" (click)="closeModal()">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <h3 class="modal-title">Top 10 compradores</h3>
+    <ul class="buyer-list">
+      <li *ngFor="let buyer of top10" class="buyer-item">
+        <div class="buyer-info">
+          <span class="name">{{ buyer.nombre }}</span>
+          <span class="amount">{{ buyer.totalBoletos }} boletos</span>
+        </div>
+        <a 
+          *ngIf="buyer.telefono" 
+          [href]="whatsappLink(buyer.telefono)" 
+          target="_blank" 
+          class="wp-button" 
+          title="Enviar WhatsApp"
+        >
+          <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp" />
+        </a>
+      </li>
+    </ul>
+    <button class="close-btn" (click)="closeModal()">Cerrar</button>
+  </div>
+</div>

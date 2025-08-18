@@ -1,0 +1,46 @@
+<section class="buscar-boleto">
+  <div class="search-bar">
+    <!-- Botón atrás -->
+    <button class="btn-back" (click)="volverABoletos()" aria-label="Volver">
+      ←
+    </button>
+
+    <!-- Input + botón de limpiar -->
+    <div class="input-container">
+      <input
+        type="text"
+        [(ngModel)]="termino"
+        (input)="buscar()"
+        (keyup.enter)="buscar()"
+        (blur)="buscar()"
+        placeholder="Buscar por boleto"
+      />
+      <button
+        *ngIf="termino"
+        class="clear-btn"
+        (click)="limpiar()"
+        aria-label="Limpiar"
+      >
+        ✖
+      </button>
+    </div>
+
+    <!-- Botón Generar -->
+    <button class="generar-btn" (click)="buscar()">Generar</button>
+  </div>
+
+ <!-- Si el boleto está disponible -->
+<div *ngIf="boletoDisponible() as boleto" class="boleto-libre-alerta">
+  <p>🎟️ El boleto <strong>#{{ boleto.numero }}</strong> está disponible.</p>
+  <button (click)="apartarParaMi(boleto)" class="btn-apartar">
+    Seleccionar boleto para apartar 
+  </button>
+</div>
+
+<!-- Si el boleto ya está ocupado/pagado -->
+<app-boleto-item-information
+  *ngIf="boletoEncontrado()"
+  [boleto]="boletoEncontrado()"
+/>
+
+</section>

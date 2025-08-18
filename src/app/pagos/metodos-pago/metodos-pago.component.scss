@@ -1,0 +1,77 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  background-color: #121212; // fondo general oscuro
+}
+
+.pago-container {
+  min-height: 100vh; // ocupa todo el alto de la pantalla
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  background: #1f1f1f;
+  color: #eee;
+  border-radius: 0;
+  box-shadow: none;
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+    color: #a78bfa;
+  }
+
+  h2 {
+    font-size: 1.2rem;
+    margin-bottom: 1.5rem;
+    color: #d8b4fe;
+  }
+
+  .pago-card {
+    background: #2d2d2d;
+    border: 1px solid #3f3f3f;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+
+    .icono img {
+      width: 50px;
+      margin-bottom: 1rem;
+      filter: brightness(1.2);
+    }
+
+    .label {
+      font-weight: 600;
+      color: #a78bfa;
+      margin: 0.5rem 0 0.2rem;
+    }
+
+    .dato {
+      font-size: 1.1rem;
+      color: #fff;
+      word-break: break-word;
+    }
+  }
+
+  .whatsapp {
+    display: inline-block;
+    background: #25d366;
+    color: #111;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  .whatsapp:hover {
+    background: #1ebe5d;
+  }
+}

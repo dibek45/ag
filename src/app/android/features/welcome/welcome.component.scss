@@ -1,0 +1,131 @@
+.welcome-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center; /* Centra verticalmente */
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+  gap: 1.5rem; /* Espaciado uniforme entre elementos */
+}
+
+.ticket-icon {
+  width: 60px;
+}
+
+h1 {
+  font-size: 1.8rem;
+}
+
+button {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: none;
+
+  small {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: normal;
+  }
+}
+
+.btn-organizador {
+  background-color: #1a73e8;
+  color: white;
+}
+
+.btn-codigo {
+  background-color: white;
+  border: 1px solid #1a73e8;
+  color: #1a73e8;
+}
+
+.info {
+  color: #555;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+
+.ticket-icon {
+  width: 60px;
+  margin-bottom: 1rem;
+}
+
+h1 {
+  font-size: 1.8rem;
+  margin-bottom: 2rem;
+}
+
+button {
+  width: 100%;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  border: none;
+
+  small {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: normal;
+  }
+}
+
+.btn-organizador {
+  background-color: #1a73e8;
+  color: white;
+}
+
+.btn-codigo {
+  background-color: white;
+  border: 1px solid #1a73e8;
+  color: #1a73e8;
+}
+
+.info {
+  margin-top: 1rem;
+  color: #555;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.info {
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.modal {
+  display: none; 
+  position: fixed;
+  z-index: 999;
+  padding-top: 100px;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.6);
+}
+
+.modal-content {
+  background: #fff;
+  margin: auto;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #000;
+}

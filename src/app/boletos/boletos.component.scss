@@ -1,0 +1,117 @@
+:host {
+  display: block;
+  color: black;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+.boletos-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  gap: 1.5rem;
+}
+
+.boletos-container > * {
+  width: 100%;
+  max-width: 600px;
+}
+
+
+.btn-aleatorio {
+  background-color:#22c55e;
+  width: 40px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  justify-content: center;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #a31676;
+  }
+}
+
+.btn-buscar {
+  position: absolute;
+ 
+margin: 20px 20px 20px 10px;
+/* top   right  bottom  left */
+ margin: 1rem auto; // 👉 centrado horizontal
+  padding: 0.8rem 1.5rem; // 👉 más grande
+  color: black;
+  font-size: 1rem; // 👉 texto más grande
+  font-weight: 600;
+  font-family: 'Roboto', sans-serif;
+  border: 1px solid #dadce0;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center; // 👉 ícono + texto centrados
+  gap: 0.5rem;
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3),
+              0 4px 8px rgba(60, 64, 67, 0.15);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  max-width: fit-content; // 👉 no se estira de más
+
+  &:hover {
+    background-color: #16a34a;
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3),
+                0 2px 6px rgba(60, 64, 67, 0.15);
+  }
+
+  &:active {
+    background-color: #e8eaed;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.3);
+  }
+}
+
+
+@media (max-width: 680px) {
+  .btn-buscar {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+
+    top: 0.5rem;
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem; // 👉 más ancho
+    right: 8rem;            // 👉 opcional: ajusta posición
+    top: 0.5rem;
+    border-radius: 24px;
+    width: 80%;             // 👉 ocupa casi toda la pantalla
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+  }
+}
+.settings {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 2000;
+}
+
+.menu-icon {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 3000;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+}

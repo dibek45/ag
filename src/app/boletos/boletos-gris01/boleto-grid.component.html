@@ -1,0 +1,11 @@
+
+
+<div class="grid">
+  <app-boleto-item
+    *ngFor="let boleto of boletos$ | async"
+    [numero]="boleto.numero"
+    [estado]="boleto.estado"
+    [anchoNumero]="anchoNumero"
+    (toggle)="toggleSeleccion(boleto)">
+  </app-boleto-item>
+</div>

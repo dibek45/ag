@@ -1,0 +1,25 @@
+<nav class="bottom-nav">
+  <a [routerLink]="['/boletos', numeroSorteo]" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+    <i class="fa fa-home"></i>
+    <span>Inicio</span>
+  </a>
+  <a [routerLink]="['/', numeroSorteo, 'boletos']" routerLinkActive="active">
+    <i class="fa fa-ticket"></i>
+    <span>Boletos</span>
+  </a>
+ <a href="javascript:void(0)" (click)="verificarPremium('/' + numeroSorteo + '/pagos')">
+  <i class="fa fa-credit-card"></i>
+  <span>Pago</span>
+</a>
+
+<a href="javascript:void(0)" (click)="verificarPremium('/' + numeroSorteo + '/faq')">
+  <i class="fa fa-question-circle"></i>
+  <span>FAQ</span>
+</a>
+
+<a href="javascript:void(0)" (click)="verificarPremium('/' + numeroSorteo + '/contacto')">
+  <i class="fa fa-phone"></i>
+  <span>Contacto</span>
+</a>
+
+</nav>

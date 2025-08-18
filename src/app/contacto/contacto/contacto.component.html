@@ -1,0 +1,56 @@
+<section class="contact-wrapper">
+  <div class="contacto-container">
+
+    <!-- Logo centrado -->
+    <div style="display: flex; justify-content: center; align-items: center; margin-bottom: 1rem;">
+         <img [src]="logoUrl"   alt="Logo de la rifa"        width="100"        style="height: auto; object-fit: contain; filter: drop-shadow(0 0 4px #ffc107);"
+      />
+    </div>
+
+    <h1>Contacto</h1>
+
+    <div class="contact-info">
+
+      <!-- Cuando ya llegó el sorteo -->
+      <ng-container *ngIf="sorteo; else loading">
+        
+        <p *ngIf="sorteo.numeroWhatsApp">
+          <strong>📞 WhatsApp:</strong>
+          <a [href]="'https://wa.me/' + sorteo.numeroWhatsApp" target="_blank">
+            {{ sorteo.numeroWhatsApp }}
+          </a>
+        </p>
+
+        <p *ngIf="sorteo.nombreEmpresa">
+          <strong>🏢 Empresa:</strong> {{ sorteo.nombreEmpresa }}
+        </p>
+
+        <p *ngIf="sorteo.linkfacebook">
+          <a [href]="sorteo.linkfacebook" target="_blank">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
+                alt="Facebook"
+                width="20"
+                style="vertical-align: middle; margin-right: 4px;">
+            <strong>{{ sorteo.nombre }}</strong>
+          </a>
+        </p>
+
+        <p><strong>📍 Ubicación:</strong> Chihuahua, México</p>
+      </ng-container>
+
+      <!-- Cuando todavía no llega el sorteo -->
+      <ng-template #loading>
+        <p><strong>📞 WhatsApp:</strong> Cargando...</p>
+        <p><strong>🏢 Empresa:</strong> Cargando...</p>
+        <p><strong>Facebook:</strong> Cargando...</p>
+        <p><strong>📍 Ubicación:</strong> Chihuahua, México</p>
+      </ng-template>
+
+    </div>
+
+    <app-whatsapp-button></app-whatsapp-button>
+  </div>
+
+  <app-dibek-information></app-dibek-information>
+</section>
+<app-bottom-nav></app-bottom-nav>
