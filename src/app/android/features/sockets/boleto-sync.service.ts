@@ -1,55 +1,58 @@
 import { Injectable } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
-import { SocketService } from './socket.admin.service';
-import { ToastService } from '../toast-admin/toast.admin.service';
-import { Boleto } from '../../../state/boleto/boleto.model';
-import { selectBoletosPorSorteo } from '../../../state/boleto/boleto.selectors';
-import { loadBoletosSuccess } from '../../../state/boleto/boleto.actions';
+import { Evento } from '../../../state/evento/evento.model';
+import { selectAllEventos } from '../../../state/evento/evento.selectors';
+import { loadEventosSuccess } from '../../../state/evento/evento.actions';
+import { ToastService } from '../../../toast/toast.service';
+import { SocketService } from '../../../sockets/socket.service';
 
 @Injectable({ providedIn: 'root' })
-export class BoletoSyncService {
+export class EventoSyncService {
   constructor(
     private socketService: SocketService,
     private store: Store,
     private toastService: ToastService
   ) {}
 
-  listenToSocketUpdates(sorteoId: number) {
-    console.log('👂 Suscribiéndome a socket...');
+  listenToSocketUpdates(adminId: number) {
+    console.log('👂 Suscribiéndome a socket de eventos...');
 
-    this.socketService.boletoUpdated$.subscribe((updated: Boleto) => {
-      console.log('📨 Recibido en BoletoSyncService:', updated);
+    this.socketService.eventoUpdated$.subscribe((updated: Evento) => {
+      console.log('📨 Recibido en EventoSyncService:', updated);
 
-      const estadoCapitalizado =
-        updated.estado.charAt(0).toUpperCase() + updated.estado.slice(1);
+      // ✅ verificamos que sea del admin correcto
+      if (Number(updated.admin?.id) !== Number(adminId)) {
+        console.warn('🚫 Evento ignorado: adminId no coincide.');
+        return;
+      }
+
       this.toastService.show(
-        `Se actualizó boleto ${updated.numero} a ${estadoCapitalizado}`,
+        `Se actualizó evento "${updated.titulo}"`,
         3000
       );
 
-      if (Number(updated.sorteo?.id) !== Number(sorteoId)) return;
-
       this.store
-        .select(selectBoletosPorSorteo(sorteoId))
+        .select(selectAllEventos)
         .pipe(take(1))
-        .subscribe((boletos) => {
-          const existente = boletos.find((b) => b.id === updated.id);
+        .subscribe((eventos) => {
+          const existente = eventos.find((e) => e.id === updated.id);
 
           if (existente && JSON.stringify(existente) === JSON.stringify(updated)) {
-            console.log('🔁 Boleto ya estaba igual, no se actualiza store.');
+            console.log('🔁 Evento ya estaba igual, no se actualiza store.');
             return;
           }
 
           const nuevaLista = [
-            ...boletos.filter((b) => b.id !== updated.id),
+            ...eventos.filter((e) => e.id !== updated.id),
             updated,
           ];
 
           this.store.dispatch(
-            loadBoletosSuccess({ sorteoId, boletos: nuevaLista }) // ✅ CORRECTO
+            loadEventosSuccess({ eventos: nuevaLista }) // ✅ usamos la acción de eventos
           );
-          console.log('✅ Boleto actualizado por socket y actualizado en Redux');
+
+          console.log('✅ Evento actualizado por socket y guardado en store.');
         });
     });
   }

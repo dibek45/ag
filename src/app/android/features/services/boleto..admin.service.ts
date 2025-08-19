@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { delay, Observable, of, switchMap, throwError } from 'rxjs';
-import { Boleto } from '../../../state/boleto/boleto.model';
+import { Boleto } from '../../../state/evento/evento.model';
 
 @Injectable({
   providedIn: 'root'

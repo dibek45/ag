@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { OnChanges, SimpleChanges } from '@angular/core';
-import { Boleto } from '../../../../state/boleto/boleto.model';
 
 @Component({
   selector: 'app-cambiar-estado-modal',
@@ -12,6 +11,10 @@ import { Boleto } from '../../../../state/boleto/boleto.model';
   styleUrls: ['./cambiar-estado-modal.component.scss']
 })
 export class CambiarEstadoModalComponent implements OnChanges {
+  ngOnChanges(changes: SimpleChanges): void {
+    throw new Error('Method not implemented.');
+  }
+  /*
 ngOnChanges(changes: SimpleChanges): void {
   if (changes['reasignacion']) {
     this.confirmado = false;
@@ -20,7 +23,6 @@ ngOnChanges(changes: SimpleChanges): void {
 }
 confirmado: boolean = false;
 
-@Input() boleto!: Boleto;
 @Output() estadoSeleccionado = new EventEmitter<'disponible' | 'ocupado' | 'pagado' | null>();
 @Input() reasignacion: boolean = false;
 @Output() reasignar = new EventEmitter<{ boleto: Boleto; nombre: string; telefono: string }>();
@@ -81,6 +83,6 @@ emitirReasignacionConEstado(estado: 'ocupado' | 'pagado') {
     telefono: this.nuevoTelefono
   });
 }
-
+*/
 
 }

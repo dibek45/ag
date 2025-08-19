@@ -2,7 +2,6 @@
     import io  from 'socket.io-client'; // ✅ Solo importa `io`, no `Socket`
     import { Subject } from 'rxjs';
     import { environment } from '../../../environments/environment';
-import { Boleto } from '../../../state/boleto/boleto.model';
 
     @Injectable({
     providedIn: 'root',
@@ -17,7 +16,6 @@ import { Boleto } from '../../../state/boleto/boleto.model';
     private sorteoId: number | null = null;
 
     // Subject para actualizar boletos
-    public boletoUpdated$ = new Subject<Boleto>();
 
     constructor() {
         this.socket.on('connect', () => {
@@ -31,15 +29,9 @@ import { Boleto } from '../../../state/boleto/boleto.model';
         console.log('🔴 Desconectado de WebSocket');
         });
 
-        this.listenToSocketEvents();
     }
 
-    private listenToSocketEvents(): void {
-        this.socket.on('boletoUpdated', (boleto: Boleto) => {
-        console.log('📨 Evento boletoUpdated recibido:', boleto);
-        this.boletoUpdated$.next(boleto);
-        });
-    }
+ 
 
     emit(event: string, data: any): void {
         this.socket.emit(event, data);

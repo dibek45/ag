@@ -7,19 +7,13 @@ import { FormsModule } from '@angular/forms';
 import { BoletoItemComponent01 } from './boleto-item-new-01/boleto-item.component';
 import { SearchNumberComponent } from './search-number/search-number.component';
 import { CambiarEstadoModalComponent } from './cambiar-estado-modal/cambiar-estado-modal.component';
-import { WhatsAppService } from '../services/whatsapp.admin.service';
-import { BoletoSyncService } from '../sockets/boleto-sync.admin.service';
 import { SocketService } from '../sockets/socket.admin.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MenuSettingsComponent } from './components/menu-settings/menu-settings.component';
 import { selectSorteos } from '../../../state/sorteo/sorteo.selectors';
 import { SorteoSelectorComponent } from '../main-dashboard/sorteo-selector-component/sorteo-selector-component.component';
-import { Boleto } from '../../../state/boleto/boleto.model';
-import { ToastService } from '../../../toast/toast.service';
-import { selectAllBoletos, selectBoletosPorSorteo, selectBoletosSeleccionadosPorSorteo } from '../../../state/boleto/boleto.selectors';
-import * as BoletoActions from '../../../state/boleto/boleto.actions';
-import { BoletoAdminService } from '../../../state/boleto/boleto.admin.service';
+
 import { Sorteo } from '../../../state/sorteo/sorteo.model';
 
 @Component({
@@ -44,7 +38,7 @@ cambiarTodos(_t49: string) {
   
 throw new Error('Method not implemented.');
 }
-
+/*
 
 
 nombreUsuario: string = '';
@@ -87,10 +81,7 @@ modalBoleto: Boleto | null = null;
 resetSearchFlag = false;
 
   constructor(private store: Store,
-     private boletoService: BoletoAdminService,
-     private whatsAppService: WhatsAppService,
        private socketService: SocketService,
-  private boletoSyncService: BoletoSyncService,
       private toastService: ToastService,
         private route: ActivatedRoute,// ⬅️ Aquí,
         private router:Router
@@ -505,7 +496,7 @@ cerrarModal() {
   this.mostrarSelector = false;
 }
 
-
+*/
 }
 
 

@@ -14,14 +14,11 @@
   </div>
 </div>
 
-<!-- Eventos -->
-<div class="event-list" *ngIf="selectedEvents.length > 0">
-  <h3>Eventos del día</h3>
-  <div class="event-card" *ngFor="let event of selectedEvents">
-    <div class="event-title">{{ event.title }}</div>
-    <div class="event-time">{{ event.time }}</div>
-  </div>
-</div>
 
-<!-- Apartado de citas (componente hijo) -->
-<app-today-view-apartar *ngIf="selectedDay" [inputDate]="selectedDay"></app-today-view-apartar>
+<!-- 👇 Día seleccionado -->
+<div class="selected-day" *ngIf="selectedDay">
+ 
+
+  <!-- Componente hijo de apartar -->
+<app-today-view-apartar [inputDate]="selectedDay"></app-today-view-apartar>
+</div>

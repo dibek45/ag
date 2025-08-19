@@ -11,10 +11,5 @@ import { CommonModule } from '@angular/common';
   styleUrl: './whatsapp-button.component.scss'
 })
 export class WhatsappButtonComponent {
-  private store = inject(Store);
 
-  // ✅ Accede directamente al teléfono del sorteo desde el store
-  sorteo$ = this.store.selectSignal(selectSorteoActual);
-
-  telefono = computed(() => this.sorteo$()?.numeroWhatsApp ?? '');
 }

@@ -1,58 +1,81 @@
-    import { Injectable } from '@angular/core';
-    import io  from 'socket.io-client'; // ✅ Solo importa `io`, no `Socket`
-    import { Subject } from 'rxjs';
-    import { Boleto } from '../state/boleto/boleto.model';
+import { Injectable } from '@angular/core';
+import io from 'socket.io-client';
+import { Subject } from 'rxjs';
+import { Evento } from '../state/evento/evento.model';
 import { environment } from '../environments/environment';
 
-    @Injectable({
-    providedIn: 'root',
-    })
-    export class SocketService {
+@Injectable({
+  providedIn: 'root',
+})
+export class SocketService {
+  private socket = io(environment.socketUrl, {
+    transports: ['websocket'],
+  });
 
-        
-    private socket = io(environment.socketUrl, {
-        transports: ['websocket'],
+  private sorteoId: number | null = null;
+  private adminId: number | null = null;
+
+  // 🎟️ Boletos
+
+  // 📅 Eventos
+  public eventoUpdated$ = new Subject<Evento>();
+  public eventoDeleted$ = new Subject<number>();
+
+  constructor() {
+    this.socket.on('connect', () => {
+      console.log('🟢 Conectado a WebSocket');
+
+      if (this.sorteoId) {
+        this.joinSorteoRoom(this.sorteoId);
+      }
+
+      if (this.adminId) {
+        this.joinAdminRoom(this.adminId);
+      }
     });
 
-    private sorteoId: number | null = null;
+    this.socket.on('disconnect', () => {
+      console.log('🔴 Desconectado de WebSocket');
+    });
 
-    // Subject para actualizar boletos
-    public boletoUpdated$ = new Subject<Boleto>();
+    this.listenToSocketEvents();
+  }
 
-    constructor() {
-        this.socket.on('connect', () => {
-        console.log('🟢 Conectado a WebSocket'+this.sorteoId);
-        if (this.sorteoId) {
-            this.joinSorteoRoom(this.sorteoId);
-              console.log(`🎟️ Unido a la sala del sorteo: sorteo-${this.sorteoId}`); // ✅ aquí sí ya está definido
+  // ---------------------------
+  // Escucha de eventos socket
+  // ---------------------------
+  private listenToSocketEvents(): void {
+    // 🔹 Boletos
+ 
 
-        }
+    // 🔹 Eventos
+    this.socket.on('eventoUpdated', (evento: Evento) => {
+      console.log('📨 eventoUpdated recibido:', evento);
+      this.eventoUpdated$.next(evento);
+    });
 
-                      console.log(``); // ✅ aquí sí ya está definido
+    this.socket.on('eventoDeleted', (eventoId: number) => {
+      console.log('🗑️ eventoDeleted recibido:', eventoId);
+      this.eventoDeleted$.next(eventoId);
+    });
+  }
 
-        });
+  // ---------------------------
+  // Métodos públicos
+  // ---------------------------
+  emit(event: string, data: any): void {
+    this.socket.emit(event, data);
+  }
 
-        this.socket.on('disconnect', () => {
-        console.log('🔴 Desconectado de WebSocket');
-        });
+  public joinSorteoRoom(sorteoId: number): void {
+    this.sorteoId = sorteoId;
+    this.socket.emit('joinSorteo', sorteoId);
+    console.log(`🎟️ Unido a la sala del sorteo: sorteo-${sorteoId}`);
+  }
 
-        this.listenToSocketEvents();
-    }
-
-    private listenToSocketEvents(): void {
-        this.socket.on('boletoUpdated', (boleto: Boleto) => {
-        console.log('📨 Evento boletoUpdated recibido:', boleto);
-        this.boletoUpdated$.next(boleto);
-        });
-    }
-
-    emit(event: string, data: any): void {
-        this.socket.emit(event, data);
-    }
-
-    public joinSorteoRoom(sorteoId: number): void {
-        this.sorteoId = sorteoId;
-        this.socket.emit('joinSorteo', sorteoId);
-        console.log(`🎟️       🎟️                 🎟️🎟️🎟️🎟️🎟️🎟️🎟️🎟️joinSorteoRoomUnido a la sala del sorteo: sorteo-${sorteoId}`);
-    }
-    }
+  public joinAdminRoom(adminId: number): void {
+    this.adminId = adminId;
+    this.socket.emit('joinAdmin', adminId);
+    console.log(`📅 Unido a la sala del admin: admin-${adminId}`);
+  }
+}

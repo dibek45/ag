@@ -124,3 +124,58 @@
     font-weight: bold;
   }
 }
+.calendar-day {
+  border: 1px solid #e5e7eb;
+  min-height: 90px;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &.has-event { background: #f8fbff; }  // leve resaltado
+}
+
+.day-number { font-weight: 600; font-size: 12px; }
+
+.event-chip {
+  font-size: 11px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: #2563eb; /* azul */
+  color: #fff;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: default;
+}
+
+.calendar-day {
+  border: 1px solid #eee;
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 4px;
+
+  .day-number {
+    font-weight: bold;
+    margin-bottom: 4px;
+  }
+
+  .dots {
+    display: flex;
+    gap: 3px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .dot {
+    width: 6px;
+    height: 6px;
+    background-color: #007bff;
+    border-radius: 50%;
+    display: inline-block;
+  }
+}

@@ -1,4 +1,4 @@
-<div class="search-container">
+<!--<div class="search-container">
   <input
     type="text"
     placeholder="Buscar por teléfono"
@@ -8,26 +8,26 @@
   <span class="clear-btn" *ngIf="telefono" (click)="limpiarTelefono()">✕</span>
 </div>
 
-<!-- Lista de compradores únicos -->
+ Lista de compradores únicos 
 <div class="resultados" *ngIf="telefono.trim().length > 0 && resultados.length > 0">
   <div
     class="item"
     *ngFor="let resultado of resultados"
     (click)="seleccionarPorComprador(resultado.comprador)"
   >
-    <!-- Si vino por número de boleto -->
+     Si vino por número de boleto 
     <div class="info" *ngIf="resultado.tipo === 'boleto'">
       <strong>🎫 Boleto #{{ resultado.numero }}</strong>
       <small>{{ resultado.comprador?.nombre || 'Sin nombre' }}</small>
     </div>
 
-    <!-- Si vino por búsqueda de teléfono -->
+     Si vino por búsqueda de teléfono 
     <div class="info" *ngIf="resultado.tipo === 'telefono'">
       <strong>{{ resultado.comprador?.nombre || 'Sin nombre' }}</strong>
       <small>{{ resultado.comprador?.telefono }}</small>
     </div>
 
-    <!-- Badge que cambia entre cantidad y lista de boletos -->
+Badge que cambia entre cantidad y lista de boletos 
     <span
       class="badge"
       *ngIf="resultado.tipo === 'telefono'"
@@ -39,3 +39,4 @@
     </span>
   </div>
 </div>
+-->

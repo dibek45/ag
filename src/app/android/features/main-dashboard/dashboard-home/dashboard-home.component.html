@@ -1,5 +1,5 @@
 
-  <app-btn-regresar [url]="'/login'" class="back"></app-btn-regresar>
+  <!-- <app-btn-regresar [url]="'/login'" class="back"></app-btn-regresar>
 
 <app-menu-settings *ngIf="menuAbierto" (cerrar)="toggleMenu()"></app-menu-settings>
 
@@ -12,7 +12,7 @@
   </app-total-raffles>
 
 
-  <!-- 🔁 Dashboard por cada sorteo con acordeón -->
+ 🔁 Dashboard por cada sorteo con acordeón 
 <div class="dashboard-container" *ngFor="let sorteo of sorteos; let i = index">
   <button class="sorteo-header" (click)="toggleSorteo(i)">
     Sorteo #{{ i + 1 }}
@@ -23,9 +23,7 @@
   </button>
 
   <div *ngIf="sorteosVisibles[i]" class="sorteo-content">
-    <app-ticket-status [boletos]="sorteo.boletos"   (estadoSeleccionado)="filtrarYRedirigir(sorteo.id, $event)">
-></app-ticket-status>
-
+   
     <app-total-revenue 
       [recaudado]="sorteo.recaudado" 
       [porRecaudar]="sorteo.porRecaudar">
@@ -41,12 +39,12 @@
 
 </div>
 
-<!-- Modal de selector 
+Modal de selector 
 
     <app-next-raffle [deadline]="proximoSorteo" style="  padding: 1rem;
   "></app-next-raffle>
 
-  <app-recent-activity [notificaciones]="[]"></app-recent-activity>-->
+  <app-recent-activity [notificaciones]="[]"></app-recent-activity
 
 
 
@@ -61,3 +59,4 @@
   (abrirModalSorteos)="abrirSelectorDeSorteo()" 
   (abrirMenuConfig)="toggleMenu()">
 </app-menu-bottom>
+-->

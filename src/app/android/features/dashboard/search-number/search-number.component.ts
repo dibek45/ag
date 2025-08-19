@@ -1,8 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Boleto } from '../../../../state/boleto/boleto.model';
-
+/*
 type ResultadoBusqueda =
   | {
       comprador: Boleto['comprador'];
@@ -20,7 +19,7 @@ type ResultadoBusqueda =
       listaBoletos?: number[];
       mostrandoBoletos?: boolean;
       boletos?: Boleto[];
-    };
+    };*/
 
 @Component({
   selector: 'app-search-number',
@@ -30,7 +29,8 @@ type ResultadoBusqueda =
   styleUrls: ['./search-number.component.scss']
 })
 export class SearchNumberComponent {
-  @Input() boletos: Boleto[] = [];
+// @Input() boletos: Boleto[] = [];
+/*
 @Output() resultadosChange = new EventEmitter<number>();
 
 
@@ -126,5 +126,5 @@ mostrarBoletos(resultado: ResultadoBusqueda, event: MouseEvent) {
   }
   resultado.mostrandoBoletos = !resultado.mostrandoBoletos;
 }
-
+*/
 }

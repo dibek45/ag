@@ -2,12 +2,8 @@ import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { BoletoItemComponent0InformationCComponent } from '../boletos/boletos-gris01/boleto-item-information/boleto-item.informationcomponent';
-import { selectAllBoletos, selectBoletosSeleccionadosPorSorteo, selectSelectedBoletos } from '../state/boleto/boleto.selectors';
-import { Boleto } from '../state/boleto/boleto.model';
 import { Router, ActivatedRoute } from '@angular/router';
-import * as BoletoActions from '../state/boleto/boleto.actions';
-import { WhatsAppService } from '../services/whatsapp.service';
+import * as BoletoActions from '../state/evento/evento.actions';
 import { take } from 'rxjs/operators';
 import { Sorteo } from '../state/sorteo/sorteo.model';
 import { selectSorteos } from '../state/sorteo/sorteo.selectors';
@@ -16,18 +12,23 @@ import { Actions } from '@ngrx/effects';
 @Component({
   selector: 'app-buscar-boleto',
   standalone: true,
-  imports: [CommonModule, FormsModule, BoletoItemComponent0InformationCComponent],
+  imports: [CommonModule, FormsModule
+    // BoletoItemComponent0InformationCComponent],
+  ],
   templateUrl: './buscar-boleto.component.html',
   styleUrl: './buscar-boleto.component.scss',
 })
 export class BuscarBoletoComponent implements OnInit {
+  ngOnInit(): void {
+    throw new Error('Method not implemented.');
+  }
   termino: string = '';
-  boletoEncontrado = signal<Boleto | null>(null);
-  boletoDisponible = signal<Boleto | null>(null);
-  boletos: Boleto[] = [];
-  boletos$!: import('rxjs').Observable<Boleto[]>;
+//  boletoEncontrado = signal<Boleto | null>(null);
+ // boletoDisponible = signal<Boleto | null>(null);
+  //boletos: Boleto[] = [];
+ //boletos$!: import('rxjs').Observable<Boleto[]>;
   sorteo?: Sorteo;
-
+/*
   private store = inject(Store);
   private route = inject(ActivatedRoute);
 
@@ -189,4 +190,6 @@ this.store.dispatch(
   <text x="50%" y="350" text-anchor="middle" fill="#f9b700" font-size="12">{{sitio}}</text>
 </svg>
 `;
+
+*/
 }

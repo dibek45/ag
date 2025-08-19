@@ -4,14 +4,12 @@ import { DibekInformationComponent } from '../../dibek-information/dibek-informa
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as SorteoActions from '../../state/sorteo/sorteo.actions';
-import * as BoletoActions from '../../state/boleto/boleto.actions';
+import * as BoletoActions from '../../state/evento/evento.actions';
 import { Sorteo } from '../../state/sorteo/sorteo.model';
 import { selectSorteos } from '../../state/sorteo/sorteo.selectors';
 import { take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
-import { selectAllBoletos, selectBoletosSeleccionadosPorSorteo, selectSelectedBoletos } from '../../state/boleto/boleto.selectors';
 import { combineLatest, Observable } from 'rxjs';
-import { Boleto } from '../../state/boleto/boleto.model';
 import { BottomNavComponent } from '../../bottom-nav/bottom-nav.component';
 
 @Component({
@@ -27,7 +25,6 @@ export class ContactoComponent implements OnInit {
   logoUrl = `https://api.sorteos.sa.dibeksolutions.com/uploads/sorteos/`;
 
   sorteo?: Sorteo;
-boletos$!: Observable<Boleto[]>;
 
 ngOnInit(): void {
   this.cargaDesdeStore();
@@ -43,21 +40,6 @@ cargaDesdeStore() {
     return;
   }
 
-  // ✅ your observable MUST be a selector CALLED with the id
-  this.boletos$ = this.store.select(selectAllBoletos(sorteoId));
-
-  // Gate API load by current store contents (per sorteo)
-  combineLatest([
-    this.store.select(selectAllBoletos(sorteoId)).pipe(take(1)),
-    this.store.select(selectBoletosSeleccionadosPorSorteo(sorteoId)).pipe(take(1)),
-  ]).subscribe(([boletos, seleccionados]) => {
-    if ((!boletos || boletos.length === 0) && (!seleccionados || seleccionados.length === 0)) {
-      console.log('📡 Loading boletos from API for sorteoId:', sorteoId);
-      this.store.dispatch(BoletoActions.loadBoletos({ sorteoId }));
-    } else {
-      console.log('✅ Store already has boletos.');
-    }
-  });
 
   // Optional: load sorteo data for UI
   this.store.select(selectSorteos).subscribe((sorteos) => {

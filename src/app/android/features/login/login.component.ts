@@ -6,7 +6,7 @@ import { Router } from '@angular/router';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { jwtDecode } from 'jwt-decode';
 import { Store } from '@ngrx/store';
-import * as BoletoActions from '../../../state/boleto/boleto.actions'; // ajusta la ruta si difiere
+import * as BoletoActions from '../../../state/evento/evento.actions'; // ajusta la ruta si difiere
 import * as SorteoActions from '../../../state/sorteo/sorteo.actions'; // ajusta la ruta si difiere
 import { ModalSimpleService } from './modal/modal-simple.service';
 import Swal from 'sweetalert2';
@@ -64,7 +64,6 @@ private resetInvitado() {
   localStorage.setItem('nombreUsuario', 'Invitado');
 
   // 2️⃣ Limpiar el store de Redux
-  this.store.dispatch(BoletoActions.clearBoletos());
   this.store.dispatch(SorteoActions.clearSorteos());
 
   // 3️⃣ Redirigir al home

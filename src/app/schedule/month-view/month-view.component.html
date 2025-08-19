@@ -1,10 +1,8 @@
 <div class="nav-controls">
-  <!-- Fila superior: mes centrado -->
   <div class="month-label">
     {{ currentMonthLabel | titlecase }}
   </div>
 
-  <!-- Fila inferior: botones -->
   <div class="nav-buttons">
     <button (click)="prevMonth()">← Prev</button>
     <button (click)="setToday()">Hoy</button>
@@ -21,12 +19,20 @@
   </div>
 
   <!-- días del mes -->
-  <div class="calendar-days">
-    <div *ngFor="let day of daysInMonth"
-         class="calendar-day"
-         [class.today]="isToday(day)"
-         (click)="day && goToDay(day)">
-      <span>{{ day ? (day | date:'d') : '' }}</span>
+<div class="calendar-days">
+  <div *ngFor="let day of daysInMonth"
+       class="calendar-day"
+       [class.today]="isToday(day)"
+       (click)="day && goToDay(day)">
+       
+    <!-- número del día -->
+    <span class="day-number">{{ day ? (day | date:'d') : '' }}</span>
+
+    <!-- puntitos de citas -->
+    <div class="dots" *ngIf="day">
+      <span *ngFor="let cita of getCitasForDay(day)" class="dot"></span>
     </div>
   </div>
+</div>
+
 </div>

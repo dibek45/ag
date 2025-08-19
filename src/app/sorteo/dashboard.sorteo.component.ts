@@ -4,109 +4,58 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-import { Sorteo } from '../state/sorteo/sorteo.model';
-import { Boleto } from '../state/boleto/boleto.model';
-import { selectAllBoletos, selectSelectedBoletos } from '../state/boleto/boleto.selectors';
-import { selectSorteos } from '../state/sorteo/sorteo.selectors';
-import * as BoletoActions from '../state/boleto/boleto.actions';
-import * as SorteoActions from '../state/sorteo/sorteo.actions';
+import { Evento } from '../state/evento/evento.model';
+import { selectEventosByAdmin } from '../state/evento/evento.selectors'; // 👈 importar el correcto
+import * as EventoActions from '../state/evento/evento.actions';
 
 @Component({
-  selector: 'app-sorteo',
+  selector: 'app-evento',
   standalone: true,
   imports: [RouterModule],
   templateUrl: './sorteo.component.html',
   styleUrls: ['./sorteo.component.scss'],
 })
-export class SorteoComponent implements OnInit {
+export class EventoComponent implements OnInit {
   private store = inject(Store);
   private route = inject(ActivatedRoute);
 
-  sorteo?: Sorteo;
   logoUrl = '';
-  boletos$!: Observable<Boleto[]>;
+  eventos$!: Observable<Evento[]>;
 
   ngOnInit(): void {
     this.cargaDesdeStore();
   }
 
-  private loadBoletosFromLocal(sorteoId: number) {
-    try {
-      const raw = localStorage.getItem(`boletos-${sorteoId}`);
-      const boletos: Boleto[] = raw ? JSON.parse(raw) : [];
-      this.store.dispatch(BoletoActions.loadBoletosSuccess({ sorteoId, boletos }));
-      console.log('📥 Boletos desde localStorage:', boletos.length);
-    } catch (e) {
-      console.error('❌ No pude leer boletos locales:', e);
-      this.store.dispatch(BoletoActions.loadBoletosSuccess({ sorteoId, boletos: [] }));
-    }
-  }
+  private cargaDesdeStore() {
+    const adminId = Number(this.route.snapshot.paramMap.get('adminId'));
+    console.log('🧪 Param adminId recibido:', adminId);
 
-  private loadSorteosFromLocalIfNeeded(sorteoId: number) {
-    try {
-      const raw = localStorage.getItem('sorteos');
-      const sorteos: Sorteo[] = raw ? JSON.parse(raw) : [];
-      if (sorteos?.length) {
-        this.store.dispatch(SorteoActions.loadSorteosSuccess({ sorteos }));
-        const encontrado = sorteos.find(s => Number(s.id) === sorteoId);
-        if (encontrado) this.sorteo = encontrado;
-      }
-    } catch (e) {
-      console.error('❌ No pude leer sorteos locales:', e);
-    }
-  }
-
-  cargaDesdeStore() {
-    const sorteoId = Number(this.route.snapshot.paramMap.get('numeroSorteo'));
-    console.log('🧪 Param sorteoId recibido:', sorteoId);
-
-    if (!sorteoId || isNaN(sorteoId)) {
-      console.error('❌ sorteoId inválido en la URL:', sorteoId);
+    if (!adminId || isNaN(adminId)) {
+      console.error('❌ adminId inválido en la URL:', adminId);
       return;
     }
 
-    // 🟩 Carga boletos (la decisión API/local la hará el effect)
+    // 🟩 Cargar eventos de este admin
     this.store
-      .select(selectAllBoletos(sorteoId))
+      .select(selectEventosByAdmin(adminId)) // ✅ usamos selector dinámico
       .pipe(take(1))
-      .subscribe((boletos) => {
-        this.store
-          .select(selectSelectedBoletos(sorteoId.toString()))
-          .pipe(take(1))
-          .subscribe((seleccionados) => {
-            const faltanBoletos =
-              (!boletos || boletos.length === 0) &&
-              (!seleccionados || seleccionados.length === 0);
-
-            if (faltanBoletos) {
-              console.log('📤 Despachando loadBoletos para', sorteoId);
-              this.store.dispatch(BoletoActions.loadBoletos({ sorteoId }));
-            } else {
-              console.log('✅ Ya hay boletos en el store.');
-            }
-          });
+      .subscribe((eventos) => {
+        if (!eventos || eventos.length === 0) {
+          console.log('📤 Despachando loadEventos para admin:', adminId);
+          this.store.dispatch(EventoActions.loadEventos({ adminId }));
+        } else {
+          console.log('✅ Ya hay eventos en el store.');
+        }
       });
 
-    // 🟦 Buscar sorteo en el store
-    this.store.select(selectSorteos).pipe(take(1)).subscribe((sorteos) => {
-      const encontrado = sorteos.find((s) => Number(s.id) === sorteoId);
-      if (encontrado) {
-        this.sorteo = encontrado;
-        console.log('🎯 Sorteo detectado en store:', this.sorteo);
-      } else {
-        console.warn('⚠️ Sorteo no encontrado en store. Cargando desde API...');
-        this.store.dispatch(SorteoActions.loadSorteos());
-      }
-    });
-
-    // Logo
-    this.logoUrl = `https://api.sorteos.sa.dibeksolutions.com/uploads/sorteos/${sorteoId}.png`;
-
     // Suscripción para la vista
-    this.boletos$ = this.store.select(selectAllBoletos(sorteoId));
+    this.eventos$ = this.store.select(selectEventosByAdmin(adminId)); // ✅ observable con filtro
+
+    // Logo (si tienes logo por admin)
+    this.logoUrl = `https://api.agenda.sa.dibeksolutions.com/uploads/admins/${adminId}.png`;
   }
 
   logoFallback() {
-    this.logoUrl = 'assets/default-logo.png';
+    this.logoUrl = 'assets/default-admin.png';
   }
 }
