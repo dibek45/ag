@@ -103,11 +103,6 @@ getCitasForDay(day: Date | null): Cita[] {
   }
 
 
-
-  prevMonth() { /* ... */ }
-  nextMonth() { /* ... */ }
-  setToday() { /* ... */ }
-
 goToDay(day: Date) {
   if (!day) return;
   const dateStr = day.toISOString().split('T')[0];
@@ -117,6 +112,37 @@ goToDay(day: Date) {
   this.router.navigate([`/${sorteoId}/agenda/schedule/day`, dateStr], {
     state: { date: dateStr }  // 👈 opcional
   });
+}
+
+
+
+
+
+
+prevMonth() {
+  this.currentDate = new Date(
+    this.currentDate.getFullYear(),
+    this.currentDate.getMonth() - 1,
+    1
+  );
+  this.updateMonthLabel();
+  this.generateCalendar(this.currentDate);
+}
+
+nextMonth() {
+  this.currentDate = new Date(
+    this.currentDate.getFullYear(),
+    this.currentDate.getMonth() + 1,
+    1
+  );
+  this.updateMonthLabel();
+  this.generateCalendar(this.currentDate);
+}
+
+setToday() {
+  this.currentDate = new Date();
+  this.updateMonthLabel();
+  this.generateCalendar(this.currentDate);
 }
 
   
