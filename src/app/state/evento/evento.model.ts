@@ -10,6 +10,16 @@ export interface Admin {
   nombre: string;
   email: string;
   disponibilidades: Disponibilidad[];
+    servicios?: Servicio[]; // 👈 aquí agregas los servicios
+
+}
+
+export interface Servicio {
+  id: number;
+  nombre: string;
+  descripcion: string;
+  precio: number;
+  duracionMin: number; // en minutos
 }
 
 export interface Cita {
@@ -20,8 +30,9 @@ export interface Cita {
   hora: string;
   estado: string;
   eventoId: number;
+  servicioId: number;   // FK
+  servicio?: Servicio;  // relación opcional
 }
-
 export interface Evento {
   id: number;
   titulo: string;
@@ -30,4 +41,5 @@ export interface Evento {
   duracion: number;
   citas: Cita[];
   admin: Admin;
+  servicios: Servicio[]; // 🔹 un evento puede tener varios servicios
 }

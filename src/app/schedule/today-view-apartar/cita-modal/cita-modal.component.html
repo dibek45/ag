@@ -1,0 +1,52 @@
+<div class="modal-overlay">
+  <div class="modal">
+    
+    <!-- Header -->
+    <div class="header">
+      <input 
+        type="text" 
+        placeholder="Añade un título" 
+        [(ngModel)]="titulo"
+      />
+      <button class="close" (click)="closeModal.emit()">✕</button>
+    </div>
+
+    <!-- Tabs de servicios -->
+<!-- Tabs de servicios -->
+<div class="tabs">
+  <button 
+    *ngFor="let servicio of servicios; let i = index"
+    [class.active]="i === tabActivo"
+    (click)="tabActivo = i; actualizarHoraFin()">
+    {{ servicio.nombre }} ({{ servicio.duracionMin }} min)
+  </button>
+</div>
+
+
+   <!-- Fecha -->
+<div class="appointment-pill" *ngIf="fechaSeleccionada?.fecha">
+  <span class="date">
+    {{ fechaSeleccionada.fecha | date:'EEEE, d \'de\' MMMM' }}
+  </span>
+
+  <!-- Hora de inicio -->
+  <select [(ngModel)]="fechaSeleccionada.hora" (ngModelChange)="actualizarHoraFin()" class="hora-select">
+    <option *ngFor="let h of horasDisponibles" [value]="h">
+      {{ h }}
+    </option>
+  </select>
+
+  <span class="dash">-</span>
+
+  <!-- Hora de fin -->
+  <span class="time">{{ horaFin }}</span>
+</div>
+
+
+    <!-- Footer -->
+    <div class="footer">
+      <button class="save" (click)="guardar()">Guardar</button>
+    </div>
+
+  </div>
+</div>
