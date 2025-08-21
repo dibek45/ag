@@ -25,4 +25,24 @@ export class EventoEffects {
       )
     )
   );
+
+
+/// ✅ Effect corregido
+createCita$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(EventoActions.createCita),
+    switchMap(({ eventoId, cita }) =>
+      this.eventoService.createCita(cita).pipe(   // 👈 ya no se pasa eventoId al servicio
+        map((newCita) =>
+          EventoActions.createCitaSuccess({ eventoId, cita: newCita }) // 👈 aquí sí guardamos el eventoId en el store
+        ),
+        catchError((error) =>
+          of(EventoActions.createCitaFailure({ error }))
+        )
+      )
+    )
+  )
+);
+
+
 }

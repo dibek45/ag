@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Evento } from './evento.model';
+import { Cita, Evento } from './evento.model';
 
 // 🔄 Cargar todos los eventos
 export const loadEventos = createAction(
@@ -53,5 +53,35 @@ export const deleteEventoSuccess = createAction(
 );
 export const deleteEventoFailure = createAction(
   '[Evento] Delete Evento Failure',
+  props<{ error: any }>()
+);
+
+
+
+
+
+
+
+
+
+
+
+
+
+//citas
+
+// ➕ Crear cita
+export const createCita = createAction(
+  '[Cita] Create Cita',
+  props<{ eventoId: number; cita: Cita }>()
+);
+
+export const createCitaSuccess = createAction(
+  '[Cita] Create Cita Success',
+  props<{ eventoId: number; cita: Cita }>()
+);
+
+export const createCitaFailure = createAction(
+  '[Cita] Create Cita Failure',
   props<{ error: any }>()
 );

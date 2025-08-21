@@ -1,53 +1,58 @@
 <div class="modal-overlay">
   <div class="modal">
-    
-    <!-- Header -->
-    <div class="header">
-      <input 
-        type="text" 
-        placeholder="Añade un título" 
-        [(ngModel)]="titulo"
-      />
-      <button class="close" (click)="closeModal.emit()">✕</button>
-    </div>
+    <form [formGroup]="form" (ngSubmit)="guardar()">
 
-    <!-- Tabs de servicios -->
-<!-- Tabs de servicios -->
-<div class="tabs">
-  <button 
-    *ngFor="let servicio of servicios; let i = index"
-    [class.active]="i === tabActivo"
-    (click)="tabActivo = i; actualizarHoraFin()">
-    {{ servicio.nombre }} ({{ servicio.duracionMin }} min)
-  </button>
-</div>
+      <!-- Nombre -->
+      <div class="input-group">
+        <i class="fa fa-user"></i>
+        <input type="text" placeholder="Nombre del cliente" formControlName="nombreCliente" />
+      </div>
+      <div *ngIf="form.get('nombreCliente')?.touched && form.get('nombreCliente')?.invalid" class="err">
+        Nombre requerido (mín. 2 caracteres)
+      </div>
 
+      <!-- WhatsApp -->
+      <div class="input-group">
+        <i class="fab fa-whatsapp" style="color:#25D366;"></i>
+        <input type="tel" placeholder="WhatsApp (10 dígitos)" formControlName="telefonoCliente" />
+      </div>
+      <div *ngIf="form.get('telefonoCliente')?.touched && form.get('telefonoCliente')?.invalid" class="err">
+        Teléfono de 10 dígitos.
+      </div>
 
-   <!-- Fecha -->
-<div class="appointment-pill" *ngIf="fechaSeleccionada?.fecha">
-  <span class="date">
-    {{ fechaSeleccionada.fecha | date:'EEEE, d \'de\' MMMM' }}
-  </span>
+      <!-- Tabs -->
+      <div class="tabs">
+        <div *ngFor="let s of servicios; let i = index"
+             class="tab-item"
+             [class.active]="i === tabActivo"
+             (click)="cambiarTab(i)">
+          {{ s.nombre }} ({{ s.duracionMin }} min)
+        </div>
+      </div>
 
-  <!-- Hora de inicio -->
-  <select [(ngModel)]="fechaSeleccionada.hora" (ngModelChange)="actualizarHoraFin()" class="hora-select">
-    <option *ngFor="let h of horasDisponibles" [value]="h">
-      {{ h }}
-    </option>
-  </select>
+      <!-- Fecha -->
+      <div class="section-block">
+        <div class="appointment-pill" *ngIf="fechaSeleccionada?.fecha">
+          <span class="date">{{ fechaSeleccionada.fecha | date:'EEEE, d \'de\' MMMM' }}</span>
+        </div>
 
-  <span class="dash">-</span>
+        <div class="appointment-pill" *ngIf="fechaSeleccionada?.fecha">
+          <label class="time-label">Hora:</label>
+          <select class="hora-select"
+                  formControlName="hora"
+                  (change)="actualizarHoraFin()">
+            <option *ngFor="let h of horasDisponibles" [value]="h">{{ h }}</option>
+          </select>
+          <span class="dash">-</span>
+          <span class="time">{{ horaFin }}</span>
+        </div>
+      </div>
 
-  <!-- Hora de fin -->
-  <span class="time">{{ horaFin }}</span>
-</div>
-
-
-    <!-- Footer -->
-    <div class="footer">
-      <button class="options" (click)="closeModal.emit()">Cancelar</button>
-      <button class="save" (click)="guardar()">Guardar</button>
-    </div>
-
+      <!-- Footer -->
+      <div class="footer">
+        <button type="button" class="options" (click)="closeModal.emit()">Cancelar</button>
+        <button type="submit" class="save" [disabled]="form.invalid">Guardar</button>
+      </div>
+    </form>
   </div>
 </div>

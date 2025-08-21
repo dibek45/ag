@@ -30,5 +30,29 @@ export const eventoReducer = createReducer(
     ...state,
     eventos: [],
     loading: false,
-  }))
+  })),
+
+
+
+
+
+
+
+
+
+
+  //cita
+
+
+
+on(EventoActions.createCitaSuccess, (state, { eventoId, cita }) => ({
+  ...state,
+  eventos: state.eventos.map(ev =>
+    ev.id === eventoId
+      ? { ...ev, citas: [...(ev.citas || []), cita] }
+      : ev
+  )
+})),
+
+
 );

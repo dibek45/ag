@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { Cita, Evento } from '../../state/evento/evento.model';
 import { selectAllEventos } from '../../state/evento/evento.selectors';
 import { ModalCitaComponent } from './cita-modal/cita-modal.component';
+import * as EventoActions from '../../state/evento/evento.actions';
 
 interface TimeSlot {
   time: string;
@@ -242,26 +243,31 @@ export class TodayViewApartarComponent implements OnInit, OnChanges {
   }
 
   abrirModal(hora: string) {
-    this.slotSeleccionado = {
-      fecha: this.currentDate,
-      hora: hora
-    };
-    this.showModal = true;
-  }
+  // convertir "HH:mm" a "h:mmam/pm"
+  const [hh, mm] = hora.split(':').map(Number);
+  let h12 = hh % 12 || 12;
+  const sufijo = hh >= 12 ? 'pm' : 'am';
+  const horaAmPm = `${h12}:${mm.toString().padStart(2, '0')}${sufijo}`;
+
+  this.slotSeleccionado = {
+    fecha: this.currentDate,
+    hora: horaAmPm
+  };
+  this.showModal = true;
+}
 
   cerrarModal() {
     this.showModal = false;
     this.slotSeleccionado = null;
   }
 
-  guardarCita(data: any) {
-    console.log("Nueva cita creada:", {
-      ...data,
-      fecha: this.slotSeleccionado?.fecha,
-      hora: this.slotSeleccionado?.hora
-    });
-    this.cerrarModal();
+ guardarCita(cita: any) {
+  console.log("Nueva cita creada:", cita);
+  if (this.evento) {
+    this.store.dispatch(EventoActions.createCita({ eventoId: this.evento.id, cita }));
   }
+  this.cerrarModal();
+}
 
   private loadCitasAndSlots(evento: Evento) {
     this.evento = evento;
@@ -280,4 +286,9 @@ get citasOcupadasParaModal() {
     duracionMin: c.servicio?.duracionMin ?? duracionDefault
   }));
 }
+
+get esDiaDescanso(): boolean {
+  return !this.hourLabels || this.hourLabels.length === 0;
+}
+
 }

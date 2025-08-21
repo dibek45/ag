@@ -1,4 +1,14 @@
-<table class="agenda-grid">
+<h2 class="agenda-title">
+  {{ (slotSeleccionado?.fecha || currentDate) | date:'fullDate' }}
+</h2>
+
+<!-- Si no hay horarios -->
+<div *ngIf="!hourLabels?.length || esDiaDescanso" class="no-schedule">
+  <p>No hay horarios disponibles</p>
+</div>
+
+<!-- Si hay horarios -->
+<table *ngIf="hourLabels?.length && !esDiaDescanso" class="agenda-grid">
   <tr>
     <!-- Columna izquierda: horas -->
     <td class="hours">
@@ -11,10 +21,10 @@
     <td class="slots" [style.height]="slotsHeight">
       <!-- líneas horizontales -->
       <div 
-  *ngFor="let h of hourLabels" 
-  class="hour-line" 
-  (click)="abrirModal(h)">
-</div>
+        *ngFor="let h of hourLabels" 
+        class="hour-line" 
+        (click)="abrirModal(h)">
+      </div>
 
       <!-- citas ya existentes -->
       <div
@@ -35,13 +45,13 @@
     </td>
   </tr>
 </table>
-
 <app-cita-modal
   *ngIf="showModal"
   [fechaSeleccionada]="{ fecha: slotSeleccionado?.fecha || currentDate, hora: slotSeleccionado?.hora }"
   [servicios]="serviciosDisponibles"
   [citasOcupadas]="citasOcupadasParaModal"
   (closeModal)="cerrarModal()"
+[eventoId]="evento?.id || 0"
+
   (saveModal)="guardarCita($event)">
 </app-cita-modal>
-

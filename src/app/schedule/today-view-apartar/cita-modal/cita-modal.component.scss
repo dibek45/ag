@@ -1,168 +1,205 @@
-/* cita-modal.component.scss */
-
-/* Overlay */
+/* 🔹 Overlay: cubre toda la pantalla */
 .modal-overlay {
-  position: fixed;
+  position: fixed;       /* 👈 SIEMPRE respecto a la pantalla */
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.5); /* fondo semi-transparente */
   display: flex;
   justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  padding: 16px; /* 🔹 evita que el modal toque los bordes en pantallas pequeñas */
+  align-items: center;   /* 👈 centra vertical y horizontal */
+  z-index: 2000;         /* encima de todo */
+  padding: 16px;
   box-sizing: border-box;
-  overflow-y: auto; /* 🔹 permite scroll si el modal es más alto que la pantalla */
 }
 
-/* Caja modal */
+/* 🔹 Caja modal estilo Google Calendar */
 .modal {
-  background: #f8faff;
+  position: relative;    /* relativo al overlay */
+  background: #ffffff;
   border-radius: 12px;
-  padding: 16px;
+  padding: 20px;
   width: 100%;
-  max-width: 420px;   /* 🔹 límite de ancho */
-  max-height: 90vh;   /* 🔹 no más alto que el viewport */
-  overflow-y: auto;   /* 🔹 si es muy alto, que scrollee adentro */
-  font-family: Arial, sans-serif;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  max-width: 440px;
+  max-height: 90vh;      /* nunca más grande que la pantalla */
+  overflow-y: auto;      /* si se llena, scroll dentro */
+  font-family: "Google Sans", Arial, sans-serif;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
   animation: fadeIn 0.3s ease;
 }
 
-
+/* 🔹 Animación */
 @keyframes fadeIn {
   from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
-/* Caja blanca del modal */
-.modal {
-  background: #f8faff;
-  border-radius: 12px;
-  padding: 16px;
-  width: 420px;
-  font-family: Arial, sans-serif;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-  animation: fadeIn 0.3s ease; /* animación suave */
-}
-
-/* Header con input de título y botón cerrar */
+/* Header */
 .modal .header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  justify-content: flex-end;
   margin-bottom: 12px;
-
-  input {
-    flex: 1;
-    border: none;
-    font-size: 18px;
-    font-weight: 500;
-    outline: none;
-    background: transparent;
-  }
-
-  .close {
-    border: none;
-    background: transparent;
-    font-size: 18px;
-    cursor: pointer;
-  }
+}
+.modal .header .close {
+  border: none;
+  background: transparent;
+  font-size: 20px;
+  cursor: pointer;
+  color: #444;
 }
 
-/* Tabs (Evento | Tarea | Agenda de citas) */
-.modal .tabs {
-  display: flex;
-  gap: 8px;
+/* Secciones */
+.section-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 14px 0 6px;
+  color: #333;
+}
+.section-block {
+  background: #fff;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 12px;
   margin-bottom: 16px;
-
-  button {
-    flex: 1;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 8px;
-    cursor: pointer;
-    background: #f1f3f4;
-    font-weight: 500;
-  }
-
-  .active {
-    background: #cce5ff;
-    color: #0056b3;
-  }
 }
 
-/* Inputs de fecha y hora */
-.modal .datetime {
+/* Inputs estilo Google */
+.input-group {
   display: flex;
-  gap: 8px;
   align-items: center;
-  margin-bottom: 16px;
-
-  input {
-    padding: 6px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-  }
+  background: #f8f9fa;
+  border: 1px solid #dadce0;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 10px;
+}
+.input-group i {
+  font-size: 18px;
+  margin-right: 8px;
+  color: #555;
+}
+.input-group input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 14px;
+}
+.input-group:focus-within {
+  border-color: #1a73e8;
+  box-shadow: 0 0 0 1px #1a73e8;
 }
 
-/* Footer con botones */
+/* Tabs */
+.tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.tab-item {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color: #202124;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.tab-item:hover {
+  background: #f1f3f4;
+}
+.tab-item.active {
+  background: #E8F0FE;
+  color: #1967d2;
+  font-weight: 500;
+}
+
+/* Horario */
+.appointment-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.appointment-pill .date {
+  font-weight: 500;
+  color: #333;
+}
+.appointment-pill .time-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #555;
+}
+.appointment-pill .dash {
+  font-weight: bold;
+  color: #666;
+}
+.appointment-pill .time {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #222;
+}
+
+/* Select */
+.hora-select {
+  font-size: 0.9rem;
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #dadce0;
+  background: #fff;
+  color: #202124;
+  cursor: pointer;
+  min-width: 120px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23666' height='20' viewBox='0 0 24 24' width='20'><path d='M7 10l5 5 5-5z'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+}
+.hora-select:focus {
+  border: 1px solid #1a73e8;
+  box-shadow: 0 0 0 1px #1a73e8;
+  outline: none;
+}
+.hora-select option {
+  padding: 8px;
+  font-size: 0.9rem;
+}
+.hora-select option:hover {
+  background: #f1f3f4;
+}
+.hora-select option:checked {
+  background: #E8F0FE;
+  color: #1967d2;
+  font-weight: 500;
+}
+
+/* Footer */
 .modal .footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  .options {
-    background: none;
-    border: none;
-    color: #1a73e8;
-    cursor: pointer;
-  }
-
-  .save {
-    background: #1a73e8;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 16px;
-    cursor: pointer;
-    font-weight: 500;
-  }
+  margin-top: 14px;
 }
-
-/* Animación de entrada */
-@keyframes fadeIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to { opacity: 1; transform: scale(1); }
+.modal .footer .options {
+  background: none;
+  border: none;
+  color: #1a73e8;
+  cursor: pointer;
+  font-weight: 500;
 }
-.appointment-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  margin-top: 1rem;
-    margin-left: -20px;
-  span {
-    background: #f1f3f4;
-    border-radius: 6px;
-    padding: 6px 12px;
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #333;
-    white-space: nowrap;
-  }
-
-  .dash {
-    background: transparent;
-    padding: 0;
-    font-weight: bold;
-    color: #666;
-  }
+.modal .footer .save {
+  background: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 20px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s;
 }
-.hora-select {
-  font-size: 0.85rem;   // más pequeño
-  padding: 4px 6px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.modal .footer .save:hover {
+  background: #155ab6;
 }
