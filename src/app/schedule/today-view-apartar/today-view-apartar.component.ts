@@ -261,11 +261,27 @@ export class TodayViewApartarComponent implements OnInit, OnChanges {
     this.slotSeleccionado = null;
   }
 
- guardarCita(cita: any) {
+guardarCita(cita: any) {
   console.log("Nueva cita creada:", cita);
   if (this.evento) {
     this.store.dispatch(EventoActions.createCita({ eventoId: this.evento.id, cita }));
+
+    // ✅ Mensaje para WhatsApp
+    const msg =
+`✅ Nueva cita creada
+👤 Cliente: ${cita.nombreCliente}
+📞 Tel: ${cita.telefonoCliente}
+📅 Fecha: ${cita.fecha}
+🕒 Hora: ${cita.hora}`;
+
+    // ⚡ Usar el teléfono del admin
+    const adminPhone = this.evento.admin?.telefono || '0'; // fallback
+    const url = `https://wa.me/52${adminPhone}?text=${encodeURIComponent(msg)}`;
+
+    // abrir whatsapp en nueva pestaña
+    window.open(url, '_blank');
   }
+
   this.cerrarModal();
 }
 

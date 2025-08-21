@@ -8,6 +8,8 @@ export interface Disponibilidad {
 export interface Admin {
   id: number;
   nombre: string;
+    telefono?: string;                // 👈 nuevo campo
+
   email: string;
   disponibilidades: Disponibilidad[];
     servicios?: Servicio[]; // 👈 aquí agregas los servicios
