@@ -1,5 +1,10 @@
 <div>
- 
+     <!-- logo centrado -->
+    <div class="logo-center">
+      <img src="https://api.sorteos.sa.dibeksolutions.com/uploads/logos/logo.ico" 
+           alt="Logo" class="logo-img">
+    </div>
+
 
   <app-menu-settings 
     *ngIf="mostrarMenu && menuAbierto" 
@@ -13,9 +18,7 @@
     ☰
   </button>
 
-  <button class="btn-buscar" (click)="buscarBoleto()">
-    🔍 Buscar Cita
-  </button>
+
 
   <div class="boletos-container">
     <!-- Aquí va el calendario -->

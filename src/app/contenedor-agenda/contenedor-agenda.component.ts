@@ -6,7 +6,7 @@ import { filter, take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
 import { WhatsappButtonComponent } from '../components/wp/whatsapp-button.component';
-import { MenuSettingsComponent } from '../android/features/dashboard/components/menu-settings/menu-settings.component';
+import { MenuSettingsComponent } from '../android/features/menu-settings/menu-settings.component';
 import { BtnRegresarComponent } from '../shared/btn-regresar/btn-regresar.component';
 import { BottomNavComponent } from '../bottom-nav/bottom-nav.component';
 import { NavigationService } from '../android/features/services/navigation.service';

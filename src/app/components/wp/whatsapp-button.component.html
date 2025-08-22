@@ -1,5 +1,6 @@
 <a 
-  [href]="'https://wa.me/52'"
+  *ngIf="telefono()"
+  [href]="'https://wa.me/52' + telefono()"
   target="_blank"
   class="whatsapp"
 >

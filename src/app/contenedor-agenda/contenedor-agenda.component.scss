@@ -112,6 +112,17 @@ margin: 20px 20px 20px 10px;
   background: transparent;
   border: none;
   font-size: 2rem;
-  color: white;
+  color: rgb(14, 12, 12);
   cursor: pointer;
+}
+.logo-center {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.logo-img {
+  width: 100px;   /* ajusta tamaño */
+  height: auto;
 }

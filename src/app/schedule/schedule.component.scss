@@ -1,29 +1,14 @@
 .dashboard-container {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
-  padding: 1rem;
+  gap: .5rem;
   max-width: 800px;  // más ancho para que respire
-  margin: 0 auto;
+margin-bottom: 50px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* ==== Header superior ==== */
-.header {
-  display: flex;
-  flex-wrap: wrap;     // ✅ permite que salten de línea
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;           // espacio entre secciones
-  margin-bottom: 1rem;
 
-  h2 {
-    font-size: 1.8rem;
-    font-weight: 700;
-    text-transform: capitalize;
-    margin-left: 10px;
-  }
-}
 
 
 /* Toggle de vistas */

@@ -28,20 +28,27 @@
 
       <!-- citas ya existentes -->
       <div
-        *ngFor="let cita of citasDelDia"
-        class="cita"
-        [style.top.px]="getTop(cita.hora)"
-        [style.height.px]="getHeight(cita.servicio?.duracionMin || 60)"
-      >
-        <div class="appointment">
-          <strong>{{ cita.nombreCliente }}</strong>
-          <div class="duration">
-            {{ cita.servicio?.duracionMin }} min
-            de {{ (cita.fecha + 'T' + cita.hora) | date:'shortTime' }}
-            a {{ getHoraFin(cita.hora, cita.servicio?.duracionMin || 60, cita.fecha) }}
-          </div>
-        </div>
-      </div>
+  *ngFor="let cita of citasDelDia; let i = index"
+  class="cita"
+  [ngClass]="{ 'peach': i % 3 === 0, 'blue': i % 3 === 1, 'mint': i % 3 === 2 }"
+  [style.top.px]="getTop(cita.hora)"
+  [style.height.px]="getHeight(cita.servicio?.duracionMin || 60)"
+>
+  <div class="appointment">
+    <strong>{{ cita.nombreCliente }}</strong>
+   <div class="duration">
+  <ng-container *ngIf="cita.servicio?.duracionMin == 30; else conDuracion">
+  </ng-container>
+  <ng-template #conDuracion>
+    {{ cita.servicio?.duracionMin }} min 
+    de {{ (cita.fecha + 'T' + cita.hora) | date:'shortTime':'':'es-MX' }}
+    a {{ getHoraFin(cita.hora, cita.servicio?.duracionMin || 60, cita.fecha) }}
+  </ng-template>
+</div>
+
+  </div>
+</div>
+
     </td>
   </tr>
 </table>

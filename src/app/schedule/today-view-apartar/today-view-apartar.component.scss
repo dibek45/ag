@@ -1,97 +1,145 @@
-.agenda-grid {
-  width: 100%;
-  margin: 0 10px 100px 10px; /* top right bottom left */
-  border: 1px solid #ddd;
-  border-collapse: collapse;  /* quita espacios de tabla */
-  background: #fff;
-  table-layout: fixed;        /* columnas fijas */
-  position: relative;
-    border: 1px solid #e5e7eb;   /* gris suave */
-  border-radius: 10px;         /* bordes redondeados */  box-shadow: 0 2px 10px rgba(0,0,0,0.05); /* sombra ligera */
-
+/* ====================
+   Título de la fecha
+==================== */
+.agenda-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 16px 0;
+  color: #111;
 }
 
+/* ====================
+   Tabs segmentados
+==================== */
+.tabs {
+  display: inline-flex;
+  gap: 0;
+  margin-bottom: 14px;
+  background: #f6f5f2;
+  border-radius: 12px;
+  padding: 4px;
+}
+.tabs button {
+  border: none;
+  background: transparent;
+  padding: 6px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+}
+.tabs button.active {
+  background: #fff;
+  color: #b5893b; /* dorado suave */
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
 
-.agenda-grid td {
-  vertical-align: top;
-  padding: 0;
+/* ====================
+   Tabla principal
+==================== */
+.agenda-grid {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.05);
+  overflow: hidden;
 }
 
 /* Columna de horas */
 .hours {
   width: 70px;
-  border-right: 1px solid #ddd;
-  background: #f9f9f9;
+  background: #fafafa;
+  border-right: 1px solid #eee;
 }
-
-
-
 .hour-label {
-  height: 30px;          /* media hora */
-  line-height: 30px;     /* centra vertical */
-  border-bottom: 1px solid #eee;
+  height: 40px;
+  line-height: 40px;
+  border-bottom: 1px solid #f3f4f6;
   font-size: 12px;
   color: #555;
   padding-left: 6px;
-  text-align: left;
 }
+
+/* Columna de citas */
 .slots {
   position: relative;
-  background: #fafafa;
+  background: #fff;
 }
 .hour-line {
-  height: 30px; /* media hora */
+  height: 40px;
   border-bottom: 1px dashed #eee;
+  cursor: pointer;
+}
+.hour-line:hover {
+  background: #fafafa;
 }
 
-
-/* Citas */
-
+/* ====================
+   Citas (cards)
+==================== */
 .cita {
   position: absolute;
-  left: 0px;
+  left: 10px;
   right: 10px;
-  background: #f3f6ff;
-  border: 1px solid #cbd5e0;
-  border-radius: 6px;
-  padding: 6px 10px;
-  font-size: 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-    justify-content: center;  // centrado horizontal (si quieres)
-
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 13px;
+  box-shadow: 0 2px 6px rgba(0,0,0,.05);
+  border: 1px solid transparent;
 }
-
-.cita-header {
-  display: flex;
-  justify-content: space-between; /* 👈 título a la izq, horario a la der */
+.cita strong {
+  display: block;
   font-weight: 600;
+  margin-bottom: 4px;
+  color: #111;
 }
-
-.cita-title {
-  color: #333;
-}
-
-.cita-time {
-  color: #555;
-  font-size: 11px;
-  white-space: nowrap;
-}
-
-.cita-client {
-  margin-top: 4px;
+.cita .duration {
   font-size: 12px;
-  color: #007bff;
+  color: #444;
 }
 
-.cita-duration {
-  font-size: 8px;
-  color: #888;
+/* Colores suaves para citas */
+.cita.peach { background: #fff7f0; border-color: #fce4d4; }
+.cita.blue  { background: #f2f7ff; border-color: #dbe7ff; }
+.cita.mint  { background: #f4fbf7; border-color: #d5f0e2; }
+
+/* ====================
+   FAB (botón nueva cita)
+==================== */
+.fab {
+  position: absolute;
+  right: 16px;
+  bottom: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 999px;
+  padding: 12px 18px;
+  background: #d1a458;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 6px 14px rgba(209,164,88,.35);
 }
-.appointment .time {
-  white-space: nowrap;
-    justify-content: center; /* centra vertical */
-  align-items: center;     /* centra horizontal */
-  text-align: center;      /* centra el texto */
+.fab:hover {
+  filter: brightness(1.05);
+}
+/* Colores alternados para las citas */
+.cita:nth-of-type(1) { background: #fff7f0; border: 1px solid #fce4d4; } /* peach */
+.cita:nth-of-type(2) { background: #f2f7ff; border: 1px solid #dbe7ff; } /* blue */
+.cita:nth-of-type(3) { background: #f4fbf7; border: 1px solid #d5f0e2; } /* mint */
+.cita:nth-of-type(1) {
+  background: #fff7f0; 
+  border: 1px solid #fce4d4;
+}
+.cita:nth-of-type(2) {
+  background: #f2f7ff; 
+  border: 1px solid #dbe7ff;
+}
+.cita:nth-of-type(3) {
+  background: #f4fbf7; 
+  border: 1px solid #d5f0e2;
 }

@@ -8,7 +8,6 @@ import { WelcomeComponent } from './android/features/welcome/welcome.component';
 import { IngresarCodigoComponent } from './android/features/ingresar-codigo/ingresar-codigo.component';
 import { LoginComponent } from './android/features/login/login.component';
 import { MisEventosComponent } from './android/features/main-dashboard/dashboard-home/dashboard-home.component';
-import { DashboardComponent } from './android/features/dashboard/dashboard.component';
 
 // 👇 imports de rifa/evento
 
@@ -29,7 +28,6 @@ export const routes: Routes = [
   { path: 'home', component: MisEventosComponent },
 
   // 📌 Vista de rifa individual
-  { path: 'rifa/:id', component: DashboardComponent },
 
   // 📌 Entrar a una rifa por numeroSorteo
   {

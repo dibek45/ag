@@ -17,7 +17,7 @@ import { TopSellersComponent } from '../top-sellers/top-sellers.component';
 import { SalesProgressComponent } from '../sales-progress/sales-progress.component';
 import { NextRaffleComponent } from '../next-raffle/next-raffle.component';
 import { MenuBottomComponent } from '../../menu-bottom/menu-bottom.component';
-import { MenuSettingsComponent } from '../../dashboard/components/menu-settings/menu-settings.component';
+import { MenuSettingsComponent } from '../../menu-settings/menu-settings.component';
 import { BtnRegresarComponent } from '../../../../shared/btn-regresar/btn-regresar.component';
 
 @Component({
