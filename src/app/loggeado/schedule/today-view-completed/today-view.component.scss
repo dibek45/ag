@@ -1,0 +1,68 @@
+.today-container {
+  padding: 1.5rem;
+  font-family: 'Segoe UI', sans-serif;
+
+  h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    margin-bottom: 0.3rem;
+  }
+
+  p {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+  }
+}
+
+.appointment-card {
+  border-radius: 12px;
+  color: white;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+
+  .time {
+    font-size: 1.2rem;
+    font-weight: bold;
+    min-width: 60px;
+  }
+
+  .details {
+    .service {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .duration {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+    .client {
+      font-size: 0.9rem;
+    }
+  }
+}
+
+/* Botón flotante */
+.fab {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  background: #2563eb;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+.fab:hover {
+  transform: scale(1.1);
+}

@@ -31,9 +31,21 @@ import * as EventoActions from '../state/evento/evento.actions';
   styleUrl: './contenedor-agenda.component.scss'
 })
 export class EventosComponent implements OnInit {
+
+
+  isLoggedIn = false; // simulado, cámbialo según tu AuthService
+  
+ goToLogin() {
+    this.isLoggedIn = true;   // al presionar login simula autenticación
+  }
+
+  logout() {
+    this.isLoggedIn = false;  // 👈 opcional, para probar logout
+  }
 buscarBoleto() {
 throw new Error('Method not implemented.');
 }
+
   eventos: Evento[] = [];
   showSplash = true;
   adminId!: number;

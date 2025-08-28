@@ -5,6 +5,7 @@
   font-family: Arial, sans-serif;
 }
 
+/* Contenedor de boletos */
 .boletos-container {
   display: flex;
   flex-direction: column;
@@ -18,9 +19,9 @@
   max-width: 600px;
 }
 
-
+/* Botón aleatorio */
 .btn-aleatorio {
-  background-color:#22c55e;
+  background-color: #22c55e;
   width: 40px;
   color: #fff;
   font-weight: bold;
@@ -40,28 +41,26 @@
   }
 }
 
+/* Botón de búsqueda */
 .btn-buscar {
   position: absolute;
- 
-margin: 20px 20px 20px 10px;
-/* top   right  bottom  left */
- margin: 1rem auto; // 👉 centrado horizontal
-  padding: 0.8rem 1.5rem; // 👉 más grande
+  margin: 1rem auto;
+  padding: 0.8rem 1.5rem;
   color: black;
-  font-size: 1rem; // 👉 texto más grande
+  font-size: 1rem;
   font-weight: 600;
   font-family: 'Roboto', sans-serif;
   border: 1px solid #dadce0;
   border-radius: 24px;
   display: flex;
   align-items: center;
-  justify-content: center; // 👉 ícono + texto centrados
+  justify-content: center;
   gap: 0.5rem;
   box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3),
               0 4px 8px rgba(60, 64, 67, 0.15);
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  max-width: fit-content; // 👉 no se estira de más
+  max-width: fit-content;
 
   &:hover {
     background-color: #16a34a;
@@ -79,42 +78,20 @@ margin: 20px 20px 20px 10px;
   }
 }
 
-
+/* Responsive */
 @media (max-width: 680px) {
   .btn-buscar {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.8rem;
-
-    top: 0.5rem;
     font-size: 0.9rem;
-    padding: 0.6rem 1.5rem; // 👉 más ancho
-    right: 8rem;            // 👉 opcional: ajusta posición
-    top: 0.5rem;
+    padding: 0.6rem 1.5rem;
     border-radius: 24px;
-    width: 80%;             // 👉 ocupa casi toda la pantalla
+    width: 80%;
     margin: 0 auto;
     display: block;
     text-align: center;
   }
 }
-.settings {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  z-index: 2000;
-}
 
-.menu-icon {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
-  z-index: 3000;
-  background: transparent;
-  border: none;
-  font-size: 2rem;
-  color: rgb(14, 12, 12);
-  cursor: pointer;
-}
+/* Logo centrado */
 .logo-center {
   margin-top: 20px;
   display: flex;
@@ -123,6 +100,34 @@ margin: 20px 20px 20px 10px;
 }
 
 .logo-img {
-  width: 100px;   /* ajusta tamaño */
+  width: 100px;
   height: auto;
+}
+
+/* Botones arriba a la izquierda */
+.menu-icon,
+.login-btn,
+.logout-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;     /* 👈 todos quedan arriba a la derecha */
+  z-index: 3000;
+  border: none;
+  cursor: pointer;
+}
+
+/* Estilos de cada uno */
+.menu-icon {
+  background: transparent;
+  font-size: 1.5rem;
+  color: rgb(14, 12, 12);
+}
+
+.login-btn,
+.logout-btn {
+  background: #007bff;
+  color: white;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
 }

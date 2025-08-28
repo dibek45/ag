@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BottomNavComponent } from './bottom-nav.component';
+import { WeekViewComponent } from './week-view.component';
 
-describe('BottomNavComponent', () => {
-  let component: BottomNavComponent;
-  let fixture: ComponentFixture<BottomNavComponent>;
+describe('WeekViewComponent', () => {
+  let component: WeekViewComponent;
+  let fixture: ComponentFixture<WeekViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [BottomNavComponent]
+      imports: [WeekViewComponent]
     })
     .compileComponents();
-
-    fixture = TestBed.createComponent(BottomNavComponent);
+    
+    fixture = TestBed.createComponent(WeekViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -13,12 +13,20 @@ import { WhatsappButtonComponent } from '../../components/wp/whatsapp-button.com
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
+
+
   numeroSorteo: string | null = null;
+  valor1 = 2;
 
   constructor(
     private router: Router,
     private route: ActivatedRoute
   ) {
+
+        let valor1 = 5
+        alert('El valor de Valor1 atributo es ' + this.valor1 + ' , el valor de la variable local es ' + valor1)
+
+    
     // Obtén el número del sorteo desde la ruta padre
     this.route.parent?.paramMap.subscribe(params => {
       this.numeroSorteo = params.get('numeroSorteo');

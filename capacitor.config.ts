@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'com.dibeksolutions.com',
-  appName: 'mi-proyecto-angular',
+  appId: 'com.dibeksolutions.com.agenda',
+  appName: 'agenda-dibek',
   webDir: 'dist/mi-proyecto-angular/browser'
 };
 
