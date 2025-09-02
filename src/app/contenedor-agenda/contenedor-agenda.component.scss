@@ -131,3 +131,51 @@
   padding: 0.5rem 1rem;
   font-size: 1rem;
 }
+/* Barra superior estilo Material */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 1rem;
+  background: #e91e63;  /* rosa Material Design */
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Botón menú (hamburguesa) */
+.icon-btn {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: #fff;
+  cursor: pointer;
+  padding: .25rem .5rem;
+}
+
+/* Empuja el login al extremo derecho */
+.spacer {
+  flex: 1;
+}
+
+/* Botón Login */
+.login-btn {
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 18px;
+  padding: .35rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+.login-btn:hover {
+  background: rgba(255,255,255,.3);
+}
+
+/* Limpiar estilos viejos */
+.menu-icon, .logout-btn { position: static !important; }

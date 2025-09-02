@@ -1,9 +1,23 @@
 <div>
-     <!-- logo centrado -->
-    <div class="logo-center">
-      <img src="https://api.sorteos.sa.dibeksolutions.com/uploads/logos/logo.ico" 
-           alt="Logo" class="logo-img">
-    </div>
+  <!-- Barra superior -->
+<div class="topbar">
+  <button *ngIf="isLoggedIn && mostrarMenu"
+          class="icon-btn"
+          (click)="toggleMenu()"
+          aria-label="Open menu">
+    ☰
+  </button>
+
+  <div class="spacer"></div>
+
+  <button *ngIf="!isLoggedIn"
+          class="login-btn"
+          (click)="goToLogin()">
+    Login
+  </button>
+</div>
+
+  
 
 
   <app-menu-settings 
@@ -12,21 +26,12 @@
   </app-menu-settings>
 
   <!-- Botón de menú si está logueado -->
-<button 
-  *ngIf="isLoggedIn && mostrarMenu" 
-  class="menu-icon" 
-  (click)="toggleMenu()">
-  ☰
-</button>
 
-<!-- Botón de login si NO está logueado -->
-<button 
-  *ngIf="!isLoggedIn" 
-  class="login-btn" 
-  (click)="goToLogin()">
-  Login
-</button>
-
+<!-- logo centrado -->
+<div class="logo-center">
+  <img src="https://api.sorteos.sa.dibeksolutions.com/uploads/logos/logo.ico" 
+       alt="Logo" class="logo-img">
+</div>
 
 
 
