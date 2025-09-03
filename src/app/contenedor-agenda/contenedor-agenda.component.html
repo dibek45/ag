@@ -15,9 +15,17 @@
           (click)="goToLogin()">
     Login
   </button>
+
+  
 </div>
 
   
+
+<app-login-agenda 
+  *ngIf="showLoginModal" 
+  (loginSuccess)="handleLoginSuccess()" 
+  (closeModal)="showLoginModal = false">
+</app-login-agenda>
 
 
   <app-menu-settings 

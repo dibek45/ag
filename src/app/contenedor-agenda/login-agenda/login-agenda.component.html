@@ -1,0 +1,20 @@
+<div class="modal-overlay">
+  <div class="modal">
+    <h2 class="modal-title">Iniciar sesión</h2>
+
+    <div class="input-group">
+      <span class="icon">👤</span>
+      <input [(ngModel)]="username" type="text" placeholder="Usuario" />
+    </div>
+
+    <div class="input-group">
+      <span class="icon">🔒</span>
+      <input [(ngModel)]="password" type="password" placeholder="Contraseña" />
+    </div>
+
+    <div class="actions">
+      <button class="btn primary" (click)="submitLogin()">Entrar</button>
+      <button class="btn secondary" (click)="close()">Cancelar</button>
+    </div>
+  </div>
+</div>

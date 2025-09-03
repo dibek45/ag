@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { Router, ActivatedRoute, NavigationEnd, RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 
@@ -14,6 +14,7 @@ import { ScheduleComponent } from '../schedule/schedule.component';
 import { Evento } from '../state/evento/evento.model';
 import { selectAllEventos } from '../state/evento/evento.selectors';
 import * as EventoActions from '../state/evento/evento.actions';
+import { LoginAgendaComponent } from './login-agenda/login-agenda.component';
 
 @Component({
   selector: 'app-eventos',
@@ -23,7 +24,8 @@ import * as EventoActions from '../state/evento/evento.actions';
     RouterModule,
     WhatsappButtonComponent,
     MenuSettingsComponent,
-    BottomNavComponent
+    BottomNavComponent,
+    LoginAgendaComponent
   ],
   templateUrl: './contenedor-agenda.component.html',
   styleUrl: './contenedor-agenda.component.scss'
@@ -31,10 +33,19 @@ import * as EventoActions from '../state/evento/evento.actions';
 export class ContenedorAgendaComponent implements OnInit {
 
 
+  @Output() loginSuccess = new EventEmitter<void>();
+  @Output() closeModal = new EventEmitter<void>();
   isLoggedIn = false; // simulado, cámbialo según tu AuthService
   
+showLoginModal = false;
+
 goToLogin() {
-  this.isLoggedIn = true; // simula autenticación
+  this.showLoginModal = true; // en vez de navegar directo
+}
+
+handleLoginSuccess() {
+  this.isLoggedIn = true;
+  this.showLoginModal = false;
 
   const numeroSorteo =
     this.route.snapshot.paramMap.get('numeroSorteo') ??
@@ -43,12 +54,10 @@ goToLogin() {
   if (numeroSorteo) {
     this.router.navigate(['/', numeroSorteo, 'agenda-admin', 'schedule', 'month']);
   } else {
-    // fallback por si no hay param en la ruta
     this.router.navigate(['/home']);
   }
+
 }
-
-
   logout() {
     this.isLoggedIn = false;  // 👈 opcional, para probar logout
   }
