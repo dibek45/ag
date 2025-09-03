@@ -1,4 +1,3 @@
-// app.routes.ts
 import { Routes } from '@angular/router';
 import { MetodosPagoComponent } from './pagos/metodos-pago/metodos-pago.component';
 import { PreguntasFrecuentesComponent } from './faq/preguntas-frecuentes/preguntas-frecuentes.component';
@@ -9,17 +8,20 @@ import { LoginComponent } from './android/features/login/login.component';
 import { MisEventosComponent } from './android/features/main-dashboard/dashboard-home/dashboard-home.component';
 
 // 👇 imports de rifa/evento
+import { EventoComponent } from './sorteo/dashboard.sorteo.component';
 
-
-// 👇 imports para agenda (schedule)
+// 👇 imports para agenda (cliente)
 import { ScheduleComponent } from './schedule/schedule.component';
 import { MonthViewComponent } from './schedule/month-view/month-view.component';
 import { WeekViewComponent } from './schedule/week-view/week-view.component';
-import { TodayViewComponent } from './schedule/today-view-completed/today-view-completed.component';
 import { TodayViewApartarComponent } from './schedule/today-view-apartar/today-view-apartar.component';
-import { EventoComponent } from './sorteo/dashboard.sorteo.component';
-import { EventosComponent } from './contenedor-agenda/contenedor-agenda.component';
+import { ContenedorAgendaComponent } from './contenedor-agenda/contenedor-agenda.component';
 import { BuscarCitaComponent } from './buscar-cita/buscar-cita.component';
+
+// 👇 imports para agenda-admin
+import { EventosComponentAdmin } from './loggeado/contenedor-agenda-admin/contenedor-agenda.admin.component';
+import { TodayViewComponentCompleted } from './loggeado/schedule/today-view-completed/today-view-completed.component';
+
 
 export const routes: Routes = [
   { path: '', component: WelcomeComponent },
@@ -27,16 +29,14 @@ export const routes: Routes = [
   { path: 'ingresar-codigo', component: IngresarCodigoComponent },
   { path: 'home', component: MisEventosComponent },
 
-  // 📌 Vista de rifa individual
-
-  // 📌 Entrar a una rifa por numeroSorteo
   {
     path: ':numeroSorteo',
     component: EventoComponent,
     children: [
+      // 📌 Agenda para clientes
       {
         path: 'agenda',
-        component: EventosComponent,
+        component: ContenedorAgendaComponent,
         children: [
           {
             path: 'schedule',
@@ -44,18 +44,37 @@ export const routes: Routes = [
             children: [
               { path: 'month', component: MonthViewComponent },
               { path: 'week', component: WeekViewComponent },
-              { path: 'day/:date', component: TodayViewApartarComponent }, // ✅ vista por día
+              { path: 'day/:date', component: TodayViewApartarComponent }, // ✅ cliente agenda
               { path: '', redirectTo: 'month', pathMatch: 'full' }
             ]
           },
           { path: '', redirectTo: 'schedule', pathMatch: 'full' }
         ]
       },
+
+      // 📌 Agenda para admins
+      {
+        path: 'agenda-admin',
+        component: EventosComponentAdmin,
+        children: [
+          {
+            path: 'schedule',
+            component: ScheduleComponent,
+            children: [
+              { path: 'month', component: MonthViewComponent },
+              { path: 'week', component: WeekViewComponent },
+              { path: 'day/:date', component: TodayViewComponentCompleted }, // ✅ admin ve completadas
+              { path: '', redirectTo: 'month', pathMatch: 'full' }
+            ]
+          },
+          { path: '', redirectTo: 'schedule', pathMatch: 'full' }
+        ]
+      },
+
       { path: 'pagos', component: MetodosPagoComponent },
       { path: 'faq', component: PreguntasFrecuentesComponent },
       { path: 'contacto', component: ContactoComponent },
       { path: 'buscar-cita', component: BuscarCitaComponent },
-   //   { path: 'generateTicket', component: GenerateTicketComponent },
       { path: 'login', component: LoginComponent },
       { path: 'codigo', component: IngresarCodigoComponent },
       { path: '', redirectTo: 'agenda', pathMatch: 'full' }

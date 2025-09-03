@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { WeekViewComponent } from './week-view.component';
+import { WeekViewComponent } from './week-view.admin.component';
 
 describe('WeekViewComponent', () => {
   let component: WeekViewComponent;

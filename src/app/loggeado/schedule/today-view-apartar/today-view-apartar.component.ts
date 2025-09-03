@@ -5,10 +5,10 @@ import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Cita, Evento } from '../../state/evento/evento.model';
-import { selectAllEventos } from '../../state/evento/evento.selectors';
+import { Cita, Evento } from '../../../state/evento/evento.model';
+import { selectAllEventos } from '../../../state/evento/evento.selectors';
 import { ModalCitaComponent } from './cita-modal/cita-modal.component';
-import * as EventoActions from '../../state/evento/evento.actions';
+import * as EventoActions from '../../../state/evento/evento.actions';
 
 interface TimeSlot {
   time: string;

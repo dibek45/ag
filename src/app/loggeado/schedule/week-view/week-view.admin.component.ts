@@ -12,7 +12,7 @@ interface Event {
   selector: 'app-week-view',
   standalone: true,
   imports: [CommonModule, TodayViewApartarComponent],
-  templateUrl: './week-view.component.html',
+  templateUrl: './week-view.admin.component.html',
   styleUrls: ['./week-view.component.scss']
 })
 export class WeekViewComponent {

@@ -4,17 +4,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Cita, Evento } from '../../state/evento/evento.model'; 
-import { selectAllEventos, selectEventosByAdmin } from '../../state/evento/evento.selectors'; 
-import * as EventoActions from '../../state/evento/evento.actions'; // 👈 importa tus actions
+import { Cita, Evento } from '../../../state/evento/evento.model'; 
+import * as EventoActions from '../../../state/evento/evento.actions'; // 👈 importa tus actions
+import { selectAllEventos, selectEventosByAdmin } from '../../../state/evento/evento.selectors';
 
 @Component({
   selector: 'app-month-view',
   standalone: true,
   imports:[DatePipe, CommonModule],
   providers: [DatePipe],
-  templateUrl: './month-view.component.html',
-  styleUrls: ['./month-view.component.scss']
+  templateUrl: './month-view.admin.component.html',
+  styleUrls: ['./month-view.admin.component.scss']
 })
 export class MonthViewComponent implements OnInit {
   daysInMonth: (Date | null)[] = [];

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { ViewToggleComponent } from './shared/view-toggle/view-toggle.component';
+import { ViewToggleComponent } from '../../schedule/shared/view-toggle/view-toggle.component';
 
 @Component({
   selector: 'app-schedule',

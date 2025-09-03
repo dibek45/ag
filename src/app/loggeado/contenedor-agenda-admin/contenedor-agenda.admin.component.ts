@@ -5,15 +5,16 @@ import { Store } from '@ngrx/store';
 import { filter, take } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
-import { WhatsappButtonComponent } from '../components/wp/whatsapp-button.component';
-import { MenuSettingsComponent } from '../android/features/menu-settings/menu-settings.component';
-import { BtnRegresarComponent } from '../shared/btn-regresar/btn-regresar.component';
-import { BottomNavComponent } from '../bottom-nav/bottom-nav.component';
-import { NavigationService } from '../android/features/services/navigation.service';
+
 import { ScheduleComponent } from '../schedule/schedule.component';
-import { Evento } from '../state/evento/evento.model';
-import { selectAllEventos } from '../state/evento/evento.selectors';
-import * as EventoActions from '../state/evento/evento.actions';
+
+import * as EventoActions from '../../state/evento/evento.actions';
+import { WhatsappButtonComponent } from '../../components/wp/whatsapp-button.component';
+import { MenuSettingsComponent } from '../../android/features/menu-settings/menu-settings.component';
+import { BottomNavComponent } from '../../bottom-nav/bottom-nav.component';
+import { NavigationService } from '../../android/features/services/navigation.service';
+import { Evento } from '../../state/evento/evento.model';
+import { selectAllEventos } from '../../state/evento/evento.selectors';
 
 @Component({
   selector: 'app-eventos',
@@ -25,29 +26,17 @@ import * as EventoActions from '../state/evento/evento.actions';
     MenuSettingsComponent,
     BottomNavComponent
   ],
-  templateUrl: './contenedor-agenda.component.html',
-  styleUrl: './contenedor-agenda.component.scss'
+  templateUrl: './contenedor-agenda.admin.component.html',
+  styleUrl: './contenedor-agenda.admin.component.scss'
 })
-export class ContenedorAgendaComponent implements OnInit {
+export class EventosComponentAdmin implements OnInit {
 
 
   isLoggedIn = false; // simulado, cámbialo según tu AuthService
   
-goToLogin() {
-  this.isLoggedIn = true; // simula autenticación
-
-  const numeroSorteo =
-    this.route.snapshot.paramMap.get('numeroSorteo') ??
-    this.route.parent?.snapshot.paramMap.get('numeroSorteo');
-
-  if (numeroSorteo) {
-    this.router.navigate(['/', numeroSorteo, 'agenda-admin', 'schedule', 'month']);
-  } else {
-    // fallback por si no hay param en la ruta
-    this.router.navigate(['/home']);
+ goToLogin() {
+    this.isLoggedIn = true;   // al presionar login simula autenticación
   }
-}
-
 
   logout() {
     this.isLoggedIn = false;  // 👈 opcional, para probar logout

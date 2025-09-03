@@ -1,0 +1,181 @@
+:host {
+  display: block;
+  color: black;
+  min-height: 100vh;
+  font-family: Arial, sans-serif;
+}
+
+/* Contenedor de boletos */
+.Agenda-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  gap: 1.5rem;
+}
+
+.Agenda-container > * {
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Botón aleatorio */
+.btn-aleatorio {
+  background-color: #22c55e;
+  width: 40px;
+  color: #fff;
+  font-weight: bold;
+  font-size: 1rem;
+  padding: 0.5rem 1.2rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.1rem;
+  justify-content: center;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #a31676;
+  }
+}
+
+/* Botón de búsqueda */
+.btn-buscar {
+  position: absolute;
+  margin: 1rem auto;
+  padding: 0.8rem 1.5rem;
+  color: black;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: 'Roboto', sans-serif;
+  border: 1px solid #dadce0;
+  border-radius: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  box-shadow: 0 1px 3px rgba(60, 64, 67, 0.3),
+              0 4px 8px rgba(60, 64, 67, 0.15);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  max-width: fit-content;
+
+  &:hover {
+    background-color: #16a34a;
+    box-shadow: 0 1px 2px rgba(60, 64, 67, 0.3),
+                0 2px 6px rgba(60, 64, 67, 0.15);
+  }
+
+  &:active {
+    background-color: #e8eaed;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.3);
+  }
+}
+
+/* Responsive */
+@media (max-width: 680px) {
+  .btn-buscar {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.5rem;
+    border-radius: 24px;
+    width: 80%;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+  }
+}
+
+/* Logo centrado */
+.logo-center {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.logo-img {
+  width: 100px;
+  height: auto;
+}
+
+/* Botones arriba a la izquierda */
+.menu-icon,
+.login-btn,
+.logout-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;     /* 👈 todos quedan arriba a la derecha */
+  z-index: 3000;
+  border: none;
+  cursor: pointer;
+}
+
+/* Estilos de cada uno */
+.menu-icon {
+  background: transparent;
+  font-size: 1.5rem;
+  color: rgb(14, 12, 12);
+}
+
+.login-btn,
+.logout-btn {
+  background: #007bff;
+  color: white;
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+}
+/* Barra superior estilo Material */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 4000;
+  display: flex;
+  align-items: center;
+  height: 56px;
+  padding: 0 1rem;
+  background: #e91e63;  /* rosa Material Design */
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+/* Botón menú (hamburguesa) */
+.icon-btn {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  font-size: 1.6rem;
+  line-height: 1;
+  color: #fff;
+  cursor: pointer;
+  padding: .25rem .5rem;
+}
+
+/* Empuja el login al extremo derecho */
+.spacer {
+  flex: 1;
+}
+
+/* Botón Login */
+.login-btn {
+  background: rgba(255,255,255,.15);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,.3);
+  border-radius: 18px;
+  padding: .35rem 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .2s ease;
+}
+.login-btn:hover {
+  background: rgba(255,255,255,.3);
+}
+
+/* Limpiar estilos viejos */
+.menu-icon, .logout-btn { position: static !important; }

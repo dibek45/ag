@@ -11,19 +11,19 @@ interface Appointment {
 }
 
 @Component({
-  selector: 'app-today-view',
+  selector: 'app-today-view-compleed',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './today-view.component.html',
-  styleUrls: ['./today-view.component.scss']
+  templateUrl: './today-view.completed.component.html',
+  styleUrls: ['./today-view.completed.component.scss']
 })
-export class TodayViewComponent implements OnInit {
+export class TodayViewComponentCompleted implements OnInit {
   date!: string;
 
   appointments: Appointment[] = [
-    { time: '9:00', service: 'Lash extension', duration: '1h 30m', client: 'Emma', color: '#7c3aed' },
-    { time: '11:00', service: 'Acrylic nails', duration: '2h', client: 'Julia', color: '#f87171' },
-    { time: '2:00', service: 'Gel polish', duration: '45m', client: 'Olivia', color: '#34d399' }
+    { time: '9:00', service: 'Paranga extension', duration: '1h 30m', client: 'Emma', color: '#7c3aed' },
+    { time: '11:00', service: 'Fanny Acosta', duration: '2h', client: 'Julia', color: '#f87171' },
+    { time: '2:00', service: 'David Velazquez Hernandez', duration: '45m', client: 'Olivia', color: '#34d399' }
   ];
 
   constructor(private route: ActivatedRoute) {}

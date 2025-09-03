@@ -1,0 +1,38 @@
+<div>
+  <!-- Barra superior -->
+<div class="topbar">
+  <button *ngIf="mostrarMenu" class="icon-btn" (click)="toggleMenu()" aria-label="Open menu">
+    ☰
+  </button>
+
+  <div class="spacer"></div>
+
+
+</div>
+
+  
+
+
+  <app-menu-settings 
+    *ngIf="mostrarMenu && menuAbierto" 
+    (cerrar)="toggleMenu()">
+  </app-menu-settings>
+
+  <!-- Botón de menú si está logueado -->
+
+<!-- logo centrado -->
+<div class="logo-center">
+  <img src="https://api.sorteos.sa.dibeksolutions.com/uploads/logos/logo.ico" 
+       alt="Logo" class="logo-img">
+</div>
+
+
+
+  <div class="Agenda-container">
+<router-outlet></router-outlet>
+  </div>
+
+  <app-whatsapp-button></app-whatsapp-button>
+  <app-bottom-nav></app-bottom-nav>
+</div>
+CONTENEDOR DE ADMIN
