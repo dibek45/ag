@@ -34,9 +34,7 @@ export class EventosComponentAdmin implements OnInit {
 
   isLoggedIn = false; // simulado, cámbialo según tu AuthService
   
- goToLogin() {
-    this.isLoggedIn = true;   // al presionar login simula autenticación
-  }
+
 
   logout() {
     this.isLoggedIn = false;  // 👈 opcional, para probar logout

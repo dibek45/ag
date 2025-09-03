@@ -4,18 +4,38 @@
       <i class="fa-solid fa-xmark"></i>
     </button>
   </div>
-<div class="menu-section">
-  <h3><i class="fa-solid fa-calendar-check" (click)="goToSorteo()"></i> Ver mi agenda</h3>
-  <ul>
-    <li><i class="fa-solid fa-calendar-day"></i> Citas del día de hoy</li>
-    <li><i class="fa-solid fa-clock"></i> Cambiar tiempo de cita</li>
-    <li><i class="fa-solid fa-business-time"></i> Cambiar horarios</li>
-    <li><i class="fa-solid fa-ban"></i> Días inhábiles</li>
-    <li><i class="fa-solid fa-file-export"></i> Exportar datos</li>
-  </ul>
-</div>
 
+  <!-- Agenda -->
+  <div class="menu-section">
+    <h3 (click)="toggleAgenda()">
+      <i class="fa-solid fa-calendar-check"></i> Ver mi agenda
+      <i class="fa-solid" [ngClass]="agendaOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+    </h3>
+    <ul *ngIf="agendaOpen">
+      <li><i class="fa-solid fa-calendar-day"></i> Citas del día de hoy</li>
+      <li><i class="fa-solid fa-clock"></i> Cambiar tiempo de cita</li>
+      <li><i class="fa-solid fa-business-time"></i> Cambiar horarios</li>
+      <li><i class="fa-solid fa-ban"></i> Días inhábiles</li>
+      <li><i class="fa-solid fa-file-export"></i> Exportar datos</li>
+    </ul>
+  </div>
 
+  <!-- Finanzas -->
+  <div class="menu-section">
+    <h3 (click)="toggleFinanzas()">
+      <i class="fa-solid fa-chart-line"></i> Finanzas
+      <i class="fa-solid" [ngClass]="finanzasOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
+    </h3>
+    <ul *ngIf="finanzasOpen">
+      <li><i class="fa-solid fa-cash-register"></i> Caja diaria</li>
+      <li><i class="fa-solid fa-money-bill-wave"></i> Ventas</li>
+      <li><i class="fa-solid fa-receipt"></i> Gastos</li>
+      <li><i class="fa-solid fa-chart-pie"></i> Reportes</li>
+      <li><i class="fa-solid fa-file-invoice-dollar"></i> Exportar finanzas</li>
+    </ul>
+  </div>
+hhhh
+  <!-- Cerrar sesión -->
   <div class="menu-section">
     <ul>
       <li (click)="logout()"><i class="fa-solid fa-right-from-bracket"></i> Cerrar sesión</li>

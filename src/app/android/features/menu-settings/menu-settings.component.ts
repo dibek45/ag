@@ -10,6 +10,19 @@ import { Router } from '@angular/router';
   styleUrls: ['./menu-settings.component.scss']
 })
 export class MenuSettingsComponent {
+
+
+  agendaOpen = false;
+finanzasOpen = false;
+
+toggleAgenda() {
+  this.agendaOpen = !this.agendaOpen;
+}
+
+toggleFinanzas() {
+  this.finanzasOpen = !this.finanzasOpen;
+}
+
 goToSorteo() {
       this.router.navigate(['/home']);
 
