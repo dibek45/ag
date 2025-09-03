@@ -3,7 +3,6 @@ import { Routes } from '@angular/router';
 import { MetodosPagoComponent } from './pagos/metodos-pago/metodos-pago.component';
 import { PreguntasFrecuentesComponent } from './faq/preguntas-frecuentes/preguntas-frecuentes.component';
 import { ContactoComponent } from './contacto/contacto/contacto.component';
-import { BuscarBoletoComponent } from './buscar-boleto/buscar-boleto.component';
 import { WelcomeComponent } from './android/features/welcome/welcome.component';
 import { IngresarCodigoComponent } from './android/features/ingresar-codigo/ingresar-codigo.component';
 import { LoginComponent } from './android/features/login/login.component';
@@ -20,6 +19,7 @@ import { TodayViewComponent } from './schedule/today-view-completed/today-view-c
 import { TodayViewApartarComponent } from './schedule/today-view-apartar/today-view-apartar.component';
 import { EventoComponent } from './sorteo/dashboard.sorteo.component';
 import { EventosComponent } from './contenedor-agenda/contenedor-agenda.component';
+import { BuscarCitaComponent } from './buscar-cita/buscar-cita.component';
 
 export const routes: Routes = [
   { path: '', component: WelcomeComponent },
@@ -54,7 +54,7 @@ export const routes: Routes = [
       { path: 'pagos', component: MetodosPagoComponent },
       { path: 'faq', component: PreguntasFrecuentesComponent },
       { path: 'contacto', component: ContactoComponent },
-      { path: 'buscar-boleto', component: BuscarBoletoComponent },
+      { path: 'buscar-cita', component: BuscarCitaComponent },
    //   { path: 'generateTicket', component: GenerateTicketComponent },
       { path: 'login', component: LoginComponent },
       { path: 'codigo', component: IngresarCodigoComponent },

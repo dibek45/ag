@@ -10,15 +10,15 @@ import { selectSorteos } from '../state/sorteo/sorteo.selectors';
 import { Actions } from '@ngrx/effects';
 
 @Component({
-  selector: 'app-buscar-boleto',
+  selector: 'app-buscar-cita',
   standalone: true,
   imports: [CommonModule, FormsModule
     // BoletoItemComponent0InformationCComponent],
   ],
-  templateUrl: './buscar-boleto.component.html',
-  styleUrl: './buscar-boleto.component.scss',
+  templateUrl: './buscar-cita.component.html',
+  styleUrl: './buscar-cita.component.scss',
 })
-export class BuscarBoletoComponent implements OnInit {
+export class BuscarCitaComponent implements OnInit {
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }
