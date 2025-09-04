@@ -25,7 +25,7 @@ import { LoginAgendaComponent } from './login-agenda/login-agenda.component';
     WhatsappButtonComponent,
     MenuSettingsComponent,
     BottomNavComponent,
-    LoginAgendaComponent
+    LoginAgendaComponent, BtnRegresarComponent
   ],
   templateUrl: './contenedor-agenda.component.html',
   styleUrl: './contenedor-agenda.component.scss'

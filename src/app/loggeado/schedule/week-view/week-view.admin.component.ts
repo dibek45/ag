@@ -15,7 +15,7 @@ interface Event {
   templateUrl: './week-view.admin.component.html',
   styleUrls: ['./week-view.component.scss']
 })
-export class WeekViewComponent {
+export class WeekViewAdminComponent {
   currentDate = new Date(); // will be normalized below
   weekDays: { name: string; date: Date }[] = [];
   selectedDay!: Date;
@@ -93,4 +93,29 @@ export class WeekViewComponent {
     const end = this.weekDays[6].date;
     return `${start.toLocaleDateString('es-MX', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('es-MX', { month: 'short', day: 'numeric' })}`;
   }
+
+
+
+  changeWeek(delta: number) {
+  // delta = -1 (anterior) | 1 (siguiente)
+  // mueve currentDate por semanas completas y regenera la grilla
+  const moved = new Date(this.currentDate);
+  moved.setDate(moved.getDate() + delta * 7);
+  this.currentDate = this.toLocalMidnight(moved);
+
+  this.generateWeek();
+
+  // si el selectedDay cae fuera de la nueva semana, lo fijamos al lunes de la nueva semana
+  const start = this.weekDays[0].date;
+  const end = this.weekDays[6].date;
+  if (!this.selectedDay || this.selectedDay < start || this.selectedDay > end) {
+    this.selectedDay = this.toLocalMidnight(start);
+  }
+
+  // refrescar eventos del día seleccionado (si usas eventos locales)
+  this.selectedEvents = this.events.filter(
+    e => this.sameLocalDay(e.date, this.selectedDay)
+  );
+}
+
 }

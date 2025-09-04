@@ -1,4 +1,15 @@
 <div class="today-container">
+
+
+  <div class="agenda-header">
+  <button class="arrow" (click)="cambiarDia(-1)">&#8249;</button>
+  
+  <h2 class="agenda-title">
+    {{ (slotSeleccionado?.fecha || currentDate) | date:'fullDate' }}
+  </h2>
+  
+  <button class="arrow" (click)="cambiarDia(1)">&#8250;</button>
+</div>
   <h2>Appointments Completed</h2>
   <p>{{ date | date:'fullDate' }}</p>
 

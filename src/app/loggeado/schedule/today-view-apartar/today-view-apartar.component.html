@@ -1,6 +1,13 @@
-<h2 class="agenda-title">
-  {{ (slotSeleccionado?.fecha || currentDate) | date:'fullDate' }}
-</h2>
+<div class="agenda-header">
+  <button class="arrow" (click)="cambiarDia(-1)">&#8249;</button>
+  
+  <h2 class="agenda-title">
+    {{ (slotSeleccionado?.fecha || currentDate) | date:'fullDate' }}
+  </h2>
+  
+  <button class="arrow" (click)="cambiarDia(1)">&#8250;</button>
+</div>
+
 
 <!-- Si no hay horarios -->
 <div *ngIf="!hourLabels?.length || esDiaDescanso" class="no-schedule">

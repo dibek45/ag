@@ -143,3 +143,34 @@
   background: #f4fbf7; 
   border: 1px solid #d5f0e2;
 }
+.agenda-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin: 12px 0;
+}
+
+.agenda-header .agenda-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  color: #111;
+}
+
+.agenda-header .arrow {
+  border: none;
+  background: #fff;
+  font-size: 20px;
+  font-weight: bold;
+  color: #b5893b;
+  cursor: pointer;
+  padding: 4px 10px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+.agenda-header .arrow:hover {
+  background: #f6f5f2;
+}

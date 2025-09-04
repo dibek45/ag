@@ -307,4 +307,11 @@ get esDiaDescanso(): boolean {
   return !this.hourLabels || this.hourLabels.length === 0;
 }
 
+
+cambiarDia(dias: number) {
+  const fechaActual = new Date(this.slotSeleccionado?.fecha || this.currentDate);
+  fechaActual.setDate(fechaActual.getDate() + dias);
+  this.slotSeleccionado = { ...this.slotSeleccionado, fecha: fechaActual };
+  // Aquí puedes recargar horarios/citas según la nueva fecha
+}
 }

@@ -20,13 +20,17 @@ import { BuscarCitaComponent } from './buscar-cita/buscar-cita.component';
 
 // 👇 imports para agenda-admin
 import { EventosComponentAdmin } from './loggeado/contenedor-agenda-admin/contenedor-agenda.admin.component';
-import { TodayViewComponentCompleted } from './loggeado/schedule/today-view-completed/today-view-completed.component';
+import { TodayViewAdminComponentCompleted } from './loggeado/schedule/today-view-completed/today-view-completed.component';
+import { WeekViewAdminComponent } from './loggeado/schedule/week-view/week-view.admin.component';
+import { CompanyListComponent } from './android/features/company-list/company-list.component';
 
 
 export const routes: Routes = [
   { path: '', component: WelcomeComponent },
   { path: 'login', component: LoginComponent },
   { path: 'ingresar-codigo', component: IngresarCodigoComponent },
+    { path: 'categoria/:slug', component: CompanyListComponent }, // 👈 aquí
+
   { path: 'home', component: MisEventosComponent },
 
   {
@@ -62,8 +66,8 @@ export const routes: Routes = [
             component: ScheduleComponent,
             children: [
               { path: 'month', component: MonthViewComponent },
-              { path: 'week', component: WeekViewComponent },
-              { path: 'day/:date', component: TodayViewComponentCompleted }, // ✅ admin ve completadas
+              { path: 'week', component: WeekViewAdminComponent },
+              { path: 'day/:date', component: TodayViewAdminComponentCompleted }, // ✅ admin ve completadas
               { path: '', redirectTo: 'month', pathMatch: 'full' }
             ]
           },

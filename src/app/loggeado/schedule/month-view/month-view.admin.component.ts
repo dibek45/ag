@@ -16,7 +16,7 @@ import { selectAllEventos, selectEventosByAdmin } from '../../../state/evento/ev
   templateUrl: './month-view.admin.component.html',
   styleUrls: ['./month-view.admin.component.scss']
 })
-export class MonthViewComponent implements OnInit {
+export class MonthViewAdminComponent implements OnInit {
   daysInMonth: (Date | null)[] = [];
   currentMonth: Date = new Date();
   currentDate: Date = new Date();

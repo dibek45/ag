@@ -1,0 +1,19 @@
+    <app-btn-regresar [url]="'/ingresar-codigo'"></app-btn-regresar>
+
+<div class="company-list-container">
+  <h2 *ngIf="categoryName">Compañías en {{ categoryName }}</h2>
+
+  <div *ngIf="!companies.length" class="empty">
+    No hay compañías registradas en esta categoría
+  </div>
+
+  <div class="company-card" *ngFor="let comp of companies">
+    <img [src]="comp.logo" [alt]="comp.name" class="logo" />
+    <div class="info">
+      <h3>{{ comp.name }}</h3>
+      <p>{{ comp.address }}</p>
+      <div class="rating">⭐ {{ comp.rating }}</div>
+    </div>
+    <button class="agenda-btn" (click)="verAgenda(comp)">Ver agenda</button>
+  </div>
+</div>
