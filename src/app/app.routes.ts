@@ -26,7 +26,7 @@ import { CompanyListComponent } from './android/features/company-list/company-li
 
 
 export const routes: Routes = [
-  { path: '', component: WelcomeComponent },
+  { path: '', component: IngresarCodigoComponent },
   { path: 'login', component: LoginComponent },
   { path: 'ingresar-codigo', component: IngresarCodigoComponent },
     { path: 'categoria/:slug', component: CompanyListComponent }, // 👈 aquí

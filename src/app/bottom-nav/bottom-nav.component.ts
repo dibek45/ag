@@ -26,8 +26,8 @@ verificarPremium(ruta: string) {
         icon: 'info',
         title: 'Función Premium',
         html: `
-          <p>⚠️ Esta sección está disponible solo en la <b>versión de paga</b> de RIFAS Premium.</p>
-          <p>Contáctanos por WhatsApp para más información.</p>
+          <p>⚠️ La <b>agenda premium</b> es una función exclusiva de la <b>versión de paga</b>.</p>
+<p>Contáctanos por WhatsApp y descubre cómo aprovechar todas sus ventajas.</p>
         `,
         confirmButtonText: 'Cerrar',
         showCancelButton: true,
