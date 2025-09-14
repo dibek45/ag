@@ -10,18 +10,20 @@ type Category = { id: number; name: string; slug: string; icon: string };
   selector: 'app-ingresar-codigo',
   standalone: true,
   imports: [CommonModule, FormsModule, BtnRegresarComponent],
-  templateUrl: './ingresar-codigo.component.html',
-  styleUrls: ['./ingresar-codigo.component.scss'],
+  templateUrl: './category-list.component.html',
+  styleUrls: ['./category-list.component.scss']
 })
-export class IngresarCodigoComponent {
+export class CategoryListComponent {
   codigo = '';
 
   // ⚠️ cambia rutas de iconos según tu proyecto
  categories = [
-  { id: 1, name: 'Uñas',     slug: 'unas',     icon: 'assets/icon/categorias/uas.svg' },
-  { id: 2, name: 'Pestañas', slug: 'pestanas', icon: 'assets/icon/categorias/pestanas.svg' },
-  { id: 3, name: 'Barbería', slug: 'barba',    icon: 'assets/icon/categorias/barba.svg' },
-  { id: 4, name: 'Corte',    slug: 'tijeras',  icon: 'assets/icon/categorias/tijeras.svg' },
+  { id: 1, name: 'Manicure',   slug: 'unas',       icon: 'assets/icon/categorias/Manicure.svg' },
+  { id: 2, name: 'Lashes',     slug: 'pestanas',   icon: 'assets/icon/categorias/eyelashes.svg' },
+  { id: 3, name: 'Barbería',   slug: 'barba',      icon: 'assets/icon/categorias/barberia.svg' },
+  { id: 4, name: 'Estética',   slug: 'tijeras',    icon: 'assets/icon/categorias/estetica.svg' },
+  { id: 5, name: 'Maquillaje', slug: 'maquillaje', icon: 'assets/icon/categorias/makeup.svg' },
+  { id: 6, name: 'Masajes',    slug: 'masajes',    icon: 'assets/icon/categorias/massage.svg' }
 ];
 
 

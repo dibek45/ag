@@ -38,48 +38,48 @@ export class CompanyListComponent {
 loadCompanies(slug: string) {
   const allCompanies: Record<string, Company[]> = {
     unas: [
-      { 
-        id: 1, 
-        name: 'Nails Glam', 
-        logo: 'assets/icon/categorias/uas.svg', 
-        address: 'Centro', 
-        rating: 4.8 
-      },
-      { 
-        id: 2, 
-        name: 'Luxury Nails', 
-        logo: 'https://imgs.search.brave.com/LoX6gATtCVCbnn8FcxHPzbw5YJKa1ApJdBrpGOelVjA/rs:fit:0:180:1:0/g:ce/aHR0cHM6Ly81NDdm/ZGM4YS5kZWxpdmVy/eS5yb2NrZXRjZG4u/bWUvd3AtY29udGVu/dC91cGxvYWRzLzIw/MjEvMDEvbG9nby1h/Y2FkZW1pYS0wMS03/Njh4MjIyLnBuZw', 
-        address: 'Col. Roma', 
-        rating: 4.6 
-      },
-    ],
-    pestanas: [
-      { 
-        id: 3, 
-        name: 'Lash Studio', 
-        logo: 'https://api.sorteos.sa.dibeksolutions.com/uploads/sorteos/1.png', 
-        address: 'Zona Norte', 
-        rating: 4.9 
-      },
-    ],
-    barba: [
-      { 
-        id: 4, 
-        name: 'Barber Bros', 
-        logo: 'assets/icon/categorias/barba.svg', 
-        address: 'Av. Juárez', 
-        rating: 4.7 
-      },
-    ],
-    tijeras: [
-      { 
-        id: 5, 
-        name: 'HairCut Pro', 
-        logo: 'assets/icon/categorias/tijeras.svg', 
-        address: 'Col. Centro', 
-        rating: 4.5 
-      },
-    ],
+              { 
+                id: 1, 
+                name: 'Nails Glam', 
+                logo: 'assets/icon/categorias/uas.svg', 
+                address: 'Centro', 
+                rating: 4.8 
+              },
+              { 
+                id: 2, 
+                name: 'Luxury Nails', 
+                logo: 'https://imgs.search.brave.com/LoX6gATtCVCbnn8FcxHPzbw5YJKa1ApJdBrpGOelVjA/rs:fit:0:180:1:0/g:ce/aHR0cHM6Ly81NDdm/ZGM4YS5kZWxpdmVy/eS5yb2NrZXRjZG4u/bWUvd3AtY29udGVu/dC91cGxvYWRzLzIw/MjEvMDEvbG9nby1h/Y2FkZW1pYS0wMS03/Njh4MjIyLnBuZw', 
+                address: 'Col. Roma', 
+                rating: 4.6 
+              },
+          ],
+              pestanas: [
+                { 
+                  id: 3, 
+                  name: 'Lash Studio', 
+                  logo: 'https://api.sorteos.sa.dibeksolutions.com/uploads/sorteos/1.png', 
+                  address: 'Zona Norte', 
+                  rating: 4.9 
+                },
+              ],
+              barba: [
+                { 
+                  id: 4, 
+                  name: 'Barber Bros', 
+                  logo: 'assets/icon/categorias/barba.svg', 
+                  address: 'Av. Juárez', 
+                  rating: 4.7 
+                },
+              ],
+              tijeras: [
+                { 
+                  id: 5, 
+                  name: 'HairCut Pro', 
+                  logo: 'assets/icon/categorias/tijeras.svg', 
+                  address: 'Col. Centro', 
+                  rating: 4.5 
+                },
+              ],
   };
 
   this.companies = allCompanies[slug] || [];

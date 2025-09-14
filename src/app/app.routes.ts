@@ -3,7 +3,6 @@ import { MetodosPagoComponent } from './pagos/metodos-pago/metodos-pago.componen
 import { PreguntasFrecuentesComponent } from './faq/preguntas-frecuentes/preguntas-frecuentes.component';
 import { ContactoComponent } from './contacto/contacto/contacto.component';
 import { WelcomeComponent } from './android/features/welcome/welcome.component';
-import { IngresarCodigoComponent } from './android/features/ingresar-codigo/ingresar-codigo.component';
 import { LoginComponent } from './android/features/login/login.component';
 import { MisEventosComponent } from './android/features/main-dashboard/dashboard-home/dashboard-home.component';
 
@@ -23,12 +22,13 @@ import { EventosComponentAdmin } from './loggeado/contenedor-agenda-admin/conten
 import { TodayViewAdminComponentCompleted } from './loggeado/schedule/today-view-completed/today-view-completed.component';
 import { WeekViewAdminComponent } from './loggeado/schedule/week-view/week-view.admin.component';
 import { CompanyListComponent } from './android/features/company-list/company-list.component';
+import { CategoryListComponent } from './android/features/category-list/category-list.component';
 
 
 export const routes: Routes = [
-  { path: '', component: IngresarCodigoComponent },
+  { path: '', component: CategoryListComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'ingresar-codigo', component: IngresarCodigoComponent },
+  { path: 'ingresar-codigo', component: CategoryListComponent },
     { path: 'categoria/:slug', component: CompanyListComponent }, // 👈 aquí
 
   { path: 'home', component: MisEventosComponent },
@@ -80,7 +80,7 @@ export const routes: Routes = [
       { path: 'contacto', component: ContactoComponent },
       { path: 'buscar-cita', component: BuscarCitaComponent },
       { path: 'login', component: LoginComponent },
-      { path: 'codigo', component: IngresarCodigoComponent },
+      { path: 'codigo', component: CategoryListComponent },
       { path: '', redirectTo: 'agenda', pathMatch: 'full' }
     ]
   },

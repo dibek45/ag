@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { IngresarCodigoComponent } from './ingresar-codigo.component';
+import { CategoryListComponent } from './category-list.component';
 
 describe('IngresarCodigoComponent', () => {
-  let component: IngresarCodigoComponent;
-  let fixture: ComponentFixture<IngresarCodigoComponent>;
+  let component: CategoryListComponent;
+  let fixture: ComponentFixture<CategoryListComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IngresarCodigoComponent]
+      imports: [CategoryListComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(IngresarCodigoComponent);
+    fixture = TestBed.createComponent(CategoryListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
