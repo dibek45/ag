@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-cita-modal2',
+  selector: 'app-cita-modal',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './cita-modal.component.html',
