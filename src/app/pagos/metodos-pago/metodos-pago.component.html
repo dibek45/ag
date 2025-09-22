@@ -14,33 +14,6 @@
     <h1 style="color: #a78bfa;">Datos de Pago</h1>
     <h2 style="color: #d8b4fe;">Transferencia</h2>
 
-    <ng-container *ngIf="sorteo; else cargando">
-
-      <div class="pago-card" style="display: flex; gap: 1rem; background: #2a2a2a; border-radius: 6px; padding: 1rem; margin: 1.5rem 0;">
-        <div class="icono">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="#a78bfa" viewBox="0 0 24 24" width="48" height="48">
-            <path d="M2 5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v2H2V5zm0 4h20v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V9zm4 4v2h4v-2H6z"/>
-          </svg>
-        </div>
-        <div class="info" style="text-align: left;">
-          <p class="label" style="margin: 0; color: #ccc;">💳 Número de cuenta:</p>
-          <p class="dato" style="font-weight: bold; color: white;">
-            {{ sorteo.numeroCuenta || 'No disponible' }}
-          </p>
-
-          <p class="label" style="margin-top: 1rem; color: #ccc;">🏦 Tipo de banco:</p>
-          <p class="dato" style="font-weight: bold; color: white;">
-            {{ sorteo.tipoBanco || 'No disponible' }}
-          </p>
-        </div>
-      </div>
-
-      <button class="whatsapp" (click)="contactarWhatsApp()"
-        style="background: #25d366; color: #111; border: none; padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: bold; cursor: pointer; transition: background 0.2s ease;">
-        Contactar por WhatsApp
-      </button>
-
-    </ng-container>
 
     <ng-template #cargando>
       <p>Cargando datos del sorteo...</p>

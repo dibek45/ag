@@ -10,39 +10,39 @@ export class EventoEffects {
   private actions$ = inject(Actions);
   private eventoService = inject(EventoService);
 
+  // 🔹 Cargar eventos de una empresa
   loadEventos$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EventoActions.loadEventos),
-      switchMap(() =>
-        this.eventoService.getEventosByAdmin(1).pipe(
+      switchMap(({ empresaId }) => {
+        console.log("📡 Effect → Cargando eventos con empresaId:", empresaId);
+
+        return this.eventoService.getEventosByAdmin(empresaId).pipe(
           map((eventos) =>
-            EventoActions.loadEventosSuccess({ eventos })
+            EventoActions.loadEventosSuccess({ eventos, empresaId })
           ),
           catchError((error) =>
             of(EventoActions.loadEventosFailure({ error }))
+          )
+        );
+      })
+    )
+  );
+
+  // 🔹 Crear cita asociada a un evento
+  createCita$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(EventoActions.createCita),
+      switchMap(({ eventoId, cita }) =>
+        this.eventoService.createCita(cita).pipe(
+          map((newCita) =>
+            EventoActions.createCitaSuccess({ eventoId, cita: newCita })
+          ),
+          catchError((error) =>
+            of(EventoActions.createCitaFailure({ error }))
           )
         )
       )
     )
   );
-
-
-/// ✅ Effect corregido
-createCita$ = createEffect(() =>
-  this.actions$.pipe(
-    ofType(EventoActions.createCita),
-    switchMap(({ eventoId, cita }) =>
-      this.eventoService.createCita(cita).pipe(   // 👈 ya no se pasa eventoId al servicio
-        map((newCita) =>
-          EventoActions.createCitaSuccess({ eventoId, cita: newCita }) // 👈 aquí sí guardamos el eventoId en el store
-        ),
-        catchError((error) =>
-          of(EventoActions.createCitaFailure({ error }))
-        )
-      )
-    )
-  )
-);
-
-
 }

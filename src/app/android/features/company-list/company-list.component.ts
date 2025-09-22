@@ -80,12 +80,16 @@ export class CompanyListComponent {
     this.companies = allCompanies[categoryId] || [];
   }
 
-  verAgenda(company: Company) {
-    const categoryId = this.route.snapshot.paramMap.get('categoryId');
-      const companySlug = this.slugify(company.name); // convertir a slug
-this.router.navigate([`/categoria/${categoryId}/empresa/${companySlug}/agenda`]);
+verAgenda(company: Company) {
+  const categoryId = this.route.snapshot.paramMap.get('categoryId');
+  const companySlug = this.slugify(company.name);
 
-  }
+  this.router.navigate([
+    `/categoria/${categoryId}/empresa/${companySlug}/${company.id}/agenda`
+  ]);
+}
+
+
 
 
 

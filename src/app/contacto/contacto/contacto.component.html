@@ -11,32 +11,7 @@
 
     <div class="contact-info">
 
-      <!-- Cuando ya llegó el sorteo -->
-      <ng-container *ngIf="sorteo; else loading">
-        
-        <p *ngIf="sorteo.numeroWhatsApp">
-          <strong>📞 WhatsApp:</strong>
-          <a [href]="'https://wa.me/' + sorteo.numeroWhatsApp" target="_blank">
-            {{ sorteo.numeroWhatsApp }}
-          </a>
-        </p>
-
-        <p *ngIf="sorteo.nombreEmpresa">
-          <strong>🏢 Empresa:</strong> {{ sorteo.nombreEmpresa }}
-        </p>
-
-        <p *ngIf="sorteo.linkfacebook">
-          <a [href]="sorteo.linkfacebook" target="_blank">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg"
-                alt="Facebook"
-                width="20"
-                style="vertical-align: middle; margin-right: 4px;">
-            <strong>{{ sorteo.nombre }}</strong>
-          </a>
-        </p>
-
-        <p><strong>📍 Ubicación:</strong> Chihuahua, México</p>
-      </ng-container>
+  
 
       <!-- Cuando todavía no llega el sorteo -->
       <ng-template #loading>

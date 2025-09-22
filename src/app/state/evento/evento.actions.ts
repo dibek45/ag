@@ -2,13 +2,18 @@ import { createAction, props } from '@ngrx/store';
 import { Cita, Evento } from './evento.model';
 
 // 🔄 Cargar todos los eventos
+
+
 export const loadEventos = createAction(
   '[Evento] Load Eventos',
-  props<{ adminId: number }>()
-);export const loadEventosSuccess = createAction(
-  '[Evento] Load Eventos Success',
-  props<{ eventos: Evento[] }>()
+  props<{ empresaId: number }>()   // 👈 ya no adminId
 );
+
+export const loadEventosSuccess = createAction(
+  '[Evento] Load Eventos Success',
+  props<{ eventos: Evento[]; empresaId: number }>()
+);
+
 export const loadEventosFailure = createAction(
   '[Evento] Load Eventos Failure',
   props<{ error: any }>()

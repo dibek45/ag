@@ -3,19 +3,13 @@ import { MetodosPagoComponent } from './pagos/metodos-pago/metodos-pago.componen
 import { PreguntasFrecuentesComponent } from './faq/preguntas-frecuentes/preguntas-frecuentes.component';
 import { ContactoComponent } from './contacto/contacto/contacto.component';
 import { WelcomeComponent } from './android/features/welcome/welcome.component';
-import { LoginComponent } from './android/features/login/login.component';
-import { MisEventosComponent } from './android/features/main-dashboard/dashboard-home/dashboard-home.component';
 
-// 👇 imports de rifa/evento
-import { EventoComponent } from './sorteo/dashboard.sorteo.component';
-
-// 👇 imports para agenda (cliente)
+// 👇 imports de agenda (cliente)
 import { ScheduleComponent } from './schedule/schedule.component';
 import { MonthViewComponent } from './schedule/month-view/month-view.component';
 import { WeekViewComponent } from './schedule/week-view/week-view.component';
 import { TodayViewApartarComponent } from './schedule/today-view-apartar/today-view-apartar.component';
 import { ContenedorAgendaComponent } from './contenedor-agenda/contenedor-agenda.component';
-import { BuscarCitaComponent } from './buscar-cita/buscar-cita.component';
 
 // 👇 imports para agenda-admin
 import { EventosComponentAdmin } from './loggeado/contenedor-agenda-admin/contenedor-agenda.admin.component';
@@ -26,14 +20,14 @@ import { CategoryListComponent } from './android/features/category-list/category
 
 export const routes: Routes = [
   { path: '', component: CategoryListComponent },
-  { path: 'login', component: LoginComponent },
   { path: 'ingresar-codigo', component: CategoryListComponent },
 
   // 👉 Categorías
   { path: 'categoria/:categoryId', component: CompanyListComponent },
 
-  // 👉 Compañías dentro de categorías con agenda
-  { path: 'categoria/:categoryId/empresa/:companyName/agenda',
+  // 👉 Compañías dentro de categorías con agenda (CLIENTE)
+  {
+    path: 'categoria/:categoryId/empresa/:companyName/:adminId/agenda',
     component: ContenedorAgendaComponent,
     children: [
       {
@@ -42,7 +36,7 @@ export const routes: Routes = [
         children: [
           { path: 'month', component: MonthViewComponent },
           { path: 'week', component: WeekViewComponent },
-          { path: 'day/:date', component: TodayViewApartarComponent }, // ✅ cliente agenda
+          { path: 'day/:date', component: TodayViewApartarComponent },
           { path: '', redirectTo: 'month', pathMatch: 'full' }
         ]
       },
@@ -50,15 +44,17 @@ export const routes: Routes = [
     ]
   },
 
-  { path: 'home', component: MisEventosComponent },
+  // 👉 Home corregido (antes era MisEventosComponent)
+  { path: 'home', component: CategoryListComponent },
 
+  // 👉 Flujo con numeroSorteo (lo mantengo porque ya lo tienes en paralelo)
   {
     path: ':numeroSorteo',
-    component: EventoComponent,
+    component: ContenedorAgendaComponent, // 👈 padre
     children: [
       // 📌 Agenda para clientes
       {
-        path: 'agenda',
+        path: 'agenda/:adminId',
         component: ContenedorAgendaComponent,
         children: [
           {
@@ -77,7 +73,7 @@ export const routes: Routes = [
 
       // 📌 Agenda para admins
       {
-        path: 'agenda-admin',
+        path: 'agenda-admin/:adminId',
         component: EventosComponentAdmin,
         children: [
           {
@@ -97,8 +93,6 @@ export const routes: Routes = [
       { path: 'pagos', component: MetodosPagoComponent },
       { path: 'faq', component: PreguntasFrecuentesComponent },
       { path: 'contacto', component: ContactoComponent },
-      { path: 'buscar-cita', component: BuscarCitaComponent },
-      { path: 'login', component: LoginComponent },
       { path: 'codigo', component: CategoryListComponent },
       { path: '', redirectTo: 'agenda', pathMatch: 'full' }
     ]

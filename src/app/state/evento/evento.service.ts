@@ -13,18 +13,20 @@ export class EventoService {
   constructor(private http: HttpClient) {}
 
   // 🔹 Obtener todos los eventos de un admin
-  getEventosByAdmin(adminId: number): Observable<Evento[]> {
-    const url = `${this.baseUrl}/eventos/admin/${adminId}`;
-    console.log(`📡 Cargando eventos del admin ${adminId} → ${url}`);
-    
-    return this.http.get<Evento[]>(url).pipe(
-      tap((resp) => console.log('✅ Respuesta del backend:', resp)),
-      catchError((error) => {
-        console.error('❌ Error al obtener eventos:', error);
-        return of([]); // devuelve array vacío en caso de fallo
-      })
-    );
-  }
+getEventosByAdmin(adminId: number | string): Observable<Evento[]> {
+  const id = Number(adminId); // 👈 conversión segura
+  const url = `${this.baseUrl}/eventos/admin/${id}`;
+  console.log(`📡 Cargando eventos del admin ${id} → ${url}`);
+  
+  return this.http.get<Evento[]>(url).pipe(
+    tap((resp) => console.log('✅ Respuesta del backend:', resp)),
+    catchError((error) => {
+      console.error('❌ Error al obtener eventos:', error);
+      return of([]); // devuelve array vacío en caso de fallo
+    })
+  );
+}
+
 
   // 🔹 Crear un nuevo evento
   createEvento(evento: Partial<Evento>): Observable<Evento> {

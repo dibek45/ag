@@ -5,7 +5,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Cita, Evento } from '../../state/evento/evento.model'; 
-import { selectAllEventos, selectEventosByAdmin } from '../../state/evento/evento.selectors'; 
+import { selectAllEventos, selectEventosByEmpresaId } from '../../state/evento/evento.selectors'; 
 import * as EventoActions from '../../state/evento/evento.actions'; // 👈 importa tus actions
 
 @Component({
@@ -35,32 +35,6 @@ evento0: Evento | undefined;
 
 citasByDate: { [date: string]: Cita[] } = {};
 
-ngOnInit() {
-  this.updateMonthLabel();
-  this.generateCalendar(this.currentMonth);
-
-  const adminId = 1;
-  this.store.dispatch(EventoActions.loadEventos({ adminId }));
-
-  this.eventos$ = this.store.select(selectEventosByAdmin(adminId));
-  this.evento0$ = this.store.select(selectAllEventos).pipe(
-    map(eventos => eventos.length > 0 ? eventos[0] : undefined)
-  );
-
-  this.evento0$.subscribe(ev => {
-    this.evento0 = ev;
-    console.log("🎯 Evento 0:", ev);
-
-    if (ev?.citas) {
-      this.citasByDate = ev.citas.reduce((acc, cita) => {
-        const dateKey = cita.fecha.split("T")[0];
-        if (!acc[dateKey]) acc[dateKey] = [];
-        acc[dateKey].push(cita);
-        return acc;
-      }, {} as { [date: string]: Cita[] });
-    }
-  });
-}
 
 /** ✅ Devuelve cuántas citas hay en ese día */
 getCitasForDay(day: Date | null): Cita[] {
@@ -103,20 +77,6 @@ getCitasForDay(day: Date | null): Cita[] {
   }
 
 
-goToDay(day: Date) {
-  if (!day) return;
-  const dateStr = day.toISOString().split('T')[0];
-  const sorteoId = this.route.snapshot.paramMap.get('numeroSorteo');
-
-  // Aquí puedes pasar por queryParams la fecha
-  this.router.navigate([`/${sorteoId}/agenda/schedule/day`, dateStr], {
-    state: { date: dateStr }  // 👈 opcional
-  });
-}
-
-
-
-
 
 
 prevMonth() {
@@ -143,6 +103,67 @@ setToday() {
   this.currentDate = new Date();
   this.updateMonthLabel();
   this.generateCalendar(this.currentDate);
+}
+
+
+
+ngOnInit() {
+  this.updateMonthLabel();
+  this.generateCalendar(this.currentMonth);
+
+  // 🔍 Buscar empresaId en toda la jerarquía de rutas padres
+  let parentRoute = this.route;
+  let empresaId: number | null = null;
+
+  while (parentRoute) {
+    const param = parentRoute.snapshot.paramMap.get('empresaId');
+    if (param) {
+      empresaId = Number(param);
+      break;
+    }
+    parentRoute = parentRoute.parent!;
+  }
+
+  console.log("📌 MonthView → empresaId leído:", empresaId);
+
+  if (empresaId && Number.isFinite(empresaId)) {
+    this.store.dispatch(EventoActions.loadEventos({ empresaId }));
+    this.eventos$ = this.store.select(selectEventosByEmpresaId(empresaId));
+  }
+
+  this.evento0$ = this.store.select(selectAllEventos).pipe(
+    map(eventos => eventos.length > 0 ? eventos[0] : undefined)
+  );
+
+  this.evento0$.subscribe(ev => {
+    this.evento0 = ev;
+    console.log("🎯 Evento 0:", ev);
+
+    if (ev?.citas) {
+      this.citasByDate = ev.citas.reduce((acc, cita) => {
+        const dateKey = cita.fecha.split("T")[0];
+        if (!acc[dateKey]) acc[dateKey] = [];
+        acc[dateKey].push(cita);
+        return acc;
+      }, {} as { [date: string]: Cita[] });
+    }
+  });
+}
+
+
+goToDay(day: Date) {
+  if (!day) return;
+  const dateStr = day.toISOString().split('T')[0];
+
+  const categoryId = this.route.snapshot.paramMap.get('categoryId');
+  const companyName = this.route.snapshot.paramMap.get('companyName');
+  const empresaId = this.route.snapshot.paramMap.get('empresaId');
+
+  console.log("📌 Navegar a día:", { categoryId, companyName, empresaId, dateStr });
+
+  this.router.navigate([
+    `/categoria/${categoryId}/empresa/${companyName}/${empresaId}/agenda/schedule/day/${dateStr}`
+  ]);
 }
 
   

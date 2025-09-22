@@ -10,11 +10,10 @@ import { MenuSettingsComponent } from '../android/features/menu-settings/menu-se
 import { BtnRegresarComponent } from '../shared/btn-regresar/btn-regresar.component';
 import { BottomNavComponent } from '../bottom-nav/bottom-nav.component';
 import { NavigationService } from '../android/features/services/navigation.service';
-import { ScheduleComponent } from '../schedule/schedule.component';
 import { Evento } from '../state/evento/evento.model';
-import { selectAllEventos } from '../state/evento/evento.selectors';
 import * as EventoActions from '../state/evento/evento.actions';
 import { LoginAgendaComponent } from './login-agenda/login-agenda.component';
+import { selectEventosByEmpresaId } from '../state/evento/evento.selectors';
 
 @Component({
   selector: 'app-eventos',
@@ -25,53 +24,27 @@ import { LoginAgendaComponent } from './login-agenda/login-agenda.component';
     WhatsappButtonComponent,
     MenuSettingsComponent,
     BottomNavComponent,
-    LoginAgendaComponent, BtnRegresarComponent
+    LoginAgendaComponent,
+    BtnRegresarComponent
   ],
   templateUrl: './contenedor-agenda.component.html',
   styleUrl: './contenedor-agenda.component.scss'
 })
 export class ContenedorAgendaComponent implements OnInit {
-
-
   @Output() loginSuccess = new EventEmitter<void>();
   @Output() closeModal = new EventEmitter<void>();
-  isLoggedIn = false; // simulado, cámbialo según tu AuthService
-  
-showLoginModal = false;
 
-goToLogin() {
-  this.showLoginModal = true; // en vez de navegar directo
-}
-
-handleLoginSuccess() {
-  this.isLoggedIn = true;
-  this.showLoginModal = false;
-
-  const numeroSorteo =
-    this.route.snapshot.paramMap.get('numeroSorteo') ??
-    this.route.parent?.snapshot.paramMap.get('numeroSorteo');
-
-  if (numeroSorteo) {
-    this.router.navigate(['/', numeroSorteo, 'agenda-admin', 'schedule', 'month']);
-  } else {
-    this.router.navigate(['/home']);
-  }
-
-}
-  logout() {
-    this.isLoggedIn = false;  // 👈 opcional, para probar logout
-  }
-buscarBoleto() {
-throw new Error('Method not implemented.');
-}
+  isLoggedIn = false;   // simulado, cámbialo según tu AuthService
+  showLoginModal = false;
 
   eventos: Evento[] = [];
+  empresaId!: number;
   showSplash = true;
-  adminId!: number;
-  menuAbierto: boolean = false;
+  menuAbierto = false;
   mostrarMenu = true;
-  private navigationService = inject(NavigationService);
   previousUrl = '/home';
+
+  private navigationService = inject(NavigationService);
 
   constructor(
     private router: Router,
@@ -79,37 +52,65 @@ throw new Error('Method not implemented.');
     private route: ActivatedRoute
   ) {
     const companyName = this.route.snapshot.paramMap.get('companyName');
-  console.log('Empresa seleccionada:', companyName);
+    console.log('Empresa seleccionada:', companyName);
   }
 
-  ngOnInit(): void {
-    this.previousUrl = this.navigationService.getPreviousUrl();
+ngOnInit(): void {
+  this.previousUrl = this.navigationService.getPreviousUrl();
 
-    this.router.events.pipe(filter(e => e instanceof NavigationEnd))
-      .subscribe(() => {
-        this.menuAbierto = false;   // cerrar menú en navegación
-      });
+  this.router.events.pipe(filter(e => e instanceof NavigationEnd))
+    .subscribe(() => {
+      this.menuAbierto = false;   // cerrar menú en navegación
+    });
 
-    const paramId =
-      this.route.snapshot.paramMap.get('adminId') ??
-      this.route.parent?.snapshot.paramMap.get('adminId');
+  // 👇 log directo de la URL actual
+  console.log("📌 URL actual:", this.router.url);
 
-    this.adminId = Number(paramId);
+  const paramId =
+    this.route.snapshot.paramMap.get('adminId') ??
+    this.route.parent?.snapshot.paramMap.get('adminId');
 
-    if (!Number.isFinite(this.adminId)) {
-      console.error('❌ invalid adminId:', paramId);
-      return;
-    }
+  console.log("📌 Param adminId leído:", paramId);
 
-    // ✅ cargar eventos de este admin
-    this.store
-      .select(selectAllEventos)
-      .pipe(take(1))
-      .subscribe((ev) => {
-        if (!ev || ev.length === 0) {
-          this.store.dispatch(EventoActions.loadEventos({ adminId: this.adminId }));
-        }
-      });
+  this.empresaId = Number(paramId);
+
+  console.log("📌 empresaId numérico:", this.empresaId);
+
+  if (!Number.isFinite(this.empresaId)) {
+    console.error('❌ invalid empresaId:', paramId);
+    return;
+  }
+
+  this.store
+    .select(selectEventosByEmpresaId(this.empresaId))
+    .pipe(take(1))
+    .subscribe((ev) => {
+      console.log("📌 Eventos obtenidos del store:", ev);
+
+      if (!ev || ev.length === 0) {
+        console.log("📌 No había eventos en store → dispatch loadEventos");
+        this.store.dispatch(EventoActions.loadEventos({ empresaId: this.empresaId }));
+      } else {
+        console.log("📌 Ya existían eventos en store:", ev);
+        this.eventos = ev;
+      }
+    });
+}
+
+
+  goToLogin() {
+    this.showLoginModal = true;
+  }
+
+  handleLoginSuccess() {
+    this.isLoggedIn = true;
+    this.showLoginModal = false;
+    // 👉 aquí decides dónde llevarlo después de login
+    this.router.navigate(['/home']);
+  }
+
+  logout() {
+    this.isLoggedIn = false;
   }
 
   toggleMenu() {
@@ -122,11 +123,9 @@ throw new Error('Method not implemented.');
     if (currentUrl.includes('/month')) {
       return null; // no navegar
     }
-
     if (currentUrl.includes('/day') || currentUrl.includes('/week')) {
       return currentUrl.replace(/(day|week)/, 'month');
     }
-
     return '/home';
   }
 }
