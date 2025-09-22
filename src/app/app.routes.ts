@@ -24,12 +24,31 @@ import { WeekViewAdminComponent } from './loggeado/schedule/week-view/week-view.
 import { CompanyListComponent } from './android/features/company-list/company-list.component';
 import { CategoryListComponent } from './android/features/category-list/category-list.component';
 
-
 export const routes: Routes = [
   { path: '', component: CategoryListComponent },
   { path: 'login', component: LoginComponent },
   { path: 'ingresar-codigo', component: CategoryListComponent },
-    { path: 'categoria/:slug', component: CompanyListComponent }, // 👈 aquí
+
+  // 👉 Categorías
+  { path: 'categoria/:categoryId', component: CompanyListComponent },
+
+  // 👉 Compañías dentro de categorías con agenda
+  { path: 'categoria/:categoryId/empresa/:companyName/agenda',
+    component: ContenedorAgendaComponent,
+    children: [
+      {
+        path: 'schedule',
+        component: ScheduleComponent,
+        children: [
+          { path: 'month', component: MonthViewComponent },
+          { path: 'week', component: WeekViewComponent },
+          { path: 'day/:date', component: TodayViewApartarComponent }, // ✅ cliente agenda
+          { path: '', redirectTo: 'month', pathMatch: 'full' }
+        ]
+      },
+      { path: '', redirectTo: 'schedule', pathMatch: 'full' }
+    ]
+  },
 
   { path: 'home', component: MisEventosComponent },
 
@@ -48,7 +67,7 @@ export const routes: Routes = [
             children: [
               { path: 'month', component: MonthViewComponent },
               { path: 'week', component: WeekViewComponent },
-              { path: 'day/:date', component: TodayViewApartarComponent }, // ✅ cliente agenda
+              { path: 'day/:date', component: TodayViewApartarComponent },
               { path: '', redirectTo: 'month', pathMatch: 'full' }
             ]
           },
@@ -67,7 +86,7 @@ export const routes: Routes = [
             children: [
               { path: 'month', component: MonthViewComponent },
               { path: 'week', component: WeekViewAdminComponent },
-              { path: 'day/:date', component: TodayViewAdminComponentCompleted }, // ✅ admin ve completadas
+              { path: 'day/:date', component: TodayViewAdminComponentCompleted },
               { path: '', redirectTo: 'month', pathMatch: 'full' }
             ]
           },

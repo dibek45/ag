@@ -77,7 +77,10 @@ throw new Error('Method not implemented.');
     private router: Router,
     private store: Store,
     private route: ActivatedRoute
-  ) {}
+  ) {
+    const companyName = this.route.snapshot.paramMap.get('companyName');
+  console.log('Empresa seleccionada:', companyName);
+  }
 
   ngOnInit(): void {
     this.previousUrl = this.navigationService.getPreviousUrl();

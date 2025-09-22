@@ -1,19 +1,16 @@
 <div class="codigo-container">
-  <!-- Header con regresar + buscador -->
+  <!-- Header con buscador -->
   <div class="header">
-   
-
-    <form class="searchbar" (ngSubmit)="continuar()" #f="ngForm">
+    <form class="searchbar">
       <input
         type="search"
         class="search-input"
-        placeholder="Ingresa el código del organizador"
+        placeholder="Buscar categoría..."
         name="codigo"
         [(ngModel)]="codigo"
+        (ngModelChange)="onSearchChange($event)"
         autocomplete="off"
-        required
       />
- 
     </form>
   </div>
 
@@ -24,8 +21,8 @@
   <div class="categories">
     <button
       class="category-card"
-      *ngFor="let cat of categories"
-      (click)="selectCategory(cat)"
+      *ngFor="let cat of filteredCategories"
+      (click)="irACategoria(cat)"
       type="button"
       [attr.aria-label]="'Elegir ' + cat.name"
     >
