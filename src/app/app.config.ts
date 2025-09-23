@@ -1,4 +1,3 @@
-// app.config.ts
 import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter, withHashLocation } from '@angular/router';
 import { routes } from './app.routes';
@@ -7,11 +6,11 @@ import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideHttpClient } from '@angular/common/http';
 
-// 📅 EVENTOS
-import { eventoReducer } from './state/evento/evento.reducer';
+// 🏢 EMPRESAS
+import { empresaReducer } from './state/empresa/empresa.reducer';
+import { EmpresaEffects } from './state/empresa/empresa.effects';
 import { EventoEffects } from './state/evento/evento.effects';
-
-// (si más adelante quieres otros features, los agregas aquí)
+import { eventoReducer } from './state/evento/evento.reducer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -20,12 +19,16 @@ export const appConfig: ApplicationConfig = {
 
     // 🧠 STORE
     provideStore({
-      eventos: eventoReducer, // 👈 clave debe coincidir con el featureSelector
+      empresas: empresaReducer, 
+            eventos: eventoReducer,    // 👈 agrega feature eventos
+  // 👈 la clave debe coincidir con el createFeatureSelector('empresas')
     }),
 
     // 🧠 EFFECTS
     provideEffects([
-      EventoEffects,
+      EmpresaEffects,
+            EventoEffects,             // 👈 agrega efectos de eventos
+
     ]),
 
     provideStoreDevtools({ maxAge: 25, logOnly: !isDevMode() }),

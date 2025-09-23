@@ -93,4 +93,19 @@ export class WeekViewComponent {
     const end = this.weekDays[6].date;
     return `${start.toLocaleDateString('es-MX', { month: 'short', day: 'numeric' })} - ${end.toLocaleDateString('es-MX', { month: 'short', day: 'numeric' })}`;
   }
+
+  prevWeek() {
+  // retroceder 7 días desde el inicio de la semana actual
+  this.currentDate.setDate(this.currentDate.getDate() - 7);
+  this.generateWeek();
+  this.selectedDay = this.weekDays[0].date; // opcional: reset al lunes
+}
+
+nextWeek() {
+  // avanzar 7 días desde el inicio de la semana actual
+  this.currentDate.setDate(this.currentDate.getDate() + 7);
+  this.generateWeek();
+  this.selectedDay = this.weekDays[0].date; // opcional: reset al lunes
+}
+
 }

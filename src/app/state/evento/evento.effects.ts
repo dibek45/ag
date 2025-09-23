@@ -1,45 +1,35 @@
 import { inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as EventoActions from './evento.actions';
-import { switchMap, map, catchError } from 'rxjs/operators';
+import { switchMap, map, catchError, withLatestFrom, filter, take } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { EventoService } from './evento.service';
+import { Store } from '@ngrx/store';
+import { selectEventosByEmpresaId } from './evento.selectors';
 
 @Injectable()
 export class EventoEffects {
-  private actions$ = inject(Actions);
-  private eventoService = inject(EventoService);
+  actions$ = inject(Actions);
+  eventoService = inject(EventoService);
+  store = inject(Store);
 
-  // 🔹 Cargar eventos de una empresa
   loadEventos$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(EventoActions.loadEventos),
-      switchMap(({ empresaId }) => {
-        console.log("📡 Effect → Cargando eventos con empresaId:", empresaId);
-
-        return this.eventoService.getEventosByAdmin(empresaId).pipe(
-          map((eventos) =>
-            EventoActions.loadEventosSuccess({ eventos, empresaId })
-          ),
-          catchError((error) =>
-            of(EventoActions.loadEventosFailure({ error }))
-          )
-        );
-      })
-    )
-  );
-
-  // 🔹 Crear cita asociada a un evento
-  createCita$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(EventoActions.createCita),
-      switchMap(({ eventoId, cita }) =>
-        this.eventoService.createCita(cita).pipe(
-          map((newCita) =>
-            EventoActions.createCitaSuccess({ eventoId, cita: newCita })
-          ),
-          catchError((error) =>
-            of(EventoActions.createCitaFailure({ error }))
+      ofType(EventoActions.loadEventos),             // 👈 aquí recibes "action"
+      withLatestFrom(this.store),                   // 👈 une la acción con el estado
+      switchMap(([action]) =>                       // 👈 ya puedes usar "action"
+        this.store.select(selectEventosByEmpresaId(action.empresaId)).pipe(
+          take(1),                                  // 👈 leer solo una vez
+          filter(eventos => !eventos || eventos.length === 0),
+          switchMap(() =>
+            this.eventoService.getEventosByAdmin(action.empresaId).pipe(
+              map((eventos) =>
+                EventoActions.loadEventosSuccess({ eventos, empresaId: action.empresaId })
+              ),
+              catchError((error) =>
+                of(EventoActions.loadEventosFailure({ error }))
+              )
+            )
           )
         )
       )

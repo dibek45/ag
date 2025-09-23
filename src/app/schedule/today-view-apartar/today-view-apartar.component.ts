@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Cita, Evento } from '../../state/evento/evento.model';
-import { selectAllEventos } from '../../state/evento/evento.selectors';
+import { selectAllEventos, selectEventosByEmpresaId } from '../../state/evento/evento.selectors';
 import { ModalCitaComponent } from './cita-modal/cita-modal.component';
 import * as EventoActions from '../../state/evento/evento.actions';
+import { AppState } from '../../state/app.state';
 
 interface TimeSlot {
   time: string;
@@ -60,36 +61,51 @@ export class TodayViewApartarComponent implements OnInit, OnChanges {
   slotSeleccionado: { fecha: Date; hora?: string } | null = null;
 
   constructor(
-    private route: ActivatedRoute,
-    private store: Store
+  private router: Router,
+  private route: ActivatedRoute,
+  private store: Store<AppState>
   ) {}
 
-  ngOnInit(): void {
+ngOnInit(): void {
+  const param = this.route.snapshot.paramMap.get('date');
+  if (param) {
+    this.date = param;
+    this.currentDate = new Date(this.date + 'T00:00:00');
+  } else {
+    const t = new Date();
+    this.date = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
+    this.currentDate = t;
+  }
 
-     this.citasOcupadas = this.citasDelDia.map(c => ({
-      fecha: c.fecha,
-      hora: c.hora.slice(0, 5)
-    }));
-    const param = this.route.snapshot.paramMap.get('date');
-    if (param) {
-      this.date = param;
-      this.currentDate = new Date(this.date + 'T00:00:00');
-    } else {
-      const t = new Date();
-      this.date = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
-      this.currentDate = t;
+  this.setDiaSemana(new Date(this.date + 'T00:00:00'));
+
+  // 🔍 obtener empresaId (subiendo en la jerarquía de rutas)
+  let parentRoute = this.route;
+  let empresaId: number | null = null;
+  while (parentRoute) {
+    const id = parentRoute.snapshot.paramMap.get('adminId');
+    if (id) {
+      empresaId = Number(id);
+      break;
     }
+    parentRoute = parentRoute.parent!;
+  }
 
-    this.setDiaSemana(new Date(this.date + 'T00:00:00'));
-
-    this.evento$ = this.store.select(selectAllEventos).pipe(
-      map(list => list.length ? list[0] : undefined)
+  if (empresaId) {
+    this.evento$ = this.store.select(selectEventosByEmpresaId(empresaId)).pipe(
+      map(eventos => eventos.length ? eventos[0] : undefined)
     );
 
     this.eventoSub = this.evento$.subscribe(ev => {
       if (ev) this.loadCitasAndSlots(ev);
+      else {
+        this.citasDelDia = [];
+        this.timeSlots = [];
+      }
     });
   }
+}
+
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['inputDate'] && this.inputDate) {

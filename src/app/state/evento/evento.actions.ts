@@ -1,12 +1,10 @@
 import { createAction, props } from '@ngrx/store';
 import { Cita, Evento } from './evento.model';
 
-// 🔄 Cargar todos los eventos
-
-
+// 🔄 Cargar eventos
 export const loadEventos = createAction(
   '[Evento] Load Eventos',
-  props<{ empresaId: number }>()   // 👈 ya no adminId
+  props<{ empresaId: number }>()
 );
 
 export const loadEventosSuccess = createAction(
@@ -24,10 +22,12 @@ export const createEvento = createAction(
   '[Evento] Create Evento',
   props<{ evento: Evento }>()
 );
+
 export const createEventoSuccess = createAction(
   '[Evento] Create Evento Success',
   props<{ evento: Evento }>()
 );
+
 export const createEventoFailure = createAction(
   '[Evento] Create Evento Failure',
   props<{ error: any }>()
@@ -38,10 +38,12 @@ export const updateEvento = createAction(
   '[Evento] Update Evento',
   props<{ evento: Evento }>()
 );
+
 export const updateEventoSuccess = createAction(
   '[Evento] Update Evento Success',
   props<{ evento: Evento }>()
 );
+
 export const updateEventoFailure = createAction(
   '[Evento] Update Evento Failure',
   props<{ error: any }>()
@@ -52,28 +54,16 @@ export const deleteEvento = createAction(
   '[Evento] Delete Evento',
   props<{ id: number }>()
 );
+
 export const deleteEventoSuccess = createAction(
   '[Evento] Delete Evento Success',
   props<{ id: number }>()
 );
+
 export const deleteEventoFailure = createAction(
   '[Evento] Delete Evento Failure',
   props<{ error: any }>()
 );
-
-
-
-
-
-
-
-
-
-
-
-
-
-//citas
 
 // ➕ Crear cita
 export const createCita = createAction(
@@ -90,3 +80,6 @@ export const createCitaFailure = createAction(
   '[Cita] Create Cita Failure',
   props<{ error: any }>()
 );
+
+// 🧹 Limpiar eventos (opcional al cambiar empresa)
+export const clearEventos = createAction('[Evento] Clear Eventos');

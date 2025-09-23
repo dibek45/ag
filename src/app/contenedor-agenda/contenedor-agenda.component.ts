@@ -14,6 +14,7 @@ import { Evento } from '../state/evento/evento.model';
 import * as EventoActions from '../state/evento/evento.actions';
 import { LoginAgendaComponent } from './login-agenda/login-agenda.component';
 import { selectEventosByEmpresaId } from '../state/evento/evento.selectors';
+import * as EmpresaActions from '../state/empresa/empresa.actions';
 
 @Component({
   selector: 'app-eventos',
@@ -54,7 +55,6 @@ export class ContenedorAgendaComponent implements OnInit {
     const companyName = this.route.snapshot.paramMap.get('companyName');
     console.log('Empresa seleccionada:', companyName);
   }
-
 ngOnInit(): void {
   this.previousUrl = this.navigationService.getPreviousUrl();
 
@@ -73,7 +73,6 @@ ngOnInit(): void {
   console.log("📌 Param adminId leído:", paramId);
 
   this.empresaId = Number(paramId);
-
   console.log("📌 empresaId numérico:", this.empresaId);
 
   if (!Number.isFinite(this.empresaId)) {
@@ -81,20 +80,21 @@ ngOnInit(): void {
     return;
   }
 
-  this.store
-    .select(selectEventosByEmpresaId(this.empresaId))
-    .pipe(take(1))
-    .subscribe((ev) => {
-      console.log("📌 Eventos obtenidos del store:", ev);
+this.store
+  .select(selectEventosByEmpresaId(this.empresaId))
+  .pipe(take(1))
+  .subscribe((ev) => {
+    console.log("📌 Eventos obtenidos del store:", ev);
 
-      if (!ev || ev.length === 0) {
-        console.log("📌 No había eventos en store → dispatch loadEventos");
-        this.store.dispatch(EventoActions.loadEventos({ empresaId: this.empresaId }));
-      } else {
-        console.log("📌 Ya existían eventos en store:", ev);
-        this.eventos = ev;
-      }
-    });
+    if (!ev || ev.length === 0) {
+      console.log("📌 No había eventos en store → dispatch loadEventos");
+      this.store.dispatch(EventoActions.loadEventos({ empresaId: this.empresaId }));
+    } else {
+      console.log("📌 Ya existían eventos en store:", ev);
+      this.eventos = ev;
+    }
+  });
+
 }
 
 

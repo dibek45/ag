@@ -1,24 +1,28 @@
+  <!-- Rango de la semana -->
+  <h2>{{ currentWeekRange }}</h2>
 <!-- Rango de la semana -->
-<h2>{{ currentWeekRange }}</h2>
-
-<!-- Días de la semana -->
-<div class="week-days">
-  <div
-    class="day"
-    *ngFor="let day of weekDays"
-    [class.selected]="selectedDay?.toDateString() === day.date.toDateString()"
-    (click)="selectDay(day.date)"
-  >
-    <div class="day-name">{{ day.name }}</div>
-    <div class="day-number">{{ day.date | date: 'd' }}</div>
+<div class="week-header">
+  <button (click)="prevWeek()">⬅️</button>
+  <button (click)="nextWeek()">➡️</button>
+</div>
+  <!-- Días de la semana -->
+  <div class="week-days">
+    <div
+      class="day"
+      *ngFor="let day of weekDays"
+      [class.selected]="selectedDay?.toDateString() === day.date.toDateString()"
+      (click)="selectDay(day.date)"
+    >
+      <div class="day-name">{{ day.name }}</div>
+      <div class="day-number">{{ day.date | date: 'd' }}</div>
+    </div>
   </div>
-</div>
 
 
-<!-- 👇 Día seleccionado -->
-<div class="selected-day" *ngIf="selectedDay">
- 
+  <!-- 👇 Día seleccionado -->
+  <div class="selected-day" *ngIf="selectedDay">
+  
 
-  <!-- Componente hijo de apartar -->
-<app-today-view-apartar [inputDate]="selectedDay"></app-today-view-apartar>
-</div>
+    <!-- Componente hijo de apartar -->
+  <app-today-view-apartar [inputDate]="selectedDay"></app-today-view-apartar>
+  </div>

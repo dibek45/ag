@@ -17,6 +17,7 @@ export class WhatsappButtonComponent {
   telefono = signal<string>('');
 
   constructor() {
+    /*
     this.store.select(selectAllEventos).pipe(
       map(eventos => eventos.length ? eventos[0] : undefined) // 👈 tomamos el primero
     ).subscribe(evento => {
@@ -26,5 +27,6 @@ export class WhatsappButtonComponent {
         this.telefono.set(cleanPhone);
       }
     });
+    */
   }
 }
