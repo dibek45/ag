@@ -91,19 +91,25 @@ ngOnInit(): void {
     parentRoute = parentRoute.parent!;
   }
 
-  if (empresaId) {
-    this.evento$ = this.store.select(selectEventosByEmpresaId(empresaId)).pipe(
-      map(eventos => eventos.length ? eventos[0] : undefined)
-    );
+ if (empresaId) {
+  this.evento$ = this.store.select(selectEventosByEmpresaId(empresaId)).pipe(
+    map(eventos => {
+      // buscar evento que tenga citas en el día actual
+      return eventos.find(ev => ev.citas?.some(c => c.fecha.startsWith(this.date)));
+    })
+  );
 
-    this.eventoSub = this.evento$.subscribe(ev => {
-      if (ev) this.loadCitasAndSlots(ev);
-      else {
-        this.citasDelDia = [];
-        this.timeSlots = [];
-      }
-    });
-  }
+  this.eventoSub = this.evento$.subscribe(ev => {
+    if (ev) {
+      this.loadCitasAndSlots(ev);
+    } else {
+      console.warn("⚠️ No hay evento con citas en la fecha:", this.date);
+      this.citasDelDia = [];
+      this.timeSlots = [];
+    }
+  });
+}
+
 }
 
 
@@ -148,51 +154,7 @@ ngOnInit(): void {
     return `${this.hourLabels.length * this.slotHeight}px`;
   }
 
-  // core
-  generateSlots(evento: Evento) {
-    const horario = evento.admin?.disponibilidades.find(
-      d => this.normalize(d.dia_semana) === this.diaSemana
-    );
-
-    if (!horario) {
-      this.timeSlots = [];
-      this.hourLabels = [];
-      this.hasAvailableSlots = false;
-      return;
-    }
-
-    this.buildHourLabels(horario.hora_inicio, horario.hora_fin);
-
-    const start = new Date(`${this.date}T${horario.hora_inicio}`);
-    const end = new Date(`${this.date}T${horario.hora_fin}`);
-    const step = this.slotUnit;
-
-    const durationDefault = evento.duracion ?? 60;
-    const slots: TimeSlot[] = [];
-
-    for (let t = new Date(start); t < end; t = new Date(t.getTime() + step * 60000)) {
-      const label = t.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
-
-      const cita = this.citasDelDia.find(c => {
-        const ini = new Date(`${this.date}T${c.hora}`);
-        const mins = c.servicio?.duracionMin ?? durationDefault;
-        const fin = new Date(ini.getTime() + mins * 60000);
-        return t >= ini && t < fin;
-      });
-
-      const dur = cita?.servicio?.duracionMin ?? durationDefault;
-
-      slots.push({
-        time: label,
-        available: !cita,
-        cita,
-        duration: dur
-      });
-    }
-
-    this.timeSlots = slots;
-    this.hasAvailableSlots = slots.length > 0;
-  }
+ 
 
   // UI helpers
   getTop(hora: string): number {
@@ -301,11 +263,8 @@ guardarCita(cita: any) {
   this.cerrarModal();
 }
 
-  private loadCitasAndSlots(evento: Evento) {
-    this.evento = evento;
-    this.citasDelDia = evento.citas.filter(c => c.fecha.startsWith(this.date));
-    this.generateSlots(evento);
-  }
+
+
 
   get serviciosDisponibles() {
     return this.evento?.admin?.servicios ?? [];
@@ -321,6 +280,76 @@ get citasOcupadasParaModal() {
 
 get esDiaDescanso(): boolean {
   return !this.hourLabels || this.hourLabels.length === 0;
+}
+
+
+generateSlots(evento: Evento) {
+  let horario = evento.admin?.disponibilidades.find(
+    d => this.normalize(d.dia_semana) === this.diaSemana
+  );
+
+  if (!horario) {
+    if (this.citasDelDia.length > 0) {
+      const horas = this.citasDelDia.map(c => parseInt(c.hora.split(':')[0], 10));
+      const minHora = Math.min(...horas);
+      const maxHora = Math.max(...horas) + 1;
+
+      horario = {
+        dia_semana: this.diaSemana,
+        hora_inicio: `${String(minHora).padStart(2, '0')}:00`,
+        hora_fin: `${String(maxHora).padStart(2, '0')}:00`
+      } as any;
+      console.log("⚡ Usando horario basado en citas:", horario);
+    } else {
+      this.timeSlots = [];
+      this.hourLabels = [];
+      this.hasAvailableSlots = false;
+      return;
+    }
+  }
+
+  this.buildHourLabels(horario!.hora_inicio, horario!.hora_fin);
+
+  const start = new Date(`${this.date}T${horario!.hora_inicio}`);
+  const end = new Date(`${this.date}T${horario!.hora_fin}`);
+
+  const durationDefault = evento.duracion ?? 60;
+  const slots: TimeSlot[] = [];
+
+  for (let t = new Date(start); t < end; t = new Date(t.getTime() + this.slotUnit * 60000)) {
+    const label = t.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+
+    const cita = this.citasDelDia.find(c => {
+      const ini = new Date(`${this.date}T${c.hora}`);
+      const mins = c.servicio?.duracionMin ?? durationDefault;
+      const fin = new Date(ini.getTime() + mins * 60000);
+      return t >= ini && t < fin;
+    });
+
+    const dur = cita?.servicio?.duracionMin ?? durationDefault;
+
+    slots.push({
+      time: label,
+      available: !cita,
+      cita,
+      duration: dur
+    });
+  }
+
+  this.timeSlots = slots;
+  this.hasAvailableSlots = slots.length > 0;
+}
+
+private loadCitasAndSlots(evento: Evento) {
+  this.evento = evento;
+
+  // filtrar las citas del día actual
+  this.citasDelDia = evento.citas.filter(c => c.fecha.startsWith(this.date));
+
+  console.log("📅 Citas para", this.date, this.citasDelDia);
+
+  // regenerar los slots con esas citas
+  this.generateSlots(evento);
 }
 
 }

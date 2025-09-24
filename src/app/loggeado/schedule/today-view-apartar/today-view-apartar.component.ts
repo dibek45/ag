@@ -7,8 +7,8 @@ import { Observable, Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Cita, Evento } from '../../../state/evento/evento.model';
 import { selectAllEventos } from '../../../state/evento/evento.selectors';
-import { ModalCitaComponent } from './cita-modal/cita-modal.component';
 import * as EventoActions from '../../../state/evento/evento.actions';
+import { ModalCitaComponent } from '../../../schedule/today-view-apartar/cita-modal/cita-modal.component';
 
 interface TimeSlot {
   time: string;
