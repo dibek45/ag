@@ -1,0 +1,11 @@
+bbbbbb
+
+<div class="empresa-card" *ngIf="empresa">
+  <img *ngIf="empresa.logoUrl" [src]="empresa.logoUrl" alt="Logo" class="empresa-logo">
+
+  <div class="empresa-data">
+    <h2 class="empresa-nombre">{{ empresa.nombre }}</h2>
+    <p *ngIf="empresa.telefono">📞 {{ empresa.telefono }}</p>
+    <p *ngIf="empresa.email">✉️ {{ empresa.email }}</p>
+  </div>
+</div>

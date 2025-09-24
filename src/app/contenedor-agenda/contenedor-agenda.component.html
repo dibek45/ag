@@ -33,9 +33,10 @@
     *ngIf="mostrarMenu && menuAbierto" 
     (cerrar)="toggleMenu()">
   </app-menu-settings>
-
+aaaaaaaaaaaaaaaaaaa
   <!-- Botón de menú si está logueado -->
-
+<app-empresa-info *ngIf="empresaSeleccionada$ | async as empresa" [empresa]="empresa"></app-empresa-info>
+aaaaaaaaaa
 <!-- logo centrado -->
 <div class="logo-center">
   <img src="https://api.sorteos.sa.dibeksolutions.com/uploads/logos/logo.ico" 

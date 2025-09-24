@@ -1,0 +1,30 @@
+.empresa-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 10px;
+  background: #f9fafb;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+
+.empresa-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ddd;
+}
+
+.empresa-data {
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  p {
+    margin: 2px 0;
+    font-size: 0.9rem;
+    color: #555;
+  }
+}
