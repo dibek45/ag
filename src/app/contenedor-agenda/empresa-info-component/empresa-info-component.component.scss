@@ -1,30 +1,38 @@
-.empresa-card {
+.empresa-info {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border-radius: 10px;
-  background: #f9fafb;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  text-align: center;
+  margin: 12px auto;
 }
 
 .empresa-logo {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #ddd;
+  margin-bottom: 8px;
 }
 
 .empresa-data {
   h2 {
     margin: 0;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
     font-weight: 600;
+    color: #111827;
   }
+
   p {
-    margin: 2px 0;
-    font-size: 0.9rem;
-    color: #555;
+    margin: 4px 0 0;
+    font-size: 0.95rem;
+    color: #4b5563;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  p i {
+    color: #ef4444; // rojo para el ícono de teléfono
   }
 }
