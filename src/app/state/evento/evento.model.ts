@@ -36,12 +36,12 @@ export interface Cita {
   servicio?: Servicio;  // relación opcional
 }
 export interface Evento {
-  id: number;
-  titulo: string;
-  descripcion: string;
-  fecha: string;
-  duracion: number;
-  citas: Cita[];
-  admin: Admin;
-  servicios: Servicio[]; // 🔹 un evento puede tener varios servicios
+    id: number;
+    titulo: string;
+    descripcion: string;
+    fecha: string;
+    duracion: number;
+    citas: Cita[];
+    admin: Admin;
+    servicios: Servicio[]; // 🔹 un evento puede tener varios servicios
 }

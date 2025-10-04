@@ -7,9 +7,9 @@
   type Category = { id: number; name: string; slug: string; icon: string };
 
   @Component({
-    selector: 'app-ingresar-codigo',
+    selector: 'app-lista-de-empresas',
     standalone: true,
-    imports: [CommonModule, FormsModule, BtnRegresarComponent],
+    imports: [CommonModule, FormsModule],
     templateUrl: './category-list.component.html',
     styleUrls: ['./category-list.component.scss']
   })

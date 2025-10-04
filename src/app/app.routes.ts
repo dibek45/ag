@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { MetodosPagoComponent } from './pagos/metodos-pago/metodos-pago.component';
 import { PreguntasFrecuentesComponent } from './faq/preguntas-frecuentes/preguntas-frecuentes.component';
 import { ContactoComponent } from './contacto/contacto/contacto.component';
-import { WelcomeComponent } from './android/features/welcome/welcome.component';
 
 // 👇 imports de agenda (cliente)
 import { ScheduleComponent } from './schedule/schedule.component';
@@ -20,7 +19,7 @@ import { CategoryListComponent } from './android/features/category-list/category
 
 export const routes: Routes = [
   { path: '', component: CategoryListComponent },
-  { path: 'ingresar-codigo', component: CategoryListComponent },
+  { path: 'lista-de-empresas', component: CategoryListComponent },
 
   // 👉 Categorías
   { path: 'categoria/:categoryId', component: CompanyListComponent },
