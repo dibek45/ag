@@ -1,20 +1,41 @@
 <div class="modal-overlay">
   <div class="modal">
-    <h2 class="modal-title">Iniciar sesión</h2>
+    <h2 class="modal-title">Iniciar Sesión</h2>
 
-    <div class="input-group">
-      <span class="icon">👤</span>
-      <input [(ngModel)]="username" type="text" placeholder="Usuario" />
-    </div>
+    <form (ngSubmit)="submitLogin()">
+      <!-- Usuario -->
+      <div class="input-group">
+        <span class="icon">👤</span>
+        <input
+          type="text"
+          placeholder="Usuario o correo"
+          [(ngModel)]="username"
+          name="username"
+          required
+        />
+      </div>
 
-    <div class="input-group">
-      <span class="icon">🔒</span>
-      <input [(ngModel)]="password" type="password" placeholder="Contraseña" />
-    </div>
+      <!-- Contraseña -->
+      <div class="input-group">
+        <span class="icon">🔒</span>
+        <input
+          type="password"
+          placeholder="Contraseña"
+          [(ngModel)]="password"
+          name="password"
+          required
+        />
+      </div>
 
-    <div class="actions">
-      <button class="btn primary" (click)="submitLogin()">Entrar</button>
-      <button class="btn secondary" (click)="close()">Cancelar</button>
-    </div>
+      <div class="actions">
+        <button type="submit" class="btn primary">Entrar</button>
+        <button type="button" class="btn secondary" (click)="close()">Cerrar</button>
+      </div>
+    </form>
+
+    <hr style="margin: 1.5rem 0;" />
+
+    <!-- 🔹 Botón de Google -->
+    <div id="googleBtn" style="display: flex; justify-content: center;"></div>
   </div>
 </div>

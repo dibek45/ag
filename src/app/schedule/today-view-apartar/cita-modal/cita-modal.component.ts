@@ -10,12 +10,12 @@ import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angula
   styleUrls: ['./cita-modal.component.scss'],
 })
 export class ModalCitaComponent {
-  @Input() servicios: any[] = []; // evento.admin.servicios
+  @Input() servicios: any[] = [];
   @Input() fechaSeleccionada!: { fecha: Date; hora?: string };
   @Input() citasOcupadas: { fecha: string; hora: string; duracionMin?: number }[] = [];
-  @Input() eventoId!: number; // 👈 pásalo desde el padre
+  @Input() eventoId!: number;
   @Output() closeModal = new EventEmitter<void>();
-  @Output() saveModal = new EventEmitter<any>(); // emitimos la cita lista
+  @Output() saveModal = new EventEmitter<any>();
 
   form!: FormGroup;
   tabActivo = 0;
@@ -26,41 +26,51 @@ export class ModalCitaComponent {
     this.form = this.fb.group({
       nombreCliente: ['', [Validators.required, Validators.minLength(2)]],
       telefonoCliente: ['', [Validators.required, Validators.pattern(/^\d{10}$/)]],
-      fecha: ['', [Validators.required]],    // yyyy-mm-dd
-      hora: ['', [Validators.required]],     // "h:mmam/pm"
+      fecha: ['', [Validators.required]],
+      hora: ['', [Validators.required]],
       servicioId: [null, [Validators.required]],
       estado: ['pendiente'],
-      eventoId: [null, [Validators.required]], // se setea en ngOnChanges
+      eventoId: [null, [Validators.required]],
     });
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    // set eventoId
-    if (this.eventoId && this.form) {
+    console.log('🟢 ngOnChanges ejecutado');
+    console.log('📅 fechaSeleccionada:', this.fechaSeleccionada);
+    console.log('🕒 servicios:', this.servicios);
+
+    if (!this.form) {
+      console.warn('⚠️ Form aún no inicializado');
+      return;
+    }
+
+    if (this.eventoId) {
+      console.log('✅ eventoId recibido:', this.eventoId);
       this.form.get('eventoId')?.setValue(this.eventoId);
     }
 
-    // set fecha/hora a partir de fechaSeleccionada
     if (this.fechaSeleccionada?.fecha) {
       const yyyy = this.fechaSeleccionada.fecha.getFullYear();
-      const mm = String(this.fechaSeleccionada.fecha.getMonth() + 1).padStart(2,'0');
-      const dd = String(this.fechaSeleccionada.fecha.getDate()).padStart(2,'0');
+      const mm = String(this.fechaSeleccionada.fecha.getMonth() + 1).padStart(2, '0');
+      const dd = String(this.fechaSeleccionada.fecha.getDate()).padStart(2, '0');
       const fechaStr = `${yyyy}-${mm}-${dd}`;
+
       this.form.get('fecha')?.setValue(fechaStr);
+      console.log('📆 Fecha seteada en form:', fechaStr);
 
       if (this.fechaSeleccionada.hora) {
         this.form.get('hora')?.setValue(this.fechaSeleccionada.hora);
+        console.log('🕐 Hora seteada en form:', this.fechaSeleccionada.hora);
+        this.horaFin = '';
+        this.actualizarHoraFin();
       }
     }
 
-    // set servicioId según tab activo
     if (this.servicios?.length) {
       const sid = this.servicios[this.tabActivo]?.id ?? null;
       this.form.get('servicioId')?.setValue(sid);
-      // recalcula horas
+      console.log('💅 Servicio activo:', sid);
       this.calcularHorasDisponibles();
-      // si ya hay hora, actualiza horaFin
-      this.actualizarHoraFin();
     }
   }
 
@@ -68,23 +78,23 @@ export class ModalCitaComponent {
     this.tabActivo = i;
     const sid = this.servicios[i]?.id ?? null;
     this.form.get('servicioId')?.setValue(sid);
+    console.log('🔁 Cambió a tab:', i, '→ servicioId:', sid);
     this.calcularHorasDisponibles();
     this.actualizarHoraFin();
   }
 
-  // ==== Guardar ====
   guardar() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      console.warn('❌ Form inválido:', this.form.value);
       return;
     }
 
     const payload = this.form.value;
-    // normaliza hora (si tu backend espera "HH:mm:ss", conviértelo aquí si lo necesitas)
-    // Ejemplo: convertir "2:30pm" -> "14:30:00"
+
     const to24h = (ampm: string) => {
       const m = ampm.match(/^(\d{1,2}):(\d{2})(am|pm)$/i);
-      if (!m) return ampm; // por si ya viene formateado
+      if (!m) return ampm;
       let h = parseInt(m[1], 10);
       const mm = parseInt(m[2], 10);
       const suf = m[3].toLowerCase();
@@ -96,24 +106,27 @@ export class ModalCitaComponent {
     const cita = {
       nombreCliente: payload.nombreCliente.trim(),
       telefonoCliente: payload.telefonoCliente,
-      fecha: payload.fecha,           // "YYYY-MM-DD"
-      hora: to24h(payload.hora),      // "HH:mm:ss"
+      fecha: payload.fecha,
+      hora: to24h(payload.hora),
       estado: payload.estado,
       eventoId: payload.eventoId,
       servicioId: payload.servicioId,
     };
 
-    this.saveModal.emit(cita); // el padre hará el dispatch
+    console.log('✅ Cita lista para guardar:', cita);
+    this.saveModal.emit(cita);
   }
 
-  // ==== Disponibilidad y hora fin ====
   calcularHorasDisponibles() {
-    if (!this.servicios.length || !this.fechaSeleccionada?.fecha) return;
+    if (!this.servicios.length || !this.fechaSeleccionada?.fecha) {
+      console.warn('⚠️ No hay servicios o fecha seleccionada');
+      return;
+    }
 
     const servicio = this.servicios[this.tabActivo];
     const duracionServicio = servicio?.duracionMin || 30;
+    console.log('🧮 Calculando horas para servicio:', servicio.nombre, 'Duración:', duracionServicio);
 
-    // intervalo base: menor duración de todos
     const menorDuracion = Math.min(...this.servicios.map(s => s.duracionMin || 30));
     const intervalo = menorDuracion > 0 ? menorDuracion : 30;
 
@@ -137,7 +150,6 @@ export class ModalCitaComponent {
         cierreTime.setHours(cierre, 0, 0, 0);
         if (finSlot.getTime() > cierreTime.getTime()) continue;
 
-        // cruces
         const solapada = this.citasOcupadas.some(c => {
           if (c.fecha !== diaStr) return false;
           const [ch, cm] = c.hora.split(':').map(Number);
@@ -153,6 +165,7 @@ export class ModalCitaComponent {
     }
 
     this.horasDisponibles = horas;
+    console.log('🕓 Horas disponibles generadas:', this.horasDisponibles);
   }
 
   actualizarHoraFin() {
@@ -174,9 +187,9 @@ export class ModalCitaComponent {
 
     const fin = new Date(inicio.getTime() + duracion * 60000);
     this.horaFin = this.formatAmPm(fin);
+    console.log(`➡️ ${ampm} → ${this.horaFin}`);
   }
 
-  // utils
   private formatAmPm(date: Date): string {
     let hours = date.getHours();
     const minutes = date.getMinutes();

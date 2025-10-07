@@ -15,29 +15,35 @@ export class EventoService {
   // 🔹 Obtener todos los eventos de un admin
   getEventosByAdmin(adminId: number): Observable<Evento[]> {
     const query = `
-      query EventosByAdmin($adminId: Int!) {
-        eventosByAdmin(adminId: $adminId) {
-          id
-          titulo
-          descripcion
-          fecha
-          duracion
-          citas {
-            id
-            nombreCliente
-            telefonoCliente
-            fecha
-            hora
-            estado
-            servicioId
-          }
-          servicios {
-            id
-            nombre
-            duracionMin
-          }
-        }
+      
+query EventosByAdmin($adminId: Int!) {
+  eventosByAdmin(adminId: $adminId) {
+    id
+    descripcion
+    fecha
+    titulo
+    citas {
+      id
+      hora
+      fecha
+      nombreCliente
+    }
+    duracion
+    servicios {
+      id
+      nombre
+    }
+    admin {
+      disponibilidades {
+        id
+        dia_semana
+        hora_inicio
+        hora_fin
+     
       }
+    }
+  }
+}
     `;
 
     return this.http

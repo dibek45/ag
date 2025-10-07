@@ -1,11 +1,12 @@
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0, 0, 0, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 9999;
+  animation: fadeInBg 0.3s ease;
 }
 
 .modal {
@@ -14,28 +15,38 @@
   padding: 2rem;
   width: 90%;
   max-width: 400px;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-  animation: fadeIn 0.3s ease;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
+  animation: fadeIn 0.35s ease;
+  font-family: 'Poppins', sans-serif;
 }
 
 .modal-title {
   text-align: center;
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  font-weight: bold;
+  font-weight: 600;
+  color: #111;
 }
 
 .input-group {
   display: flex;
   align-items: center;
-  background: #f1f1f1;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
+  background: #f4f4f4;
+  padding: 0.6rem 0.8rem;
+  border-radius: 0.6rem;
   margin-bottom: 1rem;
+  border: 1px solid transparent;
+  transition: 0.2s ease;
+
+  &:focus-within {
+    border-color: #3b82f6;
+    background: #fff;
+  }
 
   .icon {
     margin-right: 0.5rem;
     font-size: 1.2rem;
+    color: #555;
   }
 
   input {
@@ -44,6 +55,11 @@
     background: transparent;
     outline: none;
     font-size: 1rem;
+    color: #111;
+
+    &::placeholder {
+      color: #aaa;
+    }
   }
 }
 
@@ -53,20 +69,53 @@
   margin-top: 1rem;
 
   .btn {
-    padding: 0.6rem 1.2rem;
+    padding: 0.7rem 1.4rem;
     border-radius: 0.5rem;
-    font-weight: bold;
+    font-weight: 600;
     cursor: pointer;
     border: none;
+    font-size: 0.95rem;
+    transition: 0.2s ease;
 
     &.primary {
       background: #3b82f6;
       color: #fff;
+      &:hover {
+        background: #2563eb;
+      }
     }
 
     &.secondary {
       background: #e5e7eb;
       color: #111;
+      &:hover {
+        background: #d1d5db;
+      }
     }
+  }
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInBg {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

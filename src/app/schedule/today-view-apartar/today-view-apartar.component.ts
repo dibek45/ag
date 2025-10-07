@@ -65,21 +65,21 @@ export class TodayViewApartarComponent implements OnInit, OnChanges {
   private route: ActivatedRoute,
   private store: Store<AppState>
   ) {}
-
 ngOnInit(): void {
+  // 📅 Leer la fecha del parámetro o usar la actual
   const param = this.route.snapshot.paramMap.get('date');
   if (param) {
     this.date = param;
-    this.currentDate = new Date(this.date + 'T00:00:00');
+    this.currentDate = new Date(`${this.date}T00:00:00`);
   } else {
     const t = new Date();
     this.date = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}-${String(t.getDate()).padStart(2, '0')}`;
     this.currentDate = t;
   }
 
-  this.setDiaSemana(new Date(this.date + 'T00:00:00'));
+  this.setDiaSemana(this.currentDate);
 
-  // 🔍 obtener empresaId (subiendo en la jerarquía de rutas)
+  // 🔍 Buscar adminId subiendo la jerarquía de rutas
   let parentRoute = this.route;
   let empresaId: number | null = null;
   while (parentRoute) {
@@ -91,26 +91,28 @@ ngOnInit(): void {
     parentRoute = parentRoute.parent!;
   }
 
- if (empresaId) {
+  if (!empresaId) {
+    console.error('❌ No se encontró adminId en la ruta');
+    return;
+  }
+
+  // 🧠 Obtener evento del store
   this.evento$ = this.store.select(selectEventosByEmpresaId(empresaId)).pipe(
-    map(eventos => {
-      // buscar evento que tenga citas en el día actual
-      return eventos.find(ev => ev.citas?.some(c => c.fecha.startsWith(this.date)));
-    })
+    map(eventos => (eventos.length > 0 ? eventos[0] : undefined))
   );
 
+  // 🔁 Suscribirse al evento (solo el primero)
   this.eventoSub = this.evento$.subscribe(ev => {
     if (ev) {
       this.loadCitasAndSlots(ev);
     } else {
-      console.warn("⚠️ No hay evento con citas en la fecha:", this.date);
+      console.info(`📅 Mostrando disponibilidad sin eventos asignados (${this.date})`);
       this.citasDelDia = [];
       this.timeSlots = [];
     }
   });
 }
 
-}
 
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -126,6 +128,10 @@ ngOnInit(): void {
     }
   }
 
+
+  getFechaHora(cita: Cita): Date {
+  return new Date(`${cita.fecha.split('T')[0]}T${cita.hora}`);
+}
   // helpers
   private setDiaSemana(date: Date) {
     const raw = this.diasSemana[date.getDay()];
@@ -215,22 +221,25 @@ ngOnInit(): void {
   }
 
   getHoraFin(horaInicio: string, duracionMin: number, fecha: string): string {
-    const inicio = new Date(`${fecha}T${horaInicio}`);
-    inicio.setMinutes(inicio.getMinutes() + duracionMin);
+const fechaLimpia = fecha.split('T')[0]; // -> "2025-10-02"
+const inicio = new Date(`${fechaLimpia}T${horaInicio}`);    inicio.setMinutes(inicio.getMinutes() + duracionMin);
     return inicio.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  abrirModal(hora: string) {
-  // convertir "HH:mm" a "h:mmam/pm"
+abrirModal(hora: string) {
   const [hh, mm] = hora.split(':').map(Number);
-  let h12 = hh % 12 || 12;
-  const sufijo = hh >= 12 ? 'pm' : 'am';
-  const horaAmPm = `${h12}:${mm.toString().padStart(2, '0')}${sufijo}`;
+  const horaAmPm = new Date(0, 0, 0, hh, mm).toLocaleTimeString('es-MX', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: true
+  });
 
   this.slotSeleccionado = {
     fecha: this.currentDate,
     hora: horaAmPm
   };
+
+  console.log('🕒 Abriendo modal para hora:', horaAmPm);
   this.showModal = true;
 }
 
@@ -266,9 +275,9 @@ guardarCita(cita: any) {
 
 
 
-  get serviciosDisponibles() {
-    return this.evento?.admin?.servicios ?? [];
-  }
+ get serviciosDisponibles() {
+  return this.evento?.servicios ?? [];
+}
 get citasOcupadasParaModal() {
   const duracionDefault = this.evento?.duracion ?? 60;
   return (this.citasDelDia ?? []).map(c => ({
@@ -343,13 +352,25 @@ generateSlots(evento: Evento) {
 private loadCitasAndSlots(evento: Evento) {
   this.evento = evento;
 
-  // filtrar las citas del día actual
-  this.citasDelDia = evento.citas.filter(c => c.fecha.startsWith(this.date));
+  // 📅 Citas filtradas por fecha
+  this.citasDelDia = evento.citas?.filter(c => c.fecha.startsWith(this.date)) || [];
 
   console.log("📅 Citas para", this.date, this.citasDelDia);
 
-  // regenerar los slots con esas citas
+  // 🕒 Si no hay citas, igual genera slots según disponibilidad
+  if (!evento.admin?.disponibilidades?.length) {
+    console.warn("⚠️ El admin no tiene disponibilidades configuradas");
+    this.timeSlots = [];
+    this.hasAvailableSlots = false;
+    return;
+  }
+
+  // 🔹 Generar los slots disponibles del día
   this.generateSlots(evento);
+
+  // ✅ Activar la bandera
+  this.hasAvailableSlots = this.timeSlots.some(s => s.available);
 }
+
 
 }

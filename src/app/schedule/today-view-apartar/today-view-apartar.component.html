@@ -39,11 +39,16 @@
    <div class="duration">
   <ng-container *ngIf="cita.servicio?.duracionMin == 30; else conDuracion">
   </ng-container>
-  <ng-template #conDuracion>
-    {{ cita.servicio?.duracionMin }} min 
-    de {{ (cita.fecha + 'T' + cita.hora) | date:'shortTime':'':'es-MX' }}
-    a {{ getHoraFin(cita.hora, cita.servicio?.duracionMin || 60, cita.fecha) }}
-  </ng-template>
+<ng-template #conDuracion>
+  <div class="cita-info">
+    <strong>{{ cita.nombreCliente }}</strong>
+    <span class="hora">
+      {{ ('1970-01-01T' + cita.hora) | date:'shortTime':'':'es-MX' }}
+    </span>
+  </div>
+</ng-template>
+
+
 </div>
 
   </div>

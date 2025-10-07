@@ -24,9 +24,10 @@
 
 <app-login-agenda 
   *ngIf="showLoginModal" 
-  (loginSuccess)="handleLoginSuccess()" 
+  (loginSuccess)="handleLoginSuccess($event)" 
   (closeModal)="showLoginModal = false">
 </app-login-agenda>
+
 
 
   <app-menu-settings 

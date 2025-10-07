@@ -71,23 +71,7 @@ export const routes: Routes = [
       },
 
       // 📌 Agenda para admins
-      {
-        path: 'agenda-admin/:adminId',
-        component: EventosComponentAdmin,
-        children: [
-          {
-            path: 'schedule',
-            component: ScheduleComponent,
-            children: [
-              { path: 'month', component: MonthViewComponent },
-              { path: 'week', component: WeekViewAdminComponent },
-              { path: 'day/:date', component: TodayViewAdminComponentCompleted },
-              { path: '', redirectTo: 'month', pathMatch: 'full' }
-            ]
-          },
-          { path: '', redirectTo: 'schedule', pathMatch: 'full' }
-        ]
-      },
+   
 
       { path: 'pagos', component: MetodosPagoComponent },
       { path: 'faq', component: PreguntasFrecuentesComponent },

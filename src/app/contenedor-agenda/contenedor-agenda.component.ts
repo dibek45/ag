@@ -20,6 +20,7 @@ import { EmpresaInfoComponent } from './empresa-info-component/empresa-info-comp
 import { selectEmpresaById } from '../state/empresa/empresa.selectors';
 import { Empresa } from '../state/empresa/empresa.model';
 import { LoginAgendaComponent } from './login-agenda/login-agenda.component';
+import * as AuthActions from '../state/auth/auth.actions';
 
 @Component({
   selector: 'app-eventos',
@@ -117,11 +118,25 @@ export class ContenedorAgendaComponent implements OnInit {
 
 
   goToLogin() { this.showLoginModal = true; }
-  handleLoginSuccess() {
-    this.isLoggedIn = true;
-    this.showLoginModal = false;
-    this.router.navigate(['/home']);
-  }
+  
+
+handleLoginSuccess(event: { role: 'admin' | 'user' }) {
+  this.isLoggedIn = true;
+  this.showLoginModal = false;
+
+  const adminId = Number(this.route.snapshot.paramMap.get('adminId')) ?? this.empresaId;
+
+  // 🔹 Guardar en Redux
+  this.store.dispatch(AuthActions.loginSuccess({ role: event.role, adminId }));
+
+  // 🔹 Persistir en localStorage
+  localStorage.setItem('auth', JSON.stringify({ role: event.role, adminId, isLoggedIn: true }));
+
+  console.log('✅ Usuario logueado:', { role: event.role, adminId });
+
+  // 🔸 En vez de navegar, simplemente cierras el modal
+}
+
   logout() { this.isLoggedIn = false; }
   toggleMenu() { this.menuAbierto = !this.menuAbierto; }
 
