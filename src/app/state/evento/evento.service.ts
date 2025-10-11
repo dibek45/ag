@@ -3,12 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Evento, Cita } from './evento.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class EventoService {
-  private apiUrl = 'http://localhost:3000/graphql';
+  private apiUrl = environment.apiUrl; // 👈 toma la URL según el modo
 
   constructor(private http: HttpClient) {}
 

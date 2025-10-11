@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../state/auth/auth.service';
 
 declare const google: any;
 
@@ -14,7 +15,9 @@ declare const google: any;
 export class LoginAgendaComponent implements AfterViewInit {
   username = '';
   password = '';
+  loading = false;
 
+  // ✅ Outputs para comunicar al padre
   @Output() loginSuccess = new EventEmitter<{ 
     role: 'admin' | 'user'; 
     provider?: 'google' | 'manual'; 
@@ -24,55 +27,76 @@ export class LoginAgendaComponent implements AfterViewInit {
 
   @Output() closeModal = new EventEmitter<void>();
 
+  constructor(private authService: AuthService) {}
+
   ngAfterViewInit() {
-    // ✅ Inicializar Google Sign-In
+    // ✅ Inicializa Google Sign-In
     google.accounts.id.initialize({
       client_id: '123194794319-dgvffo1qkkf07csrqjim2hjfet5jqkiv.apps.googleusercontent.com',
-      callback: (response: any) => this.handleGoogleLogin(response)
+      callback: (response: any) => this.handleGoogleLogin(response),
     });
 
-    // ✅ Renderizar botón
-    google.accounts.id.renderButton(
-      document.getElementById('googleBtn'),
-      { theme: 'outline', size: 'large', width: '100%' }
-    );
+    // ✅ Renderiza botón
+    google.accounts.id.renderButton(document.getElementById('googleBtn'), {
+      theme: 'outline',
+      size: 'large',
+      width: 320,
+    });
   }
 
-  // ✅ Login manual (por ahora simple)
+  // ✅ Login manual simple
   submitLogin() {
     if (!this.username.trim() || !this.password.trim()) {
       alert('⚠️ Ingresa usuario y contraseña');
       return;
     }
 
-    const role: 'admin' | 'user' = this.username.toLowerCase().includes('admin') ? 'admin' : 'user';
+    const role: 'admin' | 'user' =
+      this.username.toLowerCase().includes('admin') ? 'admin' : 'user';
+
     console.log(`✅ Login manual como ${role.toUpperCase()}`);
 
-    this.loginSuccess.emit({ role, provider: 'manual' });
-  }
-
-  // ✅ Login con Google
-  handleGoogleLogin(response: any) {
-    const token = response.credential;
-
-    // Decodificamos el JWT
-    const userData = this.decodeJwt(token);
-    console.log('✅ Usuario de Google:', userData);
-
-    // Emitimos evento con todos los datos
+    // 🔹 Simula login manual
     this.loginSuccess.emit({
-      role: 'user',
-      provider: 'google',
-      token,
-      user: {
-        name: userData.name,
-        email: userData.email,
-        picture: userData.picture
-      }
+      role,
+      provider: 'manual',
+      user: { name: this.username }
     });
   }
 
-  // 🔹 Función para decodificar token JWT
+  // ✅ Login con Google
+  async handleGoogleLogin(response: any) {
+    this.loading = true;
+    try {
+      const token = response.credential;
+      const userData = this.decodeJwt(token);
+
+      console.log('✅ Usuario de Google:', userData);
+
+      const user = await this.authService.loginWithGoogle(
+        userData.email,
+        userData.name,
+ 
+      );
+
+      // 🔹 Emitir evento al padre con los datos
+      this.loginSuccess.emit({
+        role: user.isAdmin ? 'admin' : 'user',
+        provider: 'google',
+        token,
+        user
+      });
+
+      console.log('🎉 Sesión iniciada correctamente');
+    } catch (error) {
+      console.error('❌ Error al iniciar sesión con Google:', error);
+      alert('Error al iniciar sesión. Intenta nuevamente.');
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  // 🔹 Decodifica el JWT de Google
   private decodeJwt(token: string): any {
     const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
@@ -84,6 +108,7 @@ export class LoginAgendaComponent implements AfterViewInit {
     return JSON.parse(jsonPayload);
   }
 
+  // ✅ Cierra el modal
   close() {
     this.closeModal.emit();
   }

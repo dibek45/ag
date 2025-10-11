@@ -21,6 +21,16 @@ import { selectEmpresaById } from '../state/empresa/empresa.selectors';
 import { Empresa } from '../state/empresa/empresa.model';
 import { LoginAgendaComponent } from './login-agenda/login-agenda.component';
 import * as AuthActions from '../state/auth/auth.actions';
+export interface LoginEvent {
+  role: 'admin' | 'user';
+  provider?: 'google' | 'manual';
+  token?: string;
+  user?: {
+    name?: string;
+    email?: string;
+    picture?: string;
+  };
+}
 
 @Component({
   selector: 'app-eventos',
@@ -120,22 +130,45 @@ export class ContenedorAgendaComponent implements OnInit {
   goToLogin() { this.showLoginModal = true; }
   
 
-handleLoginSuccess(event: { role: 'admin' | 'user' }) {
+handleLoginSuccess(event: LoginEvent) {
   this.isLoggedIn = true;
   this.showLoginModal = false;
 
-  const adminId = Number(this.route.snapshot.paramMap.get('adminId')) ?? this.empresaId;
+  // 🧠 Intenta obtener adminId de la URL o usa el de la empresa
+  const adminIdParam = this.route.snapshot.paramMap.get('adminId');
+  const adminId = adminIdParam ? Number(adminIdParam) : this.empresaId;
 
-  // 🔹 Guardar en Redux
-  this.store.dispatch(AuthActions.loginSuccess({ role: event.role, adminId }));
+  // 🗄️ Guardar en Redux (NgRx)
+this.store.dispatch(
+  AuthActions.loginSuccess({
+    role: event.role,
+    adminId,
+    token: event.token ?? undefined, // ✅ <-- aquí
+  })
+);
 
-  // 🔹 Persistir en localStorage
-  localStorage.setItem('auth', JSON.stringify({ role: event.role, adminId, isLoggedIn: true }));
 
-  console.log('✅ Usuario logueado:', { role: event.role, adminId });
+  // 💾 Persistir en localStorage
+  localStorage.setItem(
+    'auth',
+    JSON.stringify({
+      role: event.role,
+      adminId,
+      token: event.token ?? null,
+      isLoggedIn: true,
+    })
+  );
 
-  // 🔸 En vez de navegar, simplemente cierras el modal
+  console.log('✅ Usuario logueado:', { 
+    role: event.role, 
+    adminId, 
+    provider: event.provider 
+  });
+
+  // 🔸 Si quieres redirigir a una vista principal, podrías hacerlo aquí
+  // this.router.navigate(['/home']);
 }
+
 
   logout() { this.isLoggedIn = false; }
   toggleMenu() { this.menuAbierto = !this.menuAbierto; }
