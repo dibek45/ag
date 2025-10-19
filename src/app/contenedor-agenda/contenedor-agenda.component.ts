@@ -54,6 +54,7 @@ export class ContenedorAgendaComponent implements OnInit {
 
   isLoggedIn = false;
   showLoginModal = false;
+bienvenida = '';
 
   eventos: Evento[] = [];
   empresaId!: number;
@@ -164,14 +165,25 @@ this.store.dispatch(
     adminId, 
     provider: event.provider 
   });
+  // ✅ Mensaje de bienvenida
+  const name = event.user?.name ?? 'usuario';
+  this.bienvenida = `Bienvenido, ${name}!`;
 
-  // 🔸 Si quieres redirigir a una vista principal, podrías hacerlo aquí
-  // this.router.navigate(['/home']);
+  // Ocultar el mensaje después de unos segundos
+  setTimeout(() => {
+    this.bienvenida = '';
+  }, 3000);
+
 }
 
 
-  logout() { this.isLoggedIn = false; }
-  toggleMenu() { this.menuAbierto = !this.menuAbierto; }
+ toggleMenu() {
+  this.menuAbierto = !this.menuAbierto;
+
+  // Si el usuario cerró sesión, revisa localStorage
+  const auth = localStorage.getItem('auth');
+  this.isLoggedIn = !!auth;
+}
 
   getBackUrl(): string | null {
     const currentUrl = this.router.url;

@@ -11,6 +11,8 @@ import { Router } from '@angular/router';
 })
 export class MenuSettingsComponent {
 
+    @Output() cerrar = new EventEmitter<void>();
+
 
   agendaOpen = false;
 finanzasOpen = false;
@@ -31,16 +33,18 @@ goToSorteo() {
   constructor(private router: Router){
 
   }
-  @Output() cerrar = new EventEmitter<void>();
 
   onCerrar() {
     this.cerrar.emit();
   }
 
+logout() {
+  // 🧹 Borra toda la sesión guardada
+  localStorage.removeItem('auth');
+  localStorage.removeItem('token');
+    this.cerrar.emit();
 
-    logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('sorteoId');
-    this.router.navigate(['/login']);
-  }
+  // 🚪 Redirige al login
+}
+
 }

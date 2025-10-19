@@ -15,10 +15,15 @@
           (click)="goToLogin()">
     Login
   </button>
+  
 
   
 </div>
 
+<!-- ✅ Mensaje de bienvenida -->
+<div *ngIf="bienvenida" class="bienvenida-msg">
+  {{ bienvenida }}
+</div>
       <app-btn-regresar [url]="'/lista-de-empresas'" style="position: absolute;;margin-top: 1   0px;"></app-btn-regresar>
 
 
