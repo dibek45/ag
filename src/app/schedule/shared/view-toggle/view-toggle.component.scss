@@ -1,23 +1,38 @@
 .view-toggle {
   position: absolute;
-  top: 230px;
+  top: 200px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 1000;
 
-  display: flex;
+  display: inline-flex;
   gap: 8px;
+  background: #e3f2fd;
+  border-radius: 14px;
+  padding: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 
   button {
-    padding: 6px 12px;
     border: none;
-    border-radius: 6px;
+    background: transparent;
+    padding: 8px 16px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-radius: 10px;
     cursor: pointer;
-    background: #f1f1f1;
+    color: #1976d2;
+    transition: all 0.25s ease;
 
-    &.active {
-      background: #007bff;
-      color: white;
+    &:hover {
+      background: rgba(25, 118, 210, 0.15);
+    }
+
+    &.active,
+    &.active-hoy {
+      background: linear-gradient(135deg, #1976d2, #42a5f5);
+      color: #fff;
+      box-shadow: 0 4px 10px rgba(25, 118, 210, 0.35);
+      transform: scale(1.05);
     }
   }
 }

@@ -1,0 +1,53 @@
+.servicios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.servicio-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.servicio-btn {
+  padding: 10px 16px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  background: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.95rem;
+
+  &.active {
+    background: #fdf0ff;
+    color: #c2185b;
+    border-color: #f8bbd0;
+  }
+
+  &:hover {
+    background: #f9f9f9;
+  }
+}
+
+.badge-x {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: #d32f2f;
+  color: #fff;
+  font-weight: bold;
+  font-size: 12px;
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.15s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}

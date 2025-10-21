@@ -20,12 +20,12 @@ export const loadEventosFailure = createAction(
 // ➕ Crear evento
 export const createEvento = createAction(
   '[Evento] Create Evento',
-  props<{ evento: Evento }>()
+  props<{ evento: Evento; empresaId: number }>()
 );
 
 export const createEventoSuccess = createAction(
   '[Evento] Create Evento Success',
-  props<{ evento: Evento }>()
+  props<{ evento: Evento; empresaId: number }>()
 );
 
 export const createEventoFailure = createAction(
@@ -36,12 +36,12 @@ export const createEventoFailure = createAction(
 // ✏️ Actualizar evento
 export const updateEvento = createAction(
   '[Evento] Update Evento',
-  props<{ evento: Evento }>()
+  props<{ evento: Evento; empresaId: number }>()
 );
 
 export const updateEventoSuccess = createAction(
   '[Evento] Update Evento Success',
-  props<{ evento: Evento }>()
+  props<{ evento: Evento; empresaId: number }>()
 );
 
 export const updateEventoFailure = createAction(
@@ -52,12 +52,12 @@ export const updateEventoFailure = createAction(
 // ❌ Eliminar evento
 export const deleteEvento = createAction(
   '[Evento] Delete Evento',
-  props<{ id: number }>()
+  props<{ id: number; empresaId: number }>()
 );
 
 export const deleteEventoSuccess = createAction(
   '[Evento] Delete Evento Success',
-  props<{ id: number }>()
+  props<{ id: number; empresaId: number }>()
 );
 
 export const deleteEventoFailure = createAction(
@@ -66,19 +66,19 @@ export const deleteEventoFailure = createAction(
 );
 
 // ➕ Crear cita
-export const createCita = createAction(
-  '[Cita] Create Cita',
-  props<{ eventoId: number; cita: Cita }>()
+export const addCita = createAction(
+  '[Cita] Add',
+  props<{ empresaId: number; eventoId: number; cita: Cita }>()
 );
 
-export const createCitaSuccess = createAction(
-  '[Cita] Create Cita Success',
-  props<{ eventoId: number; cita: Cita }>()
+export const updateCita = createAction(
+  '[Cita] Update',
+  props<{ empresaId: number; eventoId: number; cita: Cita }>()
 );
 
-export const createCitaFailure = createAction(
-  '[Cita] Create Cita Failure',
-  props<{ error: any }>()
+export const deleteCita = createAction(
+  '[Cita] Delete',
+  props<{ empresaId: number; eventoId: number; citaId: number }>()
 );
 
 // 🧹 Limpiar eventos (opcional al cambiar empresa)

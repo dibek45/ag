@@ -1,0 +1,41 @@
+<div class="selector-container">
+  <div class="header">
+    <button (click)="anterior()" class="nav-btn">‹</button>
+    <h3>Elegir nueva cita</h3>
+    <button (click)="siguiente()" class="nav-btn">›</button>
+  </div>
+
+  <!-- Servicios -->
+<app-servicio-selector
+  [servicios]="evento?.servicios || []"
+  [servicioSeleccionado]="servicioSeleccionado"
+  (servicioChange)="seleccionarServicio($event)">
+</app-servicio-selector>
+
+
+  <!-- Días y horarios -->
+  <div class="dias-grid">
+    <div class="dia" *ngFor="let d of diasVisibles">
+      <div class="dia-card">
+        <h4>{{ getEtiquetaDia(d) }}</h4>
+        <p class="fecha">{{ d | date:'d MMM' }}</p>
+
+        <div class="horas" *ngIf="servicioSeleccionado">
+          <button 
+            *ngFor="let h of horasDisponibles[d.toISOString().substring(0,10)]"
+            [disabled]="h.ocupada"
+            [class.ocupado]="h.ocupada"
+            (click)="!h.ocupada && reservar(d, h.label)">
+            {{ h.label }}
+          </button>
+        </div>
+
+        <p *ngIf="!servicioSeleccionado" class="no-servicio">
+          Selecciona un servicio
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <button class="cancelar" (click)="cancelar()">Cancelar cita</button>
+</div>

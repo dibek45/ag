@@ -25,10 +25,11 @@ export class CompanyListComponent {
   constructor(private route: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
-    const categoryId = Number(this.route.snapshot.paramMap.get('categoryId'));
-    this.categoryName = history.state.categoryName || '';
-    this.loadCompanies(categoryId);
-  }
+  const categoryId = Number(this.route.snapshot.paramMap.get('categoryId'));
+  this.categoryName = history.state.categoryName || '';
+  this.loadCompanies(categoryId);
+}
+
 
   loadCompanies(categoryId: number) {
     const allCompanies: Record<number, Company[]> = {

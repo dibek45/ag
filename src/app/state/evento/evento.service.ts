@@ -33,6 +33,8 @@ query EventosByAdmin($adminId: Int!) {
     servicios {
       id
       nombre
+       duracionMin
+      precioCents
     }
     admin {
       disponibilidades {
@@ -139,4 +141,26 @@ query EventosByAdmin($adminId: Int!) {
     return this.http.post<any>(this.apiUrl, { query: mutation, variables: { id, data } })
       .pipe(map((res) => res.data.actualizarCita as Cita));
   }
+
+
+
+  eliminarCita(id: number) {
+  const mutation = `
+    mutation EliminarCita($id: Int!) {
+      eliminarCita(id: $id)
+    }
+  `;
+
+  return this.http.post<any>(this.apiUrl, {
+    query: mutation,
+    variables: { id }
+  })
+  .pipe(
+    map(res => res.data.eliminarCita as boolean),
+    catchError(error => {
+      console.error('❌ Error al eliminar cita:', error);
+      return of(false);
+    })
+  );
+}
 }

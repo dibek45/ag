@@ -242,19 +242,21 @@ export class TodayViewApartarComponent implements OnInit, OnChanges {
     return inicio.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   }
 
-  abrirModal(hora: string) {
-  // convertir "HH:mm" a "h:mmam/pm"
+abrirModal(hora: string) {
+  // convertir "HH:mm" a un objeto Date real
   const [hh, mm] = hora.split(':').map(Number);
-  let h12 = hh % 12 || 12;
-  const sufijo = hh >= 12 ? 'pm' : 'am';
-  const horaAmPm = `${h12}:${mm.toString().padStart(2, '0')}${sufijo}`;
+  const fechaCompleta = new Date(this.currentDate);
+  fechaCompleta.setHours(hh, mm, 0, 0);
 
+  // guarda el objeto Date en slotSeleccionado
   this.slotSeleccionado = {
-    fecha: this.currentDate,
-    hora: horaAmPm
+    fecha: fechaCompleta,
+    hora: hora // opcional si quieres conservar el texto original
   };
+
   this.showModal = true;
 }
+
 
   cerrarModal() {
     this.showModal = false;
@@ -263,22 +265,24 @@ export class TodayViewApartarComponent implements OnInit, OnChanges {
 
 guardarCita(cita: any) {
   console.log("Nueva cita creada:", cita);
+
   if (this.evento) {
-    this.store.dispatch(EventoActions.createCita({ eventoId: this.evento.id, cita }));
+    const empresaId = this.evento.admin?.id || 1; // cambia 1 por tu valor real si lo manejas desde el store
+    const eventoId = this.evento.id;
+
+    this.store.dispatch(
+      EventoActions.addCita({ empresaId, eventoId, cita })
+    );
 
     // ✅ Mensaje para WhatsApp
-    const msg =
-`✅ Nueva cita creada
+    const msg = `✅ Nueva cita creada
 👤 Cliente: ${cita.nombreCliente}
 📞 Tel: ${cita.telefonoCliente}
 📅 Fecha: ${cita.fecha}
 🕒 Hora: ${cita.hora}`;
 
-    // ⚡ Usar el teléfono del admin
-    const adminPhone = this.evento.admin?.telefono || '0'; // fallback
+    const adminPhone = this.evento.admin?.telefono || '0';
     const url = `https://wa.me/52${adminPhone}?text=${encodeURIComponent(msg)}`;
-
-    // abrir whatsapp en nueva pestaña
     window.open(url, '_blank');
   }
 

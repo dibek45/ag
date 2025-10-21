@@ -1,30 +1,32 @@
 import { Routes } from '@angular/router';
+
+// 📄 Páginas generales
 import { MetodosPagoComponent } from './pagos/metodos-pago/metodos-pago.component';
 import { PreguntasFrecuentesComponent } from './faq/preguntas-frecuentes/preguntas-frecuentes.component';
 import { ContactoComponent } from './contacto/contacto/contacto.component';
 
-// 👇 imports de agenda (cliente)
+// 📅 Agenda cliente
 import { ScheduleComponent } from './schedule/schedule.component';
 import { MonthViewComponent } from './schedule/month-view/month-view.component';
-import { WeekViewComponent } from './schedule/week-view/week-view.component';
-import { TodayViewApartarComponent } from './schedule/today-view-apartar/today-view-apartar.component';
 import { ContenedorAgendaComponent } from './contenedor-agenda/contenedor-agenda.component';
 
-// 👇 imports para agenda-admin
-import { EventosComponentAdmin } from './loggeado/contenedor-agenda-admin/contenedor-agenda.admin.component';
-import { TodayViewAdminComponentCompleted } from './loggeado/schedule/today-view-completed/today-view-completed.component';
-import { WeekViewAdminComponent } from './loggeado/schedule/week-view/week-view.admin.component';
+// 🏢 Catálogo
 import { CompanyListComponent } from './android/features/company-list/company-list.component';
 import { CategoryListComponent } from './android/features/category-list/category-list.component';
+import { TodaySelectApartarComponent } from './schedule/today-select-apartar/today-select-apartar.component';
 
 export const routes: Routes = [
+  // 🏠 Página principal
   { path: '', component: CategoryListComponent },
-  { path: 'lista-de-empresas', component: CategoryListComponent },
+  { path: 'home', component: CategoryListComponent },
 
-  // 👉 Categorías
-  { path: 'categoria/:categoryId', component: CompanyListComponent },
+  // ✅ Nueva ruta: empresas dentro de una categoría
+  {
+    path: 'categoria/:categoryId/empresas',
+    component: CompanyListComponent
+  },
 
-  // 👉 Compañías dentro de categorías con agenda (CLIENTE)
+  // 📂 Categorías → Empresa → Agenda
   {
     path: 'categoria/:categoryId/empresa/:companyName/:adminId/agenda',
     component: ContenedorAgendaComponent,
@@ -34,8 +36,7 @@ export const routes: Routes = [
         component: ScheduleComponent,
         children: [
           { path: 'month', component: MonthViewComponent },
-          { path: 'week', component: WeekViewComponent },
-          { path: 'day/:date', component: TodayViewApartarComponent },
+          { path: 'day/:date', component: TodaySelectApartarComponent },
           { path: '', redirectTo: 'month', pathMatch: 'full' }
         ]
       },
@@ -43,41 +44,12 @@ export const routes: Routes = [
     ]
   },
 
-  // 👉 Home corregido (antes era MisEventosComponent)
-  { path: 'home', component: CategoryListComponent },
+  // 💬 Secciones informativas
+  { path: 'pagos', component: MetodosPagoComponent },
+  { path: 'faq', component: PreguntasFrecuentesComponent },
+  { path: 'contacto', component: ContactoComponent },
+  { path: 'codigo', component: CategoryListComponent },
 
-  // 👉 Flujo con numeroSorteo (lo mantengo porque ya lo tienes en paralelo)
-  {
-    path: ':numeroSorteo',
-    component: ContenedorAgendaComponent, // 👈 padre
-    children: [
-      // 📌 Agenda para clientes
-      {
-        path: 'agenda/:adminId',
-        component: ContenedorAgendaComponent,
-        children: [
-          {
-            path: 'schedule',
-            component: ScheduleComponent,
-            children: [
-              { path: 'month', component: MonthViewComponent },
-              { path: 'week', component: WeekViewComponent },
-              { path: 'day/:date', component: TodayViewApartarComponent },
-              { path: '', redirectTo: 'month', pathMatch: 'full' }
-            ]
-          },
-          { path: '', redirectTo: 'schedule', pathMatch: 'full' }
-        ]
-      },
-
-      // 📌 Agenda para admins
-   
-
-      { path: 'pagos', component: MetodosPagoComponent },
-      { path: 'faq', component: PreguntasFrecuentesComponent },
-      { path: 'contacto', component: ContactoComponent },
-      { path: 'codigo', component: CategoryListComponent },
-      { path: '', redirectTo: 'agenda', pathMatch: 'full' }
-    ]
-  },
+  // 🚀 Redirección comodín
+  { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

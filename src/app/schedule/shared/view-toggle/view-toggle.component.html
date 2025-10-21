@@ -1,5 +1,14 @@
 <div class="view-toggle">
-  <button routerLink="month" routerLinkActive="active">Mes</button>
-  <button routerLink="week" routerLinkActive="active">Semana</button>
-  <button (click)="goToToday()">Hoy</button>
+  <button 
+    routerLink="month" 
+    routerLinkActive="active"
+    (click)="activeView = 'month'">
+    📅 Calendario
+  </button>
+
+  <button 
+    [class.active-hoy]="activeView === 'hoy'"
+    (click)="selectHoy()">
+    🕒 Hoy
+  </button>
 </div>

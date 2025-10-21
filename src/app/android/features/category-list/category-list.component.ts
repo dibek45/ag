@@ -43,12 +43,19 @@
         queryParams: { code: sorteoId, estadoCuenta: 'premium' },
         state: { returnUrl: this.router.url },
       });
+  
+  
     }
-  irACategoria(category: { id: number; name: string; slug: string }) {
-    this.router.navigate([`/categoria/${category.id}`], {
-      state: { categoryName: category.name }
-    });
-  }
+
+
+
+    irACategoria(category: { id: number; name: string; slug: string }) {
+  this.router.navigate(
+    [`/categoria/${category.id}/empresas`],
+    { state: { categoryName: category.name } }
+  );
+}
+
 
     regresar() {
       this.router.navigateByUrl('/');

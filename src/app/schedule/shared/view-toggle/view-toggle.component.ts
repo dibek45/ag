@@ -11,6 +11,13 @@ import { RouterModule } from '@angular/router'; // 👈 IMPORTANTE
 export class ViewToggleComponent {
   @Output() today = new EventEmitter<void>();
 
+  activeView: 'month' | 'hoy' = 'month';
+
+selectHoy() {
+  this.activeView = 'hoy';
+  this.goToToday(); // si ya tienes esta función
+}
+
   goToToday() {
     this.today.emit();
   }
