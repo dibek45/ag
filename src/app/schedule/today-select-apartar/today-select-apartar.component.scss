@@ -3,6 +3,8 @@
   margin-top: 60px;
   text-align: center;
   font-family: 'Inter', sans-serif;
+    overflow: visible; /* 👈 permite mostrar la X fuera */
+
 }
 
 .header {
@@ -58,10 +60,10 @@
     }
   }
 }
-
 .dias-grid {
   display: flex;
   justify-content: space-between;
+  align-items: stretch;   /* fuerza alturas iguales */
   gap: 12px;
   margin-top: 1rem;
 }
@@ -71,7 +73,12 @@
   border-radius: 16px;
   padding: 12px;
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-  flex: 1;
+  flex: 1;                /* todas ocupan el mismo ancho */
+  min-width: 0;           /* evita desbordamiento horizontal */
+  height: 100%;           /* usa toda la altura disponible */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* reparte el contenido */
   transition: 0.2s;
 
   h4 {
@@ -85,6 +92,15 @@
     font-size: 0.9rem;
     margin-bottom: 8px;
   }
+}
+
+.horas {
+  flex-grow: 1;           /* llena el espacio disponible */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 6px;
+  overflow-y: auto;       /* scroll interno si hay muchas horas */
 }
 
 .horas {

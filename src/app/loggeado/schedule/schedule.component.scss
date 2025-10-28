@@ -1,5 +1,4 @@
 .dashboard-container {
-  display: flex;
   flex-direction: column;
   gap: .5rem;
   max-width: 800px;  // más ancho para que respire
@@ -17,6 +16,7 @@ margin-bottom: 50px;
   border: 1px solid #ddd;
   border-radius: 9999px;
   overflow: hidden;
+  margin-top: 40px;
 
   button {
     padding: 8px 18px;
