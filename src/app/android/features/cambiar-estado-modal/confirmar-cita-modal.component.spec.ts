@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CambiarEstadoModalComponent } from './cambiar-estado-modal.component';
+import { CambiarEstadoModalComponent } from './confirmar-cita-modal.component';
 
 describe('CambiarEstadoModalComponent', () => {
   let component: CambiarEstadoModalComponent;

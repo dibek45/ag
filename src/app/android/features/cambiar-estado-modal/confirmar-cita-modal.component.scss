@@ -1,0 +1,46 @@
+.overlay {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  width: 85%;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+
+  .botones {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+
+    .btn-si {
+      flex: 1;
+      background: #22c55e;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .btn-no {
+      flex: 1;
+      background: #ef4444;
+      color: white;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      padding: 8px;
+    }
+  }
+}

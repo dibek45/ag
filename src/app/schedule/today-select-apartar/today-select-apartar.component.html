@@ -5,38 +5,46 @@
     <button (click)="siguiente()" class="nav-btn">›</button>
   </div>
 
-  <!-- Servicios -->
-<app-servicio-selector
-  [servicios]="evento?.servicios || []"
-  [servicioSeleccionado]="servicioSeleccionado"
-  (servicioChange)="seleccionarServicio($event)">
-</app-servicio-selector>
-
+  <!-- Selector de servicio -->
+  <app-servicio-selector
+    [servicios]="evento?.servicios || []"
+    [servicioSeleccionado]="servicioSeleccionado"
+    (servicioChange)="seleccionarServicio($event)">
+  </app-servicio-selector>
 
   <!-- Días y horarios -->
- <div class="dias-grid">
-  <div class="dia" *ngFor="let d of diasVisibles">
-    <div class="dia-card">
-      <h4>{{ citaService.getEtiquetaDia(d) }}</h4>
-      <p class="fecha">{{ d | date:'yyyy-MM-dd' }}</p>
+  <div class="dias-grid">
+    <div class="dia" *ngFor="let d of diasVisibles">
+      <div class="dia-card">
+        <h4>{{ citaService.getEtiquetaDia(d) }}</h4>
+        <p class="fecha">{{ d | date: 'yyyy-MM-dd' }}</p>
 
-      <div class="horas" *ngIf="servicioSeleccionado">
-        <button 
-          *ngFor="let h of horasDisponibles[d.toISOString().substring(0,10)]"
-          [disabled]="h.ocupada"
-          [class.ocupado]="h.ocupada"
-          (click)="!h.ocupada && reservar(d, h.label)">
-          {{ h.label }}
-        </button>
+        <div class="horas" *ngIf="servicioSeleccionado">
+          <button
+            *ngFor="let h of horasDisponibles[d.toISOString().substring(0, 10)]"
+            [disabled]="h.ocupada"
+            [class.ocupado]="h.ocupada"
+            (click)="!h.ocupada && reservar(d, h.label)">
+            {{ h.label }}
+          </button>
+        </div>
+
+        <p *ngIf="!servicioSeleccionado" class="no-servicio">
+          Selecciona un servicio
+        </p>
       </div>
-
-      <p *ngIf="!servicioSeleccionado" class="no-servicio">
-        Selecciona un servicio
-      </p>
     </div>
   </div>
+
+  <button class="cancelar" >Cancelar cita</button>
 </div>
 
-
-  <button class="cancelar" (click)="cancelar()">Cancelar cita</button>
-</div>
+<!-- 🔹 Modal de confirmación -->
+<app-confirmar-cita-modal
+  *ngIf="mostrarConfirmacion"
+  [servicio]="servicioSeleccionado"
+  [horaInicio]="horaSeleccionada"
+  [horaFin]="horaFin"
+  (confirmarCita)="confirmarCita()"
+  (cancelarCita)="cancelarCita()">
+</app-confirmar-cita-modal>
