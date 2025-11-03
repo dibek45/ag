@@ -28,7 +28,18 @@ export class ScheduleComponent implements OnInit {
 
  
   goToToday() {
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-    this.router.navigate(['day', today], { relativeTo: this.route });
-  }
+  const today = new Date();
+  const dateStr = today.toISOString().split('T')[0];
+  console.log('📅 Ir a hoy →', dateStr);
+
+  this.router.navigate(['day', dateStr], { relativeTo: this.route }).then(
+    (ok) => {
+      console.log(ok ? '✅ Navegación completada (relativa).' : '❌ Falló la navegación.');
+    },
+    (err) => console.error('❌ Error navegando:', err)
+  );
+}
+
+
+
 }

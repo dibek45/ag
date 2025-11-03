@@ -28,6 +28,7 @@ export class MonthViewComponent implements OnInit {
   evento0$!: Observable<Evento | undefined>;
 
   constructor(
+    
     private router: Router,
     private route: ActivatedRoute,
     private store: Store
@@ -35,12 +36,13 @@ export class MonthViewComponent implements OnInit {
 
   citasByDate: { [date: string]: Cita[] } = {};
 
-  /** ✅ Devuelve cuántas citas hay en ese día */
+
   getCitasForDay(day: Date | null): Cita[] {
-    if (!day) return [];
-    const key = day.toISOString().split("T")[0];
-    return this.citasByDate[key] || [];
-  }
+  if (!day) return [];
+  const key = day.toLocaleDateString('en-CA'); // usa el mismo formato
+  return this.citasByDate[key] || [];
+}
+
 
   updateMonthLabel() {
     this.currentMonthLabel = this.currentDate.toLocaleDateString('es-MX', {
@@ -139,11 +141,17 @@ export class MonthViewComponent implements OnInit {
 
         if (ev?.citas) {
           this.citasByDate = ev.citas.reduce((acc, cita) => {
-            const dateKey = cita.fecha.split("T")[0];
-            if (!acc[dateKey]) acc[dateKey] = [];
-            acc[dateKey].push(cita);
-            return acc;
-          }, {} as { [date: string]: Cita[] });
+  // ⚙️ Normalizar a fecha local (no UTC)
+  const localDate = new Date(cita.fecha);
+  const key = localDate.toLocaleDateString('en-CA'); // genera formato YYYY-MM-DD local
+
+  if (!acc[key]) acc[key] = [];
+  acc[key].push(cita);
+  return acc;
+}, {} as { [date: string]: Cita[] });
+
+console.log("📅 Citas agrupadas localmente:", this.citasByDate);
+
         } else {
           this.citasByDate = {}; // limpiar si no hay citas
         }
@@ -152,24 +160,22 @@ export class MonthViewComponent implements OnInit {
   }
 
   goToDay(day: Date) {
-    if (!day) return;
-    const dateStr = day.toISOString().split('T')[0];
+  if (!day) return;
+  const dateStr = day.toISOString().split('T')[0];
 
-    // 👇 buscar params en la jerarquía de rutas
-    let parent = this.route;
-    while (parent.parent) {
-      parent = parent.parent;
-      if (parent.snapshot.paramMap.get('adminId')) break;
-    }
-
-    const categoryId = parent.snapshot.paramMap.get('categoryId');
-    const companyName = parent.snapshot.paramMap.get('companyName');
-    const empresaId = parent.snapshot.paramMap.get('adminId'); // 👈 usamos adminId
-
-    console.log("📌 Navegar a día:", { categoryId, companyName, empresaId, dateStr });
-
-    this.router.navigate([
-      `/categoria/${categoryId}/empresa/${companyName}/${empresaId}/agenda/schedule/day/${dateStr}`
-    ]);
+  let parent = this.route;
+  while (parent.parent) {
+    parent = parent.parent;
+    if (parent.snapshot.paramMap.get('adminId')) break;
   }
+
+  const categoryId = parent.snapshot.paramMap.get('categoryId');
+  const companyName = parent.snapshot.paramMap.get('companyName');
+  const empresaId = parent.snapshot.paramMap.get('adminId');
+
+  this.router.navigate([
+    `/categoria/${categoryId}/empresa/${companyName}/${empresaId}/agenda/schedule/day/${dateStr}`
+  ]);
+}
+
 }

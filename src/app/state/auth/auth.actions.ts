@@ -7,7 +7,12 @@ export const loginWithGoogle = createAction(
 
 export const loginSuccess = createAction(
   '[Auth] Login Success',
-  props<{ role: 'admin' | 'user'; adminId: number; token?: string }>()
+  props<{
+    role: 'admin' | 'user';
+    adminId: number | null;
+    clienteId?: number | null;   // 👈 hacerlo opcional
+    token?: string;
+  }>()
 );
 
 export const logout = createAction('[Auth] Logout');

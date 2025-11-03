@@ -177,23 +177,28 @@
   background: rgba(255,255,255,.3);
 }
 
-.bienvenida-msg {
-  text-align: center;
-  background-color: #4caf50;
-  color: white;
-  padding: 10px;
-  margin: 10px;
-  border-radius: 8px;
-  font-weight: 500;
-  animation: fadeOut 3s forwards;
-
-  @keyframes fadeOut {
-    0% { opacity: 1; }
-    80% { opacity: 1; }
-    100% { opacity: 0; }
-  }
-}
 
 
 /* Limpiar estilos viejos */
 .menu-icon, .logout-btn { position: static !important; }
+.bienvenida-msg {
+  position: fixed;
+  top: 70px; /* debajo de la topbar */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 100; /* menor que menú o modal */
+  text-align: center;
+  background-color: #4caf50;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  animation: fadeOut 3s forwards;
+  pointer-events: none; /* no bloquea clics */
+}
+
+@keyframes fadeOut {
+  0% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}

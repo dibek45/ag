@@ -25,10 +25,12 @@ export interface LoginEvent {
   role: 'admin' | 'user';
   provider?: 'google' | 'manual';
   token?: string;
+  clienteId?: number;
   user?: {
     name?: string;
     email?: string;
     picture?: string;
+    clienteId?: number;
   };
 }
 
@@ -77,8 +79,22 @@ bienvenida = '';
   }
 
  ngOnInit(): void {
-  this.previousUrl = this.navigationService.getPreviousUrl();
+ const savedAuth = localStorage.getItem('auth');
+  if (savedAuth) {
+    const auth = JSON.parse(savedAuth);
+    this.store.dispatch(
+      AuthActions.loginSuccess({
+        role: auth.role,
+        adminId: auth.adminId,
+        token: auth.token,
+        clienteId:auth.clienteId
+      })
+    );
+    this.isLoggedIn = true;
+  }
 
+  // 🔹 Tu código actual
+  this.previousUrl = this.navigationService.getPreviousUrl();
   this.router.events.pipe(filter(e => e instanceof NavigationEnd))
     .subscribe(() => {
       this.menuAbierto = false;
@@ -145,6 +161,7 @@ this.store.dispatch(
     role: event.role,
     adminId,
     token: event.token ?? undefined, // ✅ <-- aquí
+    clienteId: event.clienteId ?? 0
   })
 );
 
@@ -172,7 +189,7 @@ this.store.dispatch(
   // Ocultar el mensaje después de unos segundos
   setTimeout(() => {
     this.bienvenida = '';
-  }, 3000);
+  }, 6000);
 
 }
 

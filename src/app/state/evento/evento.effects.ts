@@ -4,6 +4,8 @@ import { of } from 'rxjs';
 import { map, catchError, switchMap, withLatestFrom, take, filter } from 'rxjs/operators';
 import * as EventoActions from './evento.actions';
 import { EventoService } from './evento.service';
+import { CitaService } from './../servicios/cita.service';
+
 import { Store } from '@ngrx/store';
 import { selectEventosByEmpresaId } from './evento.selectors';
 import { Cita } from './evento.model';
@@ -12,6 +14,7 @@ import { Cita } from './evento.model';
 export class EventoEffects {
   private actions$ = inject(Actions);
   private eventoService = inject(EventoService);
+  private citaService = inject(CitaService);
   private store = inject(Store);
 
   // 🔹 Cargar eventos (solo si no existen en el store)
@@ -97,7 +100,7 @@ export class EventoEffects {
     this.actions$.pipe(
       ofType(EventoActions.addCita),
       switchMap(({ empresaId, eventoId, cita }) =>
-        this.eventoService.crearCita(cita).pipe(
+        this.citaService.crearCita(cita).pipe(
           map((created: Cita) =>
             EventoActions.addCita({
               empresaId,
@@ -118,7 +121,7 @@ export class EventoEffects {
     this.actions$.pipe(
       ofType(EventoActions.updateCita),
       switchMap(({ empresaId, eventoId, cita }) =>
-        this.eventoService.actualizarCita(cita.id, cita).pipe(
+        this.citaService.actualizarCita(cita.id, cita).pipe(
           map(updated =>
             EventoActions.updateCita({
               empresaId,
@@ -140,7 +143,7 @@ deleteCita$ = createEffect(() =>
   this.actions$.pipe(
     ofType(EventoActions.deleteCita),
     switchMap(({ empresaId, eventoId, citaId }) =>
-      this.eventoService.eliminarCita(citaId).pipe( // 👈 asegúrate de tener este método en tu servicio
+      this.citaService.eliminarCita(citaId).pipe( // 👈 asegúrate de tener este método en tu servicio
         map(() =>
           EventoActions.deleteCita({
             empresaId,

@@ -73,11 +73,11 @@ export class LoginAgendaComponent implements AfterViewInit {
 
       console.log('✅ Usuario de Google:', userData);
 
-      const user = await this.authService.loginWithGoogle(
-        userData.email,
-        userData.name,
- 
-      );
+     const user = await this.authService.loginWithGoogle(
+  userData.email,
+  token, // el JWT real
+);
+
 
       // 🔹 Emitir evento al padre con los datos
       this.loginSuccess.emit({

@@ -27,6 +27,7 @@ query EventosByAdmin($adminId: Int!) {
       hora
       fecha
       nombreCliente
+      clienteId
       servicioId
       servicio {
         id
@@ -109,63 +110,4 @@ query EventosByAdmin($adminId: Int!) {
     return this.http.post<any>(this.apiUrl, { query: mutation, variables: { id } })
       .pipe(map((res) => res.data.eliminarEvento as boolean));
   }
-
-  // 🔹 Crear cita
-  crearCita(data: Partial<Cita>): Observable<Cita> {
-    const mutation = `
-      mutation CrearCita($data: CreateCitaInput!) {
-        crearCita(data: $data) {
-          id
-          nombreCliente
-          telefonoCliente
-          fecha
-          hora
-          estado
-          servicioId
-        }
-      }
-    `;
-    return this.http.post<any>(this.apiUrl, { query: mutation, variables: { data } })
-      .pipe(map((res) => res.data.crearCita as Cita));
-  }
-
-  // 🔹 Actualizar cita
-  actualizarCita(id: number, data: Partial<Cita>): Observable<Cita> {
-    const mutation = `
-      mutation ActualizarCita($id: Int!, $data: UpdateCitaInput!) {
-        actualizarCita(id: $id, data: $data) {
-          id
-          nombreCliente
-          telefonoCliente
-          fecha
-          hora
-          estado
-        }
-      }
-    `;
-    return this.http.post<any>(this.apiUrl, { query: mutation, variables: { id, data } })
-      .pipe(map((res) => res.data.actualizarCita as Cita));
-  }
-
-
-
-  eliminarCita(id: number) {
-  const mutation = `
-    mutation EliminarCita($id: Int!) {
-      eliminarCita(id: $id)
-    }
-  `;
-
-  return this.http.post<any>(this.apiUrl, {
-    query: mutation,
-    variables: { id }
-  })
-  .pipe(
-    map(res => res.data.eliminarCita as boolean),
-    catchError(error => {
-      console.error('❌ Error al eliminar cita:', error);
-      return of(false);
-    })
-  );
-}
 }

@@ -27,6 +27,7 @@ export interface Servicio {
 export interface Cita {
   id: number;
   nombreCliente: string;
+  clienteId:number
   telefonoCliente: string;
   fecha: string;
   hora: string;

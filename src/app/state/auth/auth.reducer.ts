@@ -5,6 +5,7 @@ export interface AuthState {
   isLoggedIn: boolean;
   role: 'admin' | 'user' | null;
   adminId: number | null;
+  clienteId?: number | null;   // 👈 permitir opcional
   token?: string | null;
 }
 
@@ -12,15 +13,18 @@ export const initialState: AuthState = {
   isLoggedIn: false,
   role: null,
   adminId: null,
-  token: null
+  clienteId: null,   // 👈 agregar valor inicial
+  token: null,
 };
+
 
 export const authReducer = createReducer(
   initialState,
-  on(AuthActions.loginSuccess, (state, { role, adminId, token }) => ({
+  on(AuthActions.loginSuccess, (state, { role, adminId, clienteId, token }) => ({
     ...state,
     role,
     adminId,
+    clienteId,
     token: token || null,
     isLoggedIn: true
   })),
