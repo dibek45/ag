@@ -1,5 +1,6 @@
 .servicios {
   display: flex;
+  margin-top: 5px;
   flex-wrap: nowrap;   /* mantiene una sola fila */
   gap: 16px;
   overflow-x: auto;    /* scroll horizontal */

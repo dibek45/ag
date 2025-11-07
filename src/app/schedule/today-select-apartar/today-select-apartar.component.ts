@@ -248,8 +248,14 @@ abrirModalCita(fecha: Date, hora: string) {
   if (confirmar) {
     this.modoReagendar = true;
     this.diaSeleccionado = fecha.toISOString().split('T')[0];
+
+    // 🔝 Subir scroll al activar modo reagendar
+    setTimeout(() => {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 50);
   }
 }
+
 
 cancelarReagendar() {
   this.modoReagendar = false;
