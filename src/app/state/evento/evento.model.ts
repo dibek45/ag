@@ -35,6 +35,8 @@ export interface Cita {
   eventoId: number;
   servicioId: number;   // FK
   servicio?: Servicio;  // relación opcional
+  usuarioId?: number; // ✅ agrega esta línea
+
 }
 export interface Evento {
     id: number;

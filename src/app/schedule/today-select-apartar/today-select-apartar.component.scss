@@ -1,150 +1,355 @@
+/* === CONTENEDOR PRINCIPAL === */
 .selector-container {
   padding: 1rem;
   margin-top: 60px;
   text-align: center;
   font-family: 'Inter', sans-serif;
-    overflow: visible; /* 👈 permite mostrar la X fuera */
-
+  overflow: visible;
 }
 
+/* === ENCABEZADO === */
 .header {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 1rem;
   margin-bottom: 1rem;
-
-  h3 {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: #333;
-  }
-
-  .nav-btn {
-    background: #ffe6ef;
-    color: #e91e63;
-    border: none;
-    border-radius: 8px;
-    padding: 6px 10px;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: 0.2s;
-    &:hover {
-      background: #fdd0e0;
-    }
-  }
 }
 
+.header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.header .nav-btn {
+  background: #ffe6ef;
+  color: #e91e63;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 10px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.header .nav-btn:hover {
+  background: #fdd0e0;
+}
+
+/* === BOTONES DE SERVICIO === */
 .servicios {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 1.2rem;
-
-  button {
-    border: 1px solid #e0e0e0;
-    background: white;
-    border-radius: 12px;
-    padding: 6px 14px;
-    color: #555;
-    font-weight: 500;
-    cursor: pointer;
-    transition: 0.2s;
-
-    &.active {
-      background: #1a73e8;
-      color: white;
-      border-color: #1a73e8;
-      box-shadow: 0 3px 6px rgba(26, 115, 232, 0.3);
-    }
-  }
 }
+
+.servicios button {
+  border: 1px solid #e0e0e0;
+  background: white;
+  border-radius: 12px;
+  padding: 6px 14px;
+  color: #555;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.servicios button.active {
+  background: #1a73e8;
+  color: white;
+  border-color: #1a73e8;
+  box-shadow: 0 3px 6px rgba(26, 115, 232, 0.3);
+}
+
 .dias-grid {
   display: flex;
   justify-content: space-between;
-  align-items: stretch;   /* fuerza alturas iguales */
-  gap: 12px;
-  margin-top: 1rem;
-      margin-bottom: 15px;
-}
-
-.dia-card {
-  background: white;
-  border-radius: 16px;
-  padding: 12px;
-  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
-  flex: 1;                /* todas ocupan el mismo ancho */
-  min-width: 0;           /* evita desbordamiento horizontal */
-  height: 100%;           /* usa toda la altura disponible */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* reparte el contenido */
-  transition: 0.2s;
-
-  h4 {
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 2px;
-  }
-
-  .fecha {
-    color: #888;
-    font-size: 0.9rem;
-    margin-bottom: 8px;
-  }
-}
-
-.horas {
-  flex-grow: 1;           /* llena el espacio disponible */
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 6px;
-  overflow-y: auto;       /* scroll interno si hay muchas horas */
-}
-
-.horas {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-
-  button {
-    border: 1px solid #dcdcdc;
-    border-radius: 8px;
-    background: #f8f9fa;
-    color: #333;
-    padding: 6px 0;
-    font-weight: 500;
-    cursor: pointer;
-    transition: 0.2s;
-
-    &:hover:not(:disabled) {
-      background: #1a73e8;
-      color: white;
-    }
-
-    &.ocupado {
-      text-decoration: line-through;
-      color: #aaa;
-      background: #fafafa;
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-  }
-}
-
-.cancelar {
+  align-items: stretch;
+  gap: 8px;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
   margin-top: 1.5rem;
-  background: transparent;
-  border: 1px solid #e91e63;
-  color: #e91e63;
-  border-radius: 10px;
-  padding: 8px 16px;
-  font-weight: 600;
+  position: relative;
+  background: transparent !important;
+  box-shadow: none !important;
+  filter: none !important;
+  backdrop-filter: none !important;
+  isolation: isolate;
+  z-index: 1;
+}
+
+/* === TARJETAS DE DÍA === */
+.dia-card {
+  flex: 1 1 0;
+  background: #fff;
+  border-radius: 12px;
+  padding: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+}
+
+/* === HORAS DISPONIBLES === */
+.horas {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+}
+
+.horas button {
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  background: #f8f9fa;
+  color: #333;
+  padding: 6px 0;
+  font-weight: 500;
   cursor: pointer;
   transition: 0.2s;
-  &:hover {
-    background: #ffe6ef;
+}
+
+.horas button:hover:not(:disabled) {
+  background: #1a73e8;
+  color: white;
+}
+
+.horas button.ocupado {
+  text-decoration: line-through;
+  color: #aaa;
+  background: #fafafa;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+button.mia {
+  background: #1a73e8;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 0 6px rgba(26, 115, 232, 0.4);
+}
+
+button.mia .edit-icon {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-size: 17px;
+  color: #fff;
+}
+
+/* === EFECTO TECNOLÓGICO SOLO EN EL BORDE === */
+@keyframes bordePulse {
+  0%, 100% {
+    box-shadow: 0 0 0px rgba(0, 255, 128, 0);
+    border-color: #4ee58a;
   }
+  50% {
+    box-shadow: 0 0 4px 2px rgba(0, 255, 128, 0.5);
+    border-color: #00e676;
+  }
+}
+
+.dia-card .parpadea {
+  animation: bordePulse 2s infinite ease-in-out;
+  background-color: #fff;
+  border: 1px solid #4ee58a;
+  color: #144a25;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+/* === MODAL ESTILO === */
+
+/* Fondo translúcido, deja ver los días */
+.overlay-reagendar {
+  position: fixed;
+  inset: 0;
+  background: transparent !important; /* ✅ ya no oscurece */
+  backdrop-filter: none !important;   /* ✅ sin desenfoque */
+  pointer-events: none;
+  z-index: 200;
+}
+
+
+/* Card centrada sobre el grid */
+.cancelar-card {
+    position: fixed !important;
+
+  top: 190px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff;
+  border-radius: 16px;
+  padding: 1.8rem;
+  width: 85%;
+  max-width: 380px;
+  text-align: center;
+  z-index: 9999 !important; /* 🔝 fuerza estar sobre todo */
+  box-shadow: 0 5px 5px rgba(0, 0, 0, 0.15);
+  animation: aparecer 0.3s ease-out;
+}
+
+/* Contenido del modal */
+.cancelar-contenido h3 {
+  margin-bottom: 0.5rem;
+  color: #1976d2;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.cancelar-contenido p {
+  color: #444;
+  font-size: 0.95rem;
+  margin-bottom: 1.2rem;
+  line-height: 1.5;
+}
+
+/* Botón Cancelar */
+
+/* Animación de entrada */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -60%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* === ANIMACIÓN DE APARICIÓN === */
+@keyframes aparecer {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* === ESTADOS DE HORA (disponible / ocupado / mia) === */
+.horas button {
+  position: relative;
+  border: 1px solid #dcdcdc;
+  border-radius: 8px;
+  background: #f8f9fa;
+  color: #333;
+  padding: 6px 10px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* Disponible */
+.horas button:not(.ocupado):not(.mia) {
+  background: #e7f5e7;
+  color: #1b5e20;
+}
+.horas button:not(.ocupado):not(.mia):hover {
+  background: #c8e6c9;
+}
+
+/* Ocupado por otros */
+.horas button.ocupado:not(.mia) {
+  background: #ffe6e6;
+  color: #c62828;
+  text-decoration: none;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+/* Ocupado genérico (fallback de legibilidad) */
+.horas button.ocupado {
+  text-decoration: line-through;
+  color: #aaa;
+  background: #fafafa;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Mía (tu reserva) */
+.horas button.mia {
+  background: #1a73e8;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 0 6px rgba(26, 115, 232, 0.4);
+  border-color: #1a73e8;
+}
+
+/* Ícono de edición solo cuando es mía */
+.horas button .edit-icon {
+  display: none;
+}
+.horas button.mia .edit-icon {
+  display: block;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-size: 17px;
+  color: #fff;
+}
+
+/* Pulso solo en disponibles durante modo reagendar */
+.horas button.parpadea:not(.ocupado):not(.mia) {
+  animation: bordePulse 2s infinite ease-in-out;
+  background-color: #fff;
+  border: 1px solid #4ee58a;
+  color: #144a25;
+}
+/* === BOTÓN CANCELAR FLOTANTE === */
+
+.cancelar-contenido {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btn-cancelar {
+  margin-top: .5rem;
+  background: #ffebee;
+  color: #c62828;
+  border: 1px solid #ef9a9a;
+  border-radius: 50px;
+  padding: 10px 22px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+.btn-cancelar:hover {
+  background: #ffcdd2;
+  transform: scale(1.05);
+}
+.view-toggle {
+  display: none !important;
+}
+/* 🔧 Forzar que el selector de vista quede detrás del overlay al reagendar */
+.modo-reagendar-activo .view-toggle {
+  z-index: 1 !important;
+  pointer-events: none !important;
+  opacity: 0.3 !important;
+}
+.arrow-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  margin-top: 14px;
+}
+
+.arrow-down {
+  color: #19d2a7;
+  animation: bounceY 1.3s ease-in-out infinite;
+  filter: drop-shadow(0 3px 6px rgba(0,0,0,0.15));
+}
+
+@keyframes bounceY {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
 }

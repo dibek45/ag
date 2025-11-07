@@ -30,16 +30,17 @@ async loginWithGoogle(email: string, token?: string) {
     console.log('🌐 Enviando a GraphQL:', body);
     const res: any = await firstValueFrom(this.http.post(this.apiUrl, body, { headers }));
 
+    console.log('🧩 Respuesta GraphQL completa:', res);
+
     const user = res?.data?.loginGoogle;
     if (!user) {
       console.warn('⚠️ Usuario no encontrado para:', email);
       return null;
     }
 
-    // 🔢 Normaliza id
-    user.id = Number(user.id) || 100;
+    const clienteId = Number(user.id) || 0;
+    console.log('🧠 Cliente ID detectado:', clienteId);
 
-    // 🧠 Determina adminId local
     let adminId: number | null = null;
     const empresaData = localStorage.getItem('empresa');
     if (empresaData) {
@@ -47,14 +48,17 @@ async loginWithGoogle(email: string, token?: string) {
       adminId = empresa.id ?? null;
     }
 
-    // 💾 Guarda sesión local
+    // 💾 Guarda sesión local forzando clienteId
     const data = {
       role: user.isAdmin ? 'admin' : 'user',
       adminId,
-      clienteId: user.id,
+      clienteId,                // 👈 ahora siempre se guarda
       token,
       isLoggedIn: true,
     };
+// 💾 Guarda clienteId en su propio storage aislado
+localStorage.setItem('clienteId', String(clienteId));
+console.log('🗂️ clienteId guardado por separado:', clienteId);
 
     localStorage.setItem('auth', JSON.stringify(data));
     console.log('💾 Sesión guardada desde AuthService:', data);

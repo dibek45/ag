@@ -1,24 +1,54 @@
-<div class="selector-container">
-  <div class="header">
-    <button (click)="anterior()" class="nav-btn">‹</button>
-    <h3>Elegir nueva cita</h3>
-    <button (click)="siguiente()" class="nav-btn">›</button>
-  </div>
+<div class="selector-container" [ngClass]="{ 'modo-reagendar-activo': modoReagendar }">
 
-  <!-- Selector de servicio -->
-  <app-servicio-selector
-    [servicios]="evento?.servicios || []"
-    [servicioSeleccionado]="servicioSeleccionado"
-    (servicioChange)="seleccionarServicio($event)">
-  </app-servicio-selector>
+  <!-- 🔳 Fondo oscuro al reagendar -->
+  <div *ngIf="modoReagendar" class="overlay-reagendar"></div>
 
-  <!-- 🔹 Mostrar mensaje si no se ha seleccionado servicio -->
-  <div *ngIf="!servicioSeleccionado" class="no-servicio-global">
+  <!-- 📌 Encabezado y selección (ocultos al reagendar) -->
+  <ng-container *ngIf="!modoReagendar">
+    <div class="header" *ngIf="!servicioSeleccionado">
+      <h3>Selecciona servicio</h3>
+    </div>
+
+    <app-servicio-selector
+      [servicios]="evento?.servicios || []"
+      [servicioSeleccionado]="servicioSeleccionado"
+      (servicioChange)="seleccionarServicio($event)">
+    </app-servicio-selector>
+
+    <div class="header" *ngIf="servicioSeleccionado">
+      <button (click)="anterior()" class="nav-btn">‹</button>
+      <h3>Elegir nueva cita</h3>
+      <button (click)="siguiente()" class="nav-btn">›</button>
+    </div>
+  </ng-container>
+
+  <!-- ⚠️ Sin servicio -->
+  <div *ngIf="!servicioSeleccionado && !modoReagendar" class="no-servicio-global">
     <p>Primero selecciona un servicio para ver las citas disponibles.</p>
   </div>
 
-  <!-- 🔹 Días y horarios solo si hay servicio -->
+  <!-- 🗓️ GRID de días -->
   <div class="dias-grid" *ngIf="servicioSeleccionado">
+    
+    <!-- 🟦 Modal de reagendar -->
+    <div *ngIf="modoReagendar" class="cancelar-card">
+      <div class="cancelar-contenido">
+  <h3>Selecciona un nuevo horario</h3>
+  <p>Puedes elegir otra hora disponible.</p>
+
+  <div class="arrow-container">
+    <svg class="arrow-down" viewBox="0 0 24 24" width="52" height="52">
+      <path d="M12 4v14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M6 12l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
+    <button class="btn-cancelar" (click)="cancelarReagendar()">✖ Cancelar</button>
+  </div>
+</div>
+
+    </div>
+
+    <!-- 📅 Días -->
     <div class="dia" *ngFor="let d of diasVisibles">
       <div class="dia-card">
         <h4>{{ citaService.getEtiquetaDia(d) }}</h4>
@@ -26,25 +56,30 @@
 
         <div class="horas">
           <button
-            *ngFor="let h of horasDisponibles[d.toISOString().substring(0, 10)]"
-            [disabled]="h.ocupada"
-            [class.ocupado]="h.ocupada"
-            (click)="!h.ocupada && reservar(d, h.label)">
+            *ngFor="let h of horasDisponibles[d.toISOString().substring(0, 10)]; let i = index"
+            [style.--i]="i"
+            [disabled]="
+              (modoReagendar && (h.ocupada || esMia(d, h.label))) ||
+              (!modoReagendar && h.ocupada && !esMia(d, h.label))
+            "
+            [ngClass]="{
+              ocupado: h.ocupada && !esMia(d, h.label),
+              mia: esMia(d, h.label),
+              parpadea: modoReagendar && !h.ocupada && !esMia(d, h.label)
+            }"
+            (click)="
+              modoReagendar
+                ? reagendar(d, h.label)
+                : esMia(d, h.label)
+                ? abrirModalCita(d, h.label)
+                : reservar(d, h.label)
+            "
+          >
             {{ h.label }}
+            <i *ngIf="esMia(d, h.label)" class="edit-icon fa fa-sync-alt"></i>
           </button>
         </div>
       </div>
     </div>
   </div>
-
-  </div>
-
-<!-- 🔹 Modal de confirmación -->
-<app-confirmar-cita-modal
-  *ngIf="mostrarConfirmacion"
-  [servicio]="servicioSeleccionado"
-  [horaInicio]="horaSeleccionada"
-  [horaFin]="horaFin"
-  (confirmarCita)="confirmarCita()"
-  (cancelarCita)="cancelarCita()">
-</app-confirmar-cita-modal>
+</div>

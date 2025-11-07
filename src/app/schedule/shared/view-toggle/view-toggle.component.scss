@@ -1,38 +1,39 @@
 .view-toggle {
-  position: absolute;
-  top: 240px;
+  position: absolute !important; /* vuelve a ser flotante */
+  top: 170px;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000;
-
+  z-index: 1 !important; /* detrás del modal */
   display: inline-flex;
   gap: 8px;
   background: #e3f2fd;
   border-radius: 14px;
   padding: 6px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  pointer-events: none; /* no interfiere cuando modal está activo */
+}
 
-  button {
-    border: none;
-    background: transparent;
-    padding: 8px 16px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    border-radius: 10px;
-    cursor: pointer;
-    color: #1976d2;
-    transition: all 0.25s ease;
+.view-toggle button {
+  border: none;
+  background: transparent;
+  padding: 8px 16px;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #1976d2;
+  transition: all 0.25s ease;
+  pointer-events: auto; /* permite clics cuando modal no está activo */
+}
 
-    &:hover {
-      background: rgba(25, 118, 210, 0.15);
-    }
+.view-toggle button:hover {
+  background: rgba(25, 118, 210, 0.15);
+}
 
-    &.active,
-    &.active-hoy {
-      background: linear-gradient(135deg, #1976d2, #42a5f5);
-      color: #fff;
-      box-shadow: 0 4px 10px rgba(25, 118, 210, 0.35);
-      transform: scale(1.05);
-    }
-  }
+.view-toggle button.active,
+.view-toggle button.active-hoy {
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  color: #fff;
+  box-shadow: 0 4px 10px rgba(25, 118, 210, 0.35);
+  transform: scale(1.05);
 }

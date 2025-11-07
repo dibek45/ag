@@ -1,5 +1,7 @@
 .btn-regresar {
 position: absolute; /* o fixed si quieres que siempre esté visible al hacer scroll */
+    z-index: 1;
+
   top: 1rem;
   left: 1rem;
   display: flex;
@@ -11,7 +13,6 @@ position: absolute; /* o fixed si quieres que siempre esté visible al hacer scr
   color: #1a73e8;
   cursor: pointer;
   padding: 0.5rem;
-  z-index: 1000; /* para que no se esconda detrás de otros elementos */
 }
 
 .btn-regresar:hover {

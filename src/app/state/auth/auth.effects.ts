@@ -10,14 +10,14 @@ export class AuthEffects {
   private readonly actions$ = inject(Actions);
   private readonly authService = inject(AuthService);
 
-  // ✅ Login con Google sin usar .then()
+  // ✅ Login con Google
   loginWithGoogle$ = createEffect(() =>
     this.actions$.pipe(
       ofType(AuthActions.loginWithGoogle),
       switchMap(({ email, name, img, token }) => {
         console.log('🔥 Efecto loginWithGoogle activado');
 
-        // 📦 Obtener adminId de empresa local
+        // 🏢 Recuperar adminId desde localStorage si existe
         const empresaData = localStorage.getItem('empresa');
         let adminId: number | null = null;
         if (empresaData) {
@@ -25,25 +25,36 @@ export class AuthEffects {
           adminId = empresa.id ?? null;
         }
 
-        // 🚀 Llamada al backend
+        // 🔹 Llamada al backend
         return from(this.authService.loginWithGoogle(email, token)).pipe(
           map((user) => {
-            console.log('🧩 user recibido del backend:', user);
+            console.log('🧩 Usuario recibido del backend:', user);
 
             const clienteId = Number(user?.id) || 100;
-
             console.log('🔍 clienteId final:', clienteId);
 
-            const payload = {
+            return AuthActions.loginSuccess({
               role: (user.isAdmin ? 'admin' : 'user') as 'admin' | 'user',
               adminId,
               clienteId,
               token,
-            };
-
-            console.log('✅ Payload enviado al loginSuccess:', payload);
-            return AuthActions.loginSuccess(payload);
+            });
           }),
+
+          // 💾 Guarda sesión local fusionando datos previos
+          tap((action) => {
+            const prev = JSON.parse(localStorage.getItem('auth') || '{}');
+            const data = {
+              role: (action as any).role ?? prev.role,
+              adminId: (action as any).adminId ?? prev.adminId,
+              clienteId: (action as any).clienteId ?? prev.clienteId,
+              token: (action as any).token ?? prev.token,
+              isLoggedIn: true,
+            };
+            localStorage.setItem('auth', JSON.stringify(data));
+            console.log('💾 Sesión guardada desde AuthEffects (fusionada):', data);
+          }),
+
           catchError((error) => {
             console.error('❌ Error en loginWithGoogle$', error);
             return of({ type: '[Auth] Login Error' });
@@ -52,8 +63,6 @@ export class AuthEffects {
       })
     )
   );
-
-
 
   // ✅ Borrar sesión
   clearLogin$ = createEffect(
@@ -84,4 +93,3 @@ export class AuthEffects {
     )
   );
 }
- 

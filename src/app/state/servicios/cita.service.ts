@@ -15,26 +15,24 @@ export class CitaService {
     private apiUrl = environment.apiUrl; // 👈 toma la URL según el modo
   
   constructor(private store: Store<AppState>, private http: HttpClient) {}
-
- generarDias(indiceBase = 0, evento?: Evento, fechaBase?: Date): Date[] {
-  const base = fechaBase || new Date(); // ← usa la fecha seleccionada si existe
+generarDias(indiceBase = 0, evento?: Evento, fechaBase?: Date): Date[] {
+  const base = fechaBase || new Date();
   const dias: Date[] = [];
 
   for (let i = 0; i < 3; i++) {
-    const d = new Date(base);
-    d.setDate(base.getDate() + indiceBase + i);
+    // ✅ crea fechas sin arrastrar zona horaria UTC
+    const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + indiceBase + i);
     dias.push(d);
   }
 
   console.log(
-    '📆 Días visibles generados desde',
-    base.toISOString().split('T')[0],
-    '→',
-    dias.map(x => x.toISOString().split('T')[0])
+    '📆 Días visibles generados:',
+    dias.map(x => x.toLocaleDateString('en-CA'))
   );
 
   return dias;
 }
+
 
 
   getEtiquetaDia(d: Date): string {
@@ -49,12 +47,13 @@ export class CitaService {
       .replace(/^\w/, c => c.toUpperCase());
   }
 
-  generarHoras(
+generarHoras(
   evento: Evento | undefined,
   servicioSeleccionado: Servicio | undefined,
   diasVisibles: Date[]
-): { [fecha: string]: { label: string; ocupada: boolean }[] } {
-  const horasDisponibles: { [fecha: string]: { label: string; ocupada: boolean }[] } = {};
+): Record<string, { label: string; ocupada: boolean; clienteId?: number | null }[]> {
+
+  const horasDisponibles: Record<string, { label: string; ocupada: boolean; clienteId?: number | null }[]> = {};
   const duracion = servicioSeleccionado?.duracionMin ?? 30;
   const citas = evento?.citas ?? [];
 
@@ -63,8 +62,8 @@ export class CitaService {
     const disponibilidad = evento?.admin?.disponibilidades
       ?.find(disp => disp.dia_semana.toLowerCase() === diaSemana);
 
-    const key = d.toISOString().substring(0, 10);
-    const horas: { label: string; ocupada: boolean }[] = [];
+    const key = d.toLocaleDateString('en-CA'); // ✅ formato local sin UTC
+    const horas: { label: string; ocupada: boolean; clienteId?: number | null }[] = [];
 
     if (!disponibilidad) {
       horasDisponibles[key] = [];
@@ -78,48 +77,32 @@ export class CitaService {
       const h = Math.floor(i / 60);
       const m = i % 60;
       const label = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-      const horaInicioSlot = new Date(`${key}T${label}:00`);
-      const horaFinSlot = new Date(horaInicioSlot.getTime() + duracion * 60000);
 
-     const ocupada = citas.some(cita => {
-  const citaFecha = new Date(cita.fecha).toISOString().split('T')[0];
+      let clienteId: number | null = null;
 
-  // 🔍 Log de comparación de fecha
-  /*console.log('📆 Comparando fechas:', {
-    key,
-    citaRaw: cita.fecha,
-    citaNormalizada: citaFecha,
-    coincide: citaFecha === key
-  });*/
+      const ocupada = citas.some(cita => {
+        const citaFecha = (cita.fecha ?? '').split('T')[0];
+        if (!citaFecha) return false; // 🔹 evita error si null
+        if (citaFecha !== key) return false;
 
-  if (citaFecha !== key) return false;
+        const inicioCita = new Date(`${citaFecha}T${cita.hora}`);
+        const duracionCita =
+          cita.servicio?.duracionMin ??
+          evento?.servicios?.find(s => s.id === cita.servicioId)?.duracionMin ??
+          30;
 
-  const inicioCita = new Date(`${key}T${cita.hora}`);
+        const finCita = new Date(inicioCita.getTime() + duracionCita * 60000);
 
-  const duracionCita =
-    cita.servicio?.duracionMin ??
-    evento?.servicios?.find(s => s.id === cita.servicioId)?.duracionMin ??
-    30;
+        const horaInicioSlot = new Date(`${key}T${label}:00`);
+        const horaFinSlot = new Date(horaInicioSlot.getTime() + duracion * 60000);
 
-  const finCita = new Date(inicioCita.getTime() + duracionCita * 60000);
-  const seCruza = horaInicioSlot < finCita && horaFinSlot > inicioCita;
+        const seCruza = horaInicioSlot < finCita && horaFinSlot > inicioCita;
 
-  console.log('🕒 Comparando slot:', {
-    fecha: key,
-    citaHora: cita.hora,
-    duracionCita,
-    slotInicio: horaInicioSlot.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
-    slotFin: horaFinSlot.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
-    citaInicio: inicioCita.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
-    citaFin: finCita.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' }),
-    resultado: seCruza ? '❌ OCUPADO' : '✅ LIBRE'
-  });
+        if (seCruza) clienteId = cita.clienteId ?? null;
+        return seCruza;
+      });
 
-  return seCruza;
-});
-
-
-      horas.push({ label, ocupada });
+      horas.push({ label, ocupada, clienteId });
     }
 
     horasDisponibles[key] = horas;
@@ -127,6 +110,7 @@ export class CitaService {
 
   return horasDisponibles;
 }
+
 
 
 reservarCita(evento: Evento, servicio: Servicio, fecha: Date, hora: string): void {
