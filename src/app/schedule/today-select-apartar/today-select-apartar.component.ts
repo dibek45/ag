@@ -10,11 +10,13 @@ import { Evento, Servicio } from '../../state/evento/evento.model';
 import { ServicioSelectorComponent } from './servicio-selector/servicio-selector.component';
 import { ConfirmarCitaModalComponent } from '../../android/features/cambiar-estado-modal/confirmar-cita-modal.component';
 import { ActivatedRoute } from '@angular/router';
+import * as EventoActions from '../../state/evento/evento.actions';
+import { ReagendarCitaModalComponent } from '../../shared/modals/reagendar-cita-modal/reagendar-cita-modal.component';
 
 @Component({
   selector: 'app-today-select-apartar',
   standalone: true,
-  imports: [CommonModule, ServicioSelectorComponent, ],
+  imports: [CommonModule, ServicioSelectorComponent, ConfirmarCitaModalComponent,ReagendarCitaModalComponent],
   templateUrl: './today-select-apartar.component.html',
   styleUrls: ['./today-select-apartar.component.scss']
 })
@@ -24,6 +26,9 @@ export class TodaySelectApartarComponent implements OnInit {
   clienteIdActual: number | null = null;
 modoReagendar = false;
 diaSeleccionado?: string; // YYYY-MM-DD
+mostrarModalReagendar = false;
+fechaModal?: Date;
+horaModal?: string;
 
   diasVisibles: Date[] = [];
   indiceBase = 0;
@@ -123,12 +128,52 @@ horasDisponibles: {
     this.horaFin = fin.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
     this.mostrarConfirmacion = true;
   }
+confirmarCita() {
+  if (!this.evento || !this.servicioSeleccionado || !this.fechaSeleccionada || !this.horaSeleccionada) return;
+  this.mostrarConfirmacion = false;
 
-  confirmarCita() {
-    if (!this.evento || !this.servicioSeleccionado || !this.fechaSeleccionada || !this.horaSeleccionada) return;
-    this.mostrarConfirmacion = false;
-    this.citaService.reservarCita(this.evento, this.servicioSeleccionado, this.fechaSeleccionada, this.horaSeleccionada);
-  }
+  console.log('📤 Enviando clienteIdActual al servicio:', this.clienteIdActual);
+
+  this.citaService.crearCita({
+    nombreCliente: 'Cliente prueba',
+    telefonoCliente: '0000000000',
+    fecha: this.fechaSeleccionada.toISOString().substring(0, 10),
+    hora: this.horaSeleccionada,
+    estado: 'pendiente',
+    eventoId: this.evento.id,
+    servicioId: this.servicioSeleccionado.id,
+    clienteId: this.clienteIdActual ?? null,
+  }).subscribe({
+    next: (nuevaCita) => {
+      console.log('✅ Cita creada en backend:', nuevaCita);
+
+      // 🧠 Actualiza el store local
+      this.store.dispatch(
+        EventoActions.addCita({
+          empresaId: 1,
+          eventoId: this.evento!.id,
+          cita: { ...nuevaCita, servicio: this.servicioSeleccionado },
+        })
+      );
+
+      // 🩵 Recalcula colores en tiempo real
+      this.horasDisponibles = this.citaService.generarHoras(
+        this.evento!,
+        this.servicioSeleccionado,
+        this.diasVisibles
+      );
+
+      console.log('🔄 Horas recalculadas tras guardar cita');
+    },
+    error: (err) => {
+      console.error('❌ Error al crear cita:', err);
+      alert('No se pudo crear la cita. Intenta de nuevo.');
+    },
+  });
+}
+
+
+
 
   cancelarCita() {
     this.mostrarConfirmacion = false;
@@ -241,34 +286,85 @@ esMia(fecha: Date, hora: string): boolean {
 
 
 
-abrirModalCita(fecha: Date, hora: string) {
-  if (!this.esMia(fecha, hora)) return;
 
-  const confirmar = confirm('¿Quieres reagendar o eliminar esta cita?');
-  if (confirmar) {
-    this.modoReagendar = true;
-    this.diaSeleccionado = fecha.toISOString().split('T')[0];
 
-    // 🔝 Subir scroll al activar modo reagendar
-    setTimeout(() => {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 50);
-  }
+
+cerrarModal() {
+  this.mostrarModalReagendar = false;
 }
 
+confirmarReagendar() {
+  if (this.fechaModal && this.horaModal) {
+    this.reagendar(this.fechaModal, this.horaModal);
+    this.mostrarModalReagendar = false;
+  }
+}
 
 cancelarReagendar() {
   this.modoReagendar = false;
   this.diaSeleccionado = undefined;
 }
 
-
-
 reagendar(fecha: Date, hora: string) {
-  this.modoReagendar = false; // desactivar parpadeo
-  console.log('🔄 Nueva hora seleccionada:', fecha, hora);
-  //this.citaService.reagendarCita(this.evento!, fecha, hora);
+  if (!this.evento) return;
+
+  const cita = this.evento.citas.find(c => c.clienteId === this.clienteIdActual);
+  if (!cita) return;
+
+  console.log('🔄 Reagendando cita:', cita.id, '→', fecha, hora);
+
+  this.citaService.actualizarCita(cita.id, {
+    fecha: fecha.toISOString().substring(0, 10),
+    hora,
+    clienteId: this.clienteIdActual
+  }).subscribe(updated => {
+    this.store.dispatch(EventoActions.updateCita({
+      empresaId: 1,
+      eventoId: this.evento!.id,
+      cita: updated
+    }));
+
+    // 🎨 Recalcular visualmente
+    this.horasDisponibles = this.citaService.generarHoras(
+      this.evento!,
+      this.servicioSeleccionado,
+      this.diasVisibles
+    );
+
+    this.modoReagendar = false;
+  });
 }
 
+
+
+
+
+
+
+
+abrirModalCita(fecha: Date, hora: string) {
+  if (!this.esMia(fecha, hora)) return;
+
+  // Abre el modal visualmente
+  this.fechaModal = fecha;
+  this.horaModal = hora;
+  this.mostrarModalReagendar = true;
+}
+
+onConfirmarReagendar() {
+  // Activa el modo reagendar con parpadeo
+  this.modoReagendar = true;
+  this.diaSeleccionado = this.fechaModal?.toISOString().split('T')[0];
+  this.mostrarModalReagendar = false;
+
+  // 🟩 Aquí ya entra el modo visual verde/parpadeo
+  setTimeout(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 100);
+}
+
+onCancelarReagendar() {
+  this.mostrarModalReagendar = false;
+}
 
 }

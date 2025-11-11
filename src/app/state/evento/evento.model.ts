@@ -27,7 +27,7 @@ export interface Servicio {
 export interface Cita {
   id: number;
   nombreCliente: string;
-  clienteId:number
+  clienteId?: number | null;   // ✅ ahora puede ser null u opcional
   telefonoCliente: string;
   fecha: string;
   hora: string;
@@ -35,9 +35,9 @@ export interface Cita {
   eventoId: number;
   servicioId: number;   // FK
   servicio?: Servicio;  // relación opcional
-  usuarioId?: number; // ✅ agrega esta línea
-
+  usuarioId?: number;   // este puedes dejar igual
 }
+
 export interface Evento {
     id: number;
     titulo: string;

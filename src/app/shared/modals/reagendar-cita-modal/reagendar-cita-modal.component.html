@@ -1,0 +1,15 @@
+<div class="overlay" *ngIf="visible">
+  <div class="modal">
+    <h2>Reagendar cita</h2>
+    <p>
+      ¿Deseas reagendar tu cita para
+      <strong>{{ fecha | date: 'fullDate' }}</strong>
+      a las <strong>{{ hora }}</strong>?
+    </p>
+
+    <div class="actions">
+      <button class="btn-confirm" (click)="onConfirm()">Sí, reagendar</button>
+      <button class="btn-cancel" (click)="onCancel()">Cancelar</button>
+    </div>
+  </div>
+</div>

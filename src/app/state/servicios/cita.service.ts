@@ -12,28 +12,22 @@ import { catchError, map, Observable, of } from 'rxjs';
 })
 export class CitaService {
 
-    private apiUrl = environment.apiUrl; // 👈 toma la URL según el modo
-  
+  private apiUrl = environment.apiUrl;
+
   constructor(private store: Store<AppState>, private http: HttpClient) {}
-generarDias(indiceBase = 0, evento?: Evento, fechaBase?: Date): Date[] {
-  const base = fechaBase || new Date();
-  const dias: Date[] = [];
 
-  for (let i = 0; i < 3; i++) {
-    // ✅ crea fechas sin arrastrar zona horaria UTC
-    const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + indiceBase + i);
-    dias.push(d);
+  generarDias(indiceBase = 0, evento?: Evento, fechaBase?: Date): Date[] {
+    const base = fechaBase || new Date();
+    const dias: Date[] = [];
+
+    for (let i = 0; i < 3; i++) {
+      const d = new Date(base.getFullYear(), base.getMonth(), base.getDate() + indiceBase + i);
+      dias.push(d);
+    }
+
+    console.log('📆 Días visibles generados:', dias.map(x => x.toLocaleDateString('en-CA')));
+    return dias;
   }
-
-  console.log(
-    '📆 Días visibles generados:',
-    dias.map(x => x.toLocaleDateString('en-CA'))
-  );
-
-  return dias;
-}
-
-
 
   getEtiquetaDia(d: Date): string {
     const hoy = new Date();
@@ -43,90 +37,77 @@ generarDias(indiceBase = 0, evento?: Evento, fechaBase?: Date): Date[] {
 
     if (soloFecha(d) === soloFecha(hoy)) return 'Hoy';
     if (soloFecha(d) === soloFecha(mañana)) return 'Mañana';
-    return d.toLocaleDateString('es-MX', { weekday: 'long' })
-      .replace(/^\w/, c => c.toUpperCase());
+    return d.toLocaleDateString('es-MX', { weekday: 'long' }).replace(/^\w/, c => c.toUpperCase());
   }
 
-generarHoras(
-  evento: Evento | undefined,
-  servicioSeleccionado: Servicio | undefined,
-  diasVisibles: Date[]
-): Record<string, { label: string; ocupada: boolean; clienteId?: number | null }[]> {
+  generarHoras(
+    evento: Evento | undefined,
+    servicioSeleccionado: Servicio | undefined,
+    diasVisibles: Date[]
+  ): Record<string, { label: string; ocupada: boolean; clienteId?: number | null }[]> {
+    const horasDisponibles: Record<string, { label: string; ocupada: boolean; clienteId?: number | null }[]> = {};
+    const duracion = servicioSeleccionado?.duracionMin ?? 30;
+    const citas = evento?.citas ?? [];
 
-  const horasDisponibles: Record<string, { label: string; ocupada: boolean; clienteId?: number | null }[]> = {};
-  const duracion = servicioSeleccionado?.duracionMin ?? 30;
-  const citas = evento?.citas ?? [];
+    for (const d of diasVisibles) {
+      const diaSemana = d.toLocaleDateString('es-MX', { weekday: 'long' }).toLowerCase();
+      const disponibilidad = evento?.admin?.disponibilidades
+        ?.find(disp => disp.dia_semana.toLowerCase() === diaSemana);
 
-  for (const d of diasVisibles) {
-    const diaSemana = d.toLocaleDateString('es-MX', { weekday: 'long' }).toLowerCase();
-    const disponibilidad = evento?.admin?.disponibilidades
-      ?.find(disp => disp.dia_semana.toLowerCase() === diaSemana);
+      const key = d.toLocaleDateString('en-CA');
+      const horas: { label: string; ocupada: boolean; clienteId?: number | null }[] = [];
 
-    const key = d.toLocaleDateString('en-CA'); // ✅ formato local sin UTC
-    const horas: { label: string; ocupada: boolean; clienteId?: number | null }[] = [];
+      if (!disponibilidad) {
+        horasDisponibles[key] = [];
+        continue;
+      }
 
-    if (!disponibilidad) {
-      horasDisponibles[key] = [];
-      continue;
+      const horaInicio = parseInt(disponibilidad.hora_inicio.split(':')[0], 10);
+      const horaFin = parseInt(disponibilidad.hora_fin.split(':')[0], 10);
+
+      for (let i = horaInicio * 60; i < horaFin * 60; i += duracion) {
+        const h = Math.floor(i / 60);
+        const m = i % 60;
+        const label = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+        let clienteId: number | null = null;
+
+        const ocupada = citas.some(cita => {
+          const citaFecha = (cita.fecha ?? '').split('T')[0];
+          if (!citaFecha || citaFecha !== key) return false;
+
+          const inicioCita = new Date(`${citaFecha}T${cita.hora}`);
+          const duracionCita =
+            cita.servicio?.duracionMin ??
+            evento?.servicios?.find(s => s.id === cita.servicioId)?.duracionMin ?? 30;
+          const finCita = new Date(inicioCita.getTime() + duracionCita * 60000);
+
+          const horaInicioSlot = new Date(`${key}T${label}:00`);
+          const horaFinSlot = new Date(horaInicioSlot.getTime() + duracion * 60000);
+          const seCruza = horaInicioSlot < finCita && horaFinSlot > inicioCita;
+
+          if (seCruza) clienteId = cita.clienteId ?? null;
+          return seCruza;
+        });
+
+        horas.push({ label, ocupada, clienteId });
+      }
+
+      horasDisponibles[key] = horas;
     }
 
-    const horaInicio = parseInt(disponibilidad.hora_inicio.split(':')[0], 10);
-    const horaFin = parseInt(disponibilidad.hora_fin.split(':')[0], 10);
-
-    for (let i = horaInicio * 60; i < horaFin * 60; i += duracion) {
-      const h = Math.floor(i / 60);
-      const m = i % 60;
-      const label = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-
-      let clienteId: number | null = null;
-
-      const ocupada = citas.some(cita => {
-        const citaFecha = (cita.fecha ?? '').split('T')[0];
-        if (!citaFecha) return false; // 🔹 evita error si null
-        if (citaFecha !== key) return false;
-
-        const inicioCita = new Date(`${citaFecha}T${cita.hora}`);
-        const duracionCita =
-          cita.servicio?.duracionMin ??
-          evento?.servicios?.find(s => s.id === cita.servicioId)?.duracionMin ??
-          30;
-
-        const finCita = new Date(inicioCita.getTime() + duracionCita * 60000);
-
-        const horaInicioSlot = new Date(`${key}T${label}:00`);
-        const horaFinSlot = new Date(horaInicioSlot.getTime() + duracion * 60000);
-
-        const seCruza = horaInicioSlot < finCita && horaFinSlot > inicioCita;
-
-        if (seCruza) clienteId = cita.clienteId ?? null;
-        return seCruza;
-      });
-
-      horas.push({ label, ocupada, clienteId });
-    }
-
-    horasDisponibles[key] = horas;
+    return horasDisponibles;
   }
 
-  return horasDisponibles;
-}
+reservarCita(
+  evento: Evento,
+  servicio: Servicio,
+  fecha: Date,
+  hora: string,
+  clienteId?: number | null
+): void {
+  console.log('🧠 clienteId recibido desde componente:', clienteId);
 
-
-
-reservarCita(evento: Evento, servicio: Servicio, fecha: Date, hora: string): void {
-  // 🔹 Recuperar clienteId desde localStorage
-  const authData = localStorage.getItem('auth');
-  let clienteId: number | null = null;
-
-  if (authData) {
-    try {
-      const parsed = JSON.parse(authData);
-      clienteId = parsed.clienteId ?? null;
-    } catch (e) {
-      console.warn('⚠️ No se pudo parsear auth localStorage:', e);
-    }
-  }
-
+  // ✅ Construir cita sin incluir el objeto `servicio`
   const cita: Cita = {
     id: 0,
     eventoId: evento.id,
@@ -136,25 +117,26 @@ reservarCita(evento: Evento, servicio: Servicio, fecha: Date, hora: string): voi
     fecha: fecha.toISOString().substring(0, 10),
     hora,
     estado: 'pendiente',
-    servicio,
-    clienteId: clienteId ?? 0, // 💥 usa el real si existe, si no 0
+    clienteId: clienteId ?? null,
   };
 
-  // 🔹 1. Enviar la mutación GraphQL
+  console.log('📤 Datos enviados a crearCita:', cita);
+
+  // ✅ Enviar mutación GraphQL con los campos válidos
   this.crearCita({
-    eventoId: cita.eventoId,
-    servicioId: cita.servicioId,
     nombreCliente: cita.nombreCliente,
     telefonoCliente: cita.telefonoCliente,
     fecha: cita.fecha,
     hora: cita.hora,
     estado: cita.estado,
-    clienteId: cita.clienteId, // ✅ ahora sí se manda
+    eventoId: cita.eventoId,
+    servicioId: cita.servicioId,
+    clienteId: cita.clienteId,
   }).subscribe({
     next: (nuevaCita) => {
       console.log('✅ Cita creada en backend:', nuevaCita);
 
-      // 🔹 2. Actualizar Redux local
+      // 🔹 Actualizar store local
       this.store.dispatch(
         EventoActions.addCita({
           empresaId: 1,
@@ -163,7 +145,9 @@ reservarCita(evento: Evento, servicio: Servicio, fecha: Date, hora: string): voi
         })
       );
 
-      // 🔹 3. Notificar por WhatsApp
+    
+
+      // 🔹 Notificar por WhatsApp
       const msg = `✅ Nueva cita creada
 💅 Servicio: ${servicio.nombre}
 📅 Fecha: ${nuevaCita.fecha}
@@ -180,65 +164,147 @@ reservarCita(evento: Evento, servicio: Servicio, fecha: Date, hora: string): voi
 
 
 
+crearCita(data: Partial<Cita>): Observable<Cita> {
+  // ⚡ Limpia cualquier campo no permitido por CreateCitaInput
+  const cleanData: any = {
+    nombreCliente: data.nombreCliente,
+    telefonoCliente: data.telefonoCliente,
+    fecha: data.fecha,
+    hora: data.hora,
+    estado: data.estado,
+    eventoId: data.eventoId,
+    servicioId: data.servicioId,
+    clienteId: data.clienteId ?? null,
+  };
 
-  
-  // 🔹 Crear cita
-  crearCita(data: Partial<Cita>): Observable<Cita> {
-    const mutation = `
-      mutation CrearCita($data: CreateCitaInput!) {
-        crearCita(data: $data) {
-          id
-          nombreCliente
-          telefonoCliente
-          fecha
-          hora
-          estado
-          servicioId
-        }
-      }
-    `;
-    return this.http.post<any>(this.apiUrl, { query: mutation, variables: { data } })
-      .pipe(map((res) => res.data.crearCita as Cita));
-  }
-
-  // 🔹 Actualizar cita
-  actualizarCita(id: number, data: Partial<Cita>): Observable<Cita> {
-    const mutation = `
-      mutation ActualizarCita($id: Int!, $data: UpdateCitaInput!) {
-        actualizarCita(id: $id, data: $data) {
-          id
-          nombreCliente
-          telefonoCliente
-          fecha
-          hora
-          estado
-        }
-      }
-    `;
-    return this.http.post<any>(this.apiUrl, { query: mutation, variables: { id, data } })
-      .pipe(map((res) => res.data.actualizarCita as Cita));
-  }
-
-
-
-  eliminarCita(id: number) {
   const mutation = `
-    mutation EliminarCita($id: Int!) {
-      eliminarCita(id: $id)
+    mutation CrearCita($data: CreateCitaInput!) {
+      crearCita(data: $data) {
+        id
+        nombreCliente
+        telefonoCliente
+        fecha
+        hora
+        estado
+        servicioId
+        clienteId
+        eventoId
+      }
     }
   `;
 
   return this.http.post<any>(this.apiUrl, {
     query: mutation,
-    variables: { id }
-  })
-  .pipe(
-    map(res => res.data.eliminarCita as boolean),
-    catchError(error => {
-      console.error('❌ Error al eliminar cita:', error);
-      return of(false);
+    variables: { data: cleanData },
+  }).pipe(
+    map((res) => {
+      console.log('🧩 Respuesta completa GraphQL:', res);
+      if (res.errors) {
+        console.error('🚨 Backend GraphQL devolvió error:', res.errors);
+        throw new Error(JSON.stringify(res.errors[0]));
+      }
+      return res.data.crearCita as Cita;
+    }),
+    catchError((err) => {
+      console.error('❌ Error GraphQL crearCita:', err);
+      throw err;
     })
   );
+}
+
+
+
+ actualizarCita(id: number, data: Partial<Cita>): Observable<Cita> {
+  const mutation = `
+    mutation ActualizarCita($actualizarCitaId: Int!, $data: UpdateCitaInput!) {
+      actualizarCita(id: $actualizarCitaId, data: $data) {
+        id
+        fecha
+        hora
+        estado
+        clienteId
+      }
+    }
+  `;
+
+  const cleanData: any = {
+    fecha: data.fecha ?? null,
+    hora: data.hora ?? null,
+    estado: data.estado ?? 'pendiente',
+    clienteId: data.clienteId ?? null,
+  };
+
+  return this.http.post<any>(this.apiUrl, {
+    query: mutation,
+    variables: { actualizarCitaId: id, data: cleanData },
+  }).pipe(
+    map((res) => {
+      if (res.errors) throw new Error(JSON.stringify(res.errors[0]));
+      return res.data.actualizarCita as Cita;
+    }),
+    catchError((err) => {
+      console.error('❌ Error al actualizar cita:', err);
+      throw err;
+    })
+  );
+}
+
+
+
+  eliminarCita(id: number) {
+    const mutation = `
+      mutation EliminarCita($id: Int!) {
+        eliminarCita(id: $id)
+      }
+    `;
+
+    return this.http
+      .post<any>(this.apiUrl, { query: mutation, variables: { id } })
+      .pipe(
+        map((res) => res.data.eliminarCita as boolean),
+        catchError((error) => {
+          console.error('❌ Error al eliminar cita:', error);
+          return of(false);
+        })
+      );
+  }
+
+
+  reagendarCita(
+  evento: Evento,
+  cita: Cita,
+  nuevaFecha: Date,
+  nuevaHora: string
+): void {
+  const fechaStr = nuevaFecha.toISOString().substring(0, 10);
+
+  console.log('🔄 Reagendando cita:', {
+    citaId: cita.id,
+    nuevaFecha: fechaStr,
+    nuevaHora,
+  });
+
+  this.actualizarCita(cita.id, { fecha: fechaStr, hora: nuevaHora }).subscribe({
+    next: (citaActualizada) => {
+      console.log('✅ Cita reagendada en backend:', citaActualizada);
+
+      // 🧠 Actualiza el store Redux
+      this.store.dispatch(
+        EventoActions.updateCita({
+          empresaId: 1,
+          eventoId: evento.id,
+          cita: { ...cita, ...citaActualizada },
+        })
+      );
+
+      // 🩵 Actualiza visualmente horarios y colores
+      console.log('🎨 Cita reagendada y sincronizada con Redux');
+    },
+    error: (err) => {
+      console.error('❌ Error al reagendar cita:', err);
+      alert('No se pudo reagendar la cita. Intenta de nuevo.');
+    },
+  });
 }
 
 }

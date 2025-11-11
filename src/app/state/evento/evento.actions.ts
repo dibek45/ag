@@ -71,14 +71,46 @@ export const addCita = createAction(
   props<{ empresaId: number; eventoId: number; cita: Cita }>()
 );
 
+export const addCitaSuccess = createAction(
+  '[Cita] Add Success',
+  props<{ empresaId: number; eventoId: number; cita: Cita }>()
+);
+
+export const addCitaFailure = createAction(
+  '[Cita] Add Failure',
+  props<{ error: any }>()
+);
+
+// ✏️ Actualizar cita
 export const updateCita = createAction(
   '[Cita] Update',
   props<{ empresaId: number; eventoId: number; cita: Cita }>()
 );
 
+export const updateCitaSuccess = createAction(
+  '[Cita] Update Success',
+  props<{ empresaId: number; eventoId: number; cita: Cita }>()
+);
+
+export const updateCitaFailure = createAction(
+  '[Cita] Update Failure',
+  props<{ error: any }>()
+);
+
+// ❌ Eliminar cita
 export const deleteCita = createAction(
   '[Cita] Delete',
   props<{ empresaId: number; eventoId: number; citaId: number }>()
+);
+
+export const deleteCitaSuccess = createAction(
+  '[Cita] Delete Success',
+  props<{ empresaId: number; eventoId: number; citaId: number }>()
+);
+
+export const deleteCitaFailure = createAction(
+  '[Cita] Delete Failure',
+  props<{ error: any }>()
 );
 
 // 🧹 Limpiar eventos (opcional al cambiar empresa)

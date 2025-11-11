@@ -83,3 +83,19 @@
     </div>
   </div>
 </div>
+<!-- ✅ Modal de confirmación -->
+<app-confirmar-cita-modal
+  *ngIf="mostrarConfirmacion"
+  [servicio]="servicioSeleccionado"
+  [horaInicio]="horaSeleccionada"
+  [horaFin]="horaFin"
+  (confirmarCita)="confirmarCita()"
+  (cancelarCita)="cancelarCita()">
+</app-confirmar-cita-modal>
+<app-reagendar-cita-modal
+  [visible]="mostrarModalReagendar"
+  [fecha]="fechaModal"
+  [hora]="horaModal"
+  (confirm)="onConfirmarReagendar()"
+  (cancel)="onCancelarReagendar()">
+</app-reagendar-cita-modal>

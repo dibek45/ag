@@ -1,9 +1,9 @@
 import { createReducer, on } from '@ngrx/store';
 import * as EventoActions from './evento.actions';
-import { Evento, Cita } from './evento.model';
+import { Evento } from './evento.model';
 
 export interface EventoState {
-  eventos: { [empresaId: number]: Evento[] }; // eventos agrupados por empresa
+  eventos: { [empresaId: number]: Evento[] };
   loading: boolean;
   error: any;
 }
@@ -69,8 +69,8 @@ export const eventoReducer = createReducer(
     },
   })),
 
-  // ➕ Agregar cita
-  on(EventoActions.addCita, (state, { empresaId, eventoId, cita }) => ({
+  // ✅ Crear cita confirmada (desde backend)
+  on(EventoActions.addCitaSuccess, (state, { empresaId, eventoId, cita }) => ({
     ...state,
     eventos: {
       ...state.eventos,
@@ -82,8 +82,8 @@ export const eventoReducer = createReducer(
     },
   })),
 
-  // ✏️ Actualizar cita
-  on(EventoActions.updateCita, (state, { empresaId, eventoId, cita }) => ({
+  // ✏️ Actualizar cita existente
+  on(EventoActions.updateCitaSuccess, (state, { empresaId, eventoId, cita }) => ({
     ...state,
     eventos: {
       ...state.eventos,
@@ -101,7 +101,7 @@ export const eventoReducer = createReducer(
   })),
 
   // ❌ Eliminar cita
-  on(EventoActions.deleteCita, (state, { empresaId, eventoId, citaId }) => ({
+  on(EventoActions.deleteCitaSuccess, (state, { empresaId, eventoId, citaId }) => ({
     ...state,
     eventos: {
       ...state.eventos,

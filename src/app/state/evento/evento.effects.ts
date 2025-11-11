@@ -5,7 +5,6 @@ import { map, catchError, switchMap, withLatestFrom, take, filter } from 'rxjs/o
 import * as EventoActions from './evento.actions';
 import { EventoService } from './evento.service';
 import { CitaService } from './../servicios/cita.service';
-
 import { Store } from '@ngrx/store';
 import { selectEventosByEmpresaId } from './evento.selectors';
 import { Cita } from './evento.model';
@@ -17,21 +16,21 @@ export class EventoEffects {
   private citaService = inject(CitaService);
   private store = inject(Store);
 
-  // 🔹 Cargar eventos (solo si no existen en el store)
+  // 🔹 Cargar eventos
   loadEventos$ = createEffect(() =>
     this.actions$.pipe(
       ofType(EventoActions.loadEventos),
-      withLatestFrom(this.store), // combina acción + estado
+      withLatestFrom(this.store),
       switchMap(([action]) =>
         this.store.select(selectEventosByEmpresaId(action.empresaId)).pipe(
           take(1),
-          filter(eventos => !eventos || eventos.length === 0), // evita recargar si ya existen
+          filter(eventos => !eventos || eventos.length === 0),
           switchMap(() =>
             this.eventoService.getEventosByAdmin(action.empresaId).pipe(
               map(eventos =>
                 EventoActions.loadEventosSuccess({
                   eventos,
-                  empresaId: action.empresaId
+                  empresaId: action.empresaId,
                 })
               ),
               catchError(error =>
@@ -95,68 +94,66 @@ export class EventoEffects {
     )
   );
 
-  // ➕ Crear cita
-  addCita$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(EventoActions.addCita),
-      switchMap(({ empresaId, eventoId, cita }) =>
-        this.citaService.crearCita(cita).pipe(
-          map((created: Cita) =>
-            EventoActions.addCita({
-              empresaId,
-              eventoId,
-              cita: created
-            })
-          ),
-          catchError(error =>
-            of(EventoActions.loadEventosFailure({ error }))
-          )
-        )
-      )
-    )
-  );
-
-  // ✏️ Actualizar cita
-  updateCita$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(EventoActions.updateCita),
-      switchMap(({ empresaId, eventoId, cita }) =>
-        this.citaService.actualizarCita(cita.id, cita).pipe(
-          map(updated =>
-            EventoActions.updateCita({
-              empresaId,
-              eventoId,
-              cita: updated
-            })
-          ),
-          catchError(error =>
-            of(EventoActions.loadEventosFailure({ error }))
-          )
-        )
-      )
-    )
-  );
-
-
-  // ❌ Eliminar cita
-deleteCita$ = createEffect(() =>
+ // ➕ Crear cita
+addCita$ = createEffect(() =>
   this.actions$.pipe(
-    ofType(EventoActions.deleteCita),
-    switchMap(({ empresaId, eventoId, citaId }) =>
-      this.citaService.eliminarCita(citaId).pipe( // 👈 asegúrate de tener este método en tu servicio
-        map(() =>
-          EventoActions.deleteCita({
+    ofType(EventoActions.addCita),
+    switchMap(({ empresaId, eventoId, cita }) =>
+      this.citaService.crearCita(cita).pipe(
+        map((created: Cita) =>
+          EventoActions.addCitaSuccess({
             empresaId,
             eventoId,
-            citaId
+            cita: created,
           })
         ),
         catchError(error =>
-          of(EventoActions.loadEventosFailure({ error }))
+          of(EventoActions.updateCitaFailure({ error }))
         )
       )
     )
   )
 );
 
+ updateCita$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(EventoActions.updateCita),
+    switchMap(({ empresaId, eventoId, cita }) =>
+      this.citaService.actualizarCita(cita.id, cita).pipe(
+        map(updated =>
+          EventoActions.updateCitaSuccess({
+            empresaId,
+            eventoId,
+            cita: updated
+          })
+        ),
+        catchError(error =>
+          of(EventoActions.updateCitaFailure({ error }))
+        )
+      )
+    )
+  )
+);
+
+
+  // ❌ Eliminar cita (usa deleteCitaSuccess para no recursar)
+  deleteCita$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(EventoActions.deleteCita),
+      switchMap(({ empresaId, eventoId, citaId }) =>
+        this.citaService.eliminarCita(citaId).pipe(
+          map(() =>
+            EventoActions.deleteCitaSuccess({
+              empresaId,
+              eventoId,
+              citaId,
+            })
+          ),
+          catchError(error =>
+            of(EventoActions.loadEventosFailure({ error }))
+          )
+        )
+      )
+    )
+  );
 }
