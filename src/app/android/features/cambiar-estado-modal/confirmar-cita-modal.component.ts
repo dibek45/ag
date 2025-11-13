@@ -28,14 +28,15 @@ export class ConfirmarCitaModalComponent {
   @Input() horaInicio!: string;
   @Input() horaFin!: string;
 
-  @Output() confirmarCita = new EventEmitter<void>();
-  @Output() cancelarCita = new EventEmitter<void>();
+ @Output() confirm = new EventEmitter<void>();
+@Output() cancel = new EventEmitter<void>();
+
 
   confirmar() {
-    this.confirmarCita.emit();
+    this.confirm.emit();
   }
 
   cancelar() {
-    this.cancelarCita.emit();
+    this.cancel.emit();
   }
 }

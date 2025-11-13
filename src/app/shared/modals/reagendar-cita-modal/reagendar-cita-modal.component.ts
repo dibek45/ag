@@ -12,6 +12,7 @@ export class ReagendarCitaModalComponent {
   @Input() visible = false;
   @Input() fecha?: Date;
   @Input() hora?: string;
+@Output() delete = new EventEmitter<void>();
 
   @Output() confirm = new EventEmitter<void>();
   @Output() cancel = new EventEmitter<void>();
@@ -23,4 +24,8 @@ export class ReagendarCitaModalComponent {
   onCancel() {
     this.cancel.emit();
   }
+
+  onDelete() {
+  this.delete.emit();
+}
 }

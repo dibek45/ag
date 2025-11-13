@@ -1,5 +1,9 @@
 <div class="overlay" *ngIf="visible">
   <div class="modal">
+
+    <!-- ❌ Botón X en la esquina -->
+    <button class="btn-close-x" (click)="onCancel()">✖</button>
+
     <h2>Reagendar cita</h2>
     <p>
       ¿Deseas reagendar tu cita para
@@ -9,7 +13,7 @@
 
     <div class="actions">
       <button class="btn-confirm" (click)="onConfirm()">Sí, reagendar</button>
-      <button class="btn-cancel" (click)="onCancel()">Cancelar</button>
+<button class="btn-delete" (click)="onDelete()">Eliminar</button>
     </div>
   </div>
 </div>

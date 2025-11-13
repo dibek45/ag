@@ -89,13 +89,19 @@
   [servicio]="servicioSeleccionado"
   [horaInicio]="horaSeleccionada"
   [horaFin]="horaFin"
-  (confirmarCita)="confirmarCita()"
-  (cancelarCita)="cancelarCita()">
+  (confirm)="confirmarCita()"
+  (cancel)="cancelarCita()">
 </app-confirmar-cita-modal>
+
+
+
 <app-reagendar-cita-modal
   [visible]="mostrarModalReagendar"
   [fecha]="fechaModal"
   [hora]="horaModal"
   (confirm)="onConfirmarReagendar()"
-  (cancel)="onCancelarReagendar()">
+  (cancel)="onCancelarReagendar()"
+  (delete)="onEliminarCita()"   
+>
 </app-reagendar-cita-modal>
+

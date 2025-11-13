@@ -4,11 +4,10 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Cita, Evento } from '../../../state/evento/evento.model';
 import { selectAllEventos } from '../../../state/evento/evento.selectors';
 import * as EventoActions from '../../../state/evento/evento.actions';
-import { ModalCitaComponent } from '../../../schedule/today-view-apartar/cita-modal/cita-modal.component';
 
 interface TimeSlot {
   time: string;
@@ -21,7 +20,7 @@ interface TimeSlot {
 @Component({
   selector: 'app-today-view-apartar',
   standalone: true,
-  imports: [CommonModule, FormsModule, ModalCitaComponent],
+  imports: [CommonModule, FormsModule],
   templateUrl: './today-view-apartar.component.html',
   styleUrls: ['./today-view-apartar.component.scss']
 })
@@ -91,18 +90,19 @@ export class TodayViewApartarComponent implements OnInit, OnChanges {
     });
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['inputDate'] && this.inputDate) {
-      const d = new Date(this.inputDate);
-      this.date = d.toISOString().split('T')[0];
-      this.currentDate = d;
-      this.setDiaSemana(d);
+ ngOnChanges(changes: SimpleChanges): void {
+  if (changes['inputDate'] && this.inputDate) {
+    const d = new Date(this.inputDate);
+    this.date = d.toISOString().split('T')[0];
+    this.currentDate = d;
+    this.setDiaSemana(d);
 
-      this.evento$?.subscribe(ev => {
-        if (ev) this.loadCitasAndSlots(ev);
-      }).unsubscribe();
-    }
+    // ✅ suscríbete una sola vez, sin unsubscribe manual
+    this.evento$?.pipe(take(1)).subscribe(ev => {
+      if (ev) this.loadCitasAndSlots(ev);
+    });
   }
+}
 
   // helpers
   private setDiaSemana(date: Date) {

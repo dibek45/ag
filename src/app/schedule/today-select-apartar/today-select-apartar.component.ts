@@ -49,6 +49,7 @@ horasDisponibles: {
   ) {}
 
   ngOnInit(): void {
+
     this.cargarClienteId();
     window.addEventListener('storage', () => this.cargarClienteId());
 
@@ -366,5 +367,34 @@ onConfirmarReagendar() {
 onCancelarReagendar() {
   this.mostrarModalReagendar = false;
 }
+
+onEliminarCita() {
+  alert("Eliminando cita...");
+  if (!this.evento || !this.clienteIdActual) return;
+
+  const cita = this.evento.citas.find(c => c.clienteId === this.clienteIdActual);
+  if (!cita) return;
+
+  this.mostrarModalReagendar = false;
+
+  this.citaService.eliminarCita(cita.id).subscribe({
+    next: () => {
+      this.store.dispatch(EventoActions.deleteCita({
+        empresaId: 1,
+        eventoId: this.evento!.id,
+        citaId: cita.id
+      }));
+
+      // Recalcular horas
+      this.horasDisponibles = this.citaService.generarHoras(
+        this.evento!,
+        this.servicioSeleccionado,
+        this.diasVisibles
+      );
+    },
+    error: () => alert("No se pudo eliminar la cita")
+  });
+}
+
 
 }

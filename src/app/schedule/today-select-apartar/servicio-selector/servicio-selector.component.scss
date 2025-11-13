@@ -41,19 +41,21 @@
 .servicio-btn {
   padding: 10px 16px;
   border: 1px solid #ccc;
-  border-radius: 20px;
-  background: #fff;
-  cursor: pointer;
+  border-radius: 20px;background-color: white;
+    color: #19191a;
+    border-color: #e1e1e1;  cursor: pointer;
   transition: all 0.2s ease;
   font-size: 0.95rem;
 
   &.active {
-    background: #fdf0ff;
-    color: #c2185b;
-    border-color: #f8bbd0;
+    background:#e7f3ff;
+    color: black;
+    
   }
 
   &:hover {
-    background: #f9f9f9;
-  }
+    background:      #e3f2fd;
+
+  
+}
 }

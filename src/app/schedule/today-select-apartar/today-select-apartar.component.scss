@@ -23,9 +23,10 @@
 }
 
 .header .nav-btn {
-  background: #ffe6ef;
-  color: #e91e63;
-  border: none;
+  background:white;
+  margin-top: 4px;
+  color: #101010;
+  border: 1px solid #abd6f6;
   border-radius: 8px;
   padding: 6px 10px;
   font-size: 1.2rem;
@@ -34,7 +35,7 @@
 }
 
 .header .nav-btn:hover {
-  background: #fdd0e0;
+  background: #9ccef4;
 }
 
 /* === BOTONES DE SERVICIO === */
@@ -58,7 +59,7 @@
 }
 
 .servicios button.active {
-  background: #1a73e8;
+  background: #91a5c0;
   color: white;
   border-color: #1a73e8;
   box-shadow: 0 3px 6px rgba(26, 115, 232, 0.3);
@@ -113,32 +114,12 @@
 }
 
 .horas button:hover:not(:disabled) {
-  background: #1a73e8;
+  background: #bbc2cc;
   color: white;
 }
 
-.horas button.ocupado {
-  text-decoration: line-through;
-  color: #aaa;
-  background: #fafafa;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
 
-button.mia {
-  background: #1a73e8;
-  color: #fff;
-  font-weight: 600;
-  box-shadow: 0 0 6px rgba(26, 115, 232, 0.4);
-}
 
-button.mia .edit-icon {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  font-size: 17px;
-  color: #fff;
-}
 
 /* === EFECTO TECNOLÓGICO SOLO EN EL BORDE === */
 @keyframes bordePulse {
@@ -256,29 +237,22 @@ button.mia .edit-icon {
 
 /* Ocupado por otros */
 .horas button.ocupado:not(.mia) {
-  background: #ffe6e6;
-  color: #c62828;
+  background: white;
+  color: grey;
   text-decoration: none;
   cursor: not-allowed;
   opacity: 0.8;
 }
 
-/* Ocupado genérico (fallback de legibilidad) */
-.horas button.ocupado {
-  text-decoration: line-through;
-  color: #aaa;
-  background: #fafafa;
-  cursor: not-allowed;
-  opacity: 0.6;
-}
+
 
 /* Mía (tu reserva) */
 .horas button.mia {
-  background: #1a73e8;
-  color: #fff;
+  background: #f9fcff;
+  color: grey;
   font-weight: 600;
   box-shadow: 0 0 6px rgba(26, 115, 232, 0.4);
-  border-color: #1a73e8;
+  border-color: grey;
 }
 
 /* Ícono de edición solo cuando es mía */
@@ -288,10 +262,10 @@ button.mia .edit-icon {
 .horas button.mia .edit-icon {
   display: block;
   position: absolute;
-  top: 0px;
+  top: 4px;
   right: 0px;
   font-size: 17px;
-  color: #fff;
+  color: grey;
 }
 
 /* Pulso solo en disponibles durante modo reagendar */
@@ -352,4 +326,36 @@ button.mia .edit-icon {
 @keyframes bounceY {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(8px); }
+}
+.horas button.ocupado {
+  background: #fff;
+  color: grey;
+  text-decoration: line-through; /* ✅ tachado visible */
+  font-weight: 500;
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+/* fuerza el tachado en ocupados */
+.horas button.ocupado .hora-label {
+  text-decoration: line-through !important;
+  color: #787777;
+}
+
+/* si algún estilo lo sigue bloqueando, dibuja la línea con un pseudo-elemento */
+.horas button.ocupado {
+  position: relative;
+  background: #fff;
+  opacity: .8;
+  cursor: not-allowed;
+}
+.horas button.ocupado::after {
+  content: "";
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 50%;
+  height: 1px;
+  background: #444242;
+  transform: translateY(-50%);
+  pointer-events: none;
 }
