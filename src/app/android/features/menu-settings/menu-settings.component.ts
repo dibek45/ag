@@ -1,6 +1,9 @@
 import { Component, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AppState } from '../../../state/app.state';
+import { Store } from '@ngrx/store';
+import * as AuthActions from '../../../state/auth/auth.actions';
 
 @Component({
   selector: 'app-menu-settings',
@@ -12,10 +15,14 @@ import { Router } from '@angular/router';
 export class MenuSettingsComponent {
 
     @Output() cerrar = new EventEmitter<void>();
+    agendaOpen = false;
+    finanzasOpen = false;
 
 
-  agendaOpen = false;
-finanzasOpen = false;
+  constructor(private router: Router,      private store: Store<AppState>,
+  ){
+
+  }
 
 toggleAgenda() {
   this.agendaOpen = !this.agendaOpen;
@@ -30,21 +37,17 @@ goToSorteo() {
 
 }
 
-  constructor(private router: Router){
 
-  }
 
   onCerrar() {
     this.cerrar.emit();
   }
 
 logout() {
-  // 🧹 Borra toda la sesión guardada
-  localStorage.removeItem('auth');
-  localStorage.removeItem('token');
-    this.cerrar.emit();
+  this.store.dispatch(AuthActions.logout());
 
-  // 🚪 Redirige al login
+  this.cerrar.emit();
 }
+
 
 }

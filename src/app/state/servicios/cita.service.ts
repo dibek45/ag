@@ -28,78 +28,116 @@
       console.log('📆 Días visibles generados:', dias.map(x => x.toLocaleDateString('en-CA')));
       return dias;
     }
+    private toLocalDateString(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
 
-    getEtiquetaDia(d: Date): string {
-      const hoy = new Date();
-      const mañana = new Date();
-      mañana.setDate(hoy.getDate() + 1);
-      const soloFecha = (x: Date) => x.toISOString().substring(0, 10);
 
-      if (soloFecha(d) === soloFecha(hoy)) return 'Hoy';
-      if (soloFecha(d) === soloFecha(mañana)) return 'Mañana';
-      return d.toLocaleDateString('es-MX', { weekday: 'long' }).replace(/^\w/, c => c.toUpperCase());
-    }
+
+
+
+   getEtiquetaDia(d: Date): string {
+  const hoy = new Date();
+  const mañana = new Date();
+  mañana.setDate(hoy.getDate() + 1);
+
+  const soloFecha = (x: Date) => this.toLocalDateString(x);
+
+  if (soloFecha(d) === soloFecha(hoy)) return 'Hoy';
+  if (soloFecha(d) === soloFecha(mañana)) return 'Mañana';
+
+  return d
+    .toLocaleDateString('es-MX', { weekday: 'long' })
+    .replace(/^\w/, c => c.toUpperCase());
+}
+
 
     generarHoras(
-      evento: Evento | undefined,
-      servicioSeleccionado: Servicio | undefined,
-      diasVisibles: Date[]
-    ): Record<string, { label: string; ocupada: boolean; clienteId?: number | null }[]> {
-      const horasDisponibles: Record<string, { label: string; ocupada: boolean; clienteId?: number | null }[]> = {};
-      const duracion = servicioSeleccionado?.duracionMin ?? 30;
-      const citas = evento?.citas ?? [];
+  evento: Evento | undefined,
+  servicioSeleccionado: Servicio | undefined,
+  diasVisibles: Date[]
+): Record<string, { label: string; ocupada: boolean; clienteId?: number | null }[]> {
 
-      for (const d of diasVisibles) {
-        const diaSemana = d.toLocaleDateString('es-MX', { weekday: 'long' }).toLowerCase();
-        const disponibilidad = evento?.admin?.disponibilidades
-          ?.find(disp => disp.dia_semana.toLowerCase() === diaSemana);
+  const horasDisponibles: Record<string, { label: string; ocupada: boolean; clienteId?: number | null }[]> = {};
+  const duracion = servicioSeleccionado?.duracionMin ?? 30;
+  const citas = evento?.citas ?? [];
+  const ahora = new Date();
 
-        const key = d.toLocaleDateString('en-CA');
-        const horas: { label: string; ocupada: boolean; clienteId?: number | null }[] = [];
+  for (const d of diasVisibles) {
+    const diaSemana = d.toLocaleDateString('es-MX', { weekday: 'long' }).toLowerCase();
 
-        if (!disponibilidad) {
-          horasDisponibles[key] = [];
-          continue;
-        }
+    const disponibilidad = evento?.admin?.disponibilidades
+      ?.find(disp => disp.dia_semana.toLowerCase() === diaSemana);
 
-        const horaInicio = parseInt(disponibilidad.hora_inicio.split(':')[0], 10);
-        const horaFin = parseInt(disponibilidad.hora_fin.split(':')[0], 10);
+    const key = d.toLocaleDateString('en-CA'); // yyyy-mm-dd
+    const horas: { label: string; ocupada: boolean; clienteId?: number | null }[] = [];
 
-        for (let i = horaInicio * 60; i < horaFin * 60; i += duracion) {
-          const h = Math.floor(i / 60);
-          const m = i % 60;
-          const label = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
-          let clienteId: number | null = null;
-
-          const ocupada = citas.some(cita => {
-            const citaFecha = (cita.fecha ?? '').split('T')[0];
-            if (!citaFecha || citaFecha !== key) return false;
-
-            const inicioCita = new Date(`${citaFecha}T${cita.hora}`);
-            const duracionCita =
-              cita.servicio?.duracionMin ??
-              evento?.servicios?.find(s => s.id === cita.servicioId)?.duracionMin ?? 30;
-            const finCita = new Date(inicioCita.getTime() + duracionCita * 60000);
-
-            const horaInicioSlot = new Date(`${key}T${label}:00`);
-            const horaFinSlot = new Date(horaInicioSlot.getTime() + duracion * 60000);
-            const seCruza = horaInicioSlot < finCita && horaFinSlot > inicioCita;
-
-            if (seCruza) clienteId = cita.clienteId ?? null;
-            return seCruza;
-          });
-
-          horas.push({ label, ocupada, clienteId });
-        }
-
-        horasDisponibles[key] = horas;
-      }
-
-      return horasDisponibles;
+    if (!disponibilidad) {
+      horasDisponibles[key] = [];
+      continue;
     }
 
- 
+    const horaInicio = parseInt(disponibilidad.hora_inicio.split(':')[0], 10);
+    const horaFin = parseInt(disponibilidad.hora_fin.split(':')[0], 10);
 
+    for (let i = horaInicio * 60; i < horaFin * 60; i += duracion) {
+      const h = Math.floor(i / 60);
+      const m = i % 60;
+      const label = `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`;
+      let clienteId: number | null = null;
+
+      const slotDateTime = new Date(`${key}T${label}:00`);
+
+      // =======================================================
+      // BLOQUEAR HORAS PASADAS
+      // =======================================================
+      if (slotDateTime < ahora) {
+        horas.push({
+          label,
+          ocupada: true,
+          clienteId: null
+        });
+        continue;
+      }
+
+      // =======================================================
+      // VERIFICAR SI LA HORA ESTÁ OCUPADA POR UNA CITA
+      // =======================================================
+      const ocupada = citas.some(cita => {
+        const citaFecha = (cita.fecha ?? '').split('T')[0];
+        if (!citaFecha || citaFecha !== key) 
+          return false;
+
+        const inicioCita = new Date(`${citaFecha}T${cita.hora}`);
+
+        const duracionCita =
+          cita.servicio?.duracionMin ??
+          evento?.servicios?.find(s => s.id === cita.servicioId)?.duracionMin ??
+          30;
+
+        const finCita = new Date(inicioCita.getTime() + duracionCita * 60000);
+
+        
+        const horaInicioSlot = slotDateTime;
+        const horaFinSlot = new Date(slotDateTime.getTime() + duracion * 60000);
+
+        const seCruza = horaInicioSlot < finCita && horaFinSlot > inicioCita;
+
+        if (seCruza) clienteId = cita.clienteId ?? null;
+        return seCruza;
+      });
+
+      horas.push({ label, ocupada, clienteId });
+    }
+
+    horasDisponibles[key] = horas;
+  }
+
+  return horasDisponibles;
+}
 
 
   crearCita(data: Partial<Cita>): Observable<Cita> {

@@ -13,14 +13,19 @@ declare const google: any;
   styleUrls: ['./login-agenda.component.scss']
 })
 export class LoginAgendaComponent implements AfterViewInit {
-  username = '';
-  password = '';
+
   loading = false;
 
-  // ✅ Outputs para comunicar al padre
+  // 🔹 Modos del login
+  mode: 'google' | 'phone' | 'verify' = 'google';
+
+  // 🔹 Teléfono
+  phone = '';
+  phoneCode = '';
+
   @Output() loginSuccess = new EventEmitter<{ 
     role: 'admin' | 'user'; 
-    provider?: 'google' | 'manual'; 
+    provider?: 'google' | 'phone'; 
     token?: string; 
     user?: any; 
   }>();
@@ -29,14 +34,13 @@ export class LoginAgendaComponent implements AfterViewInit {
 
   constructor(private authService: AuthService) {}
 
+  // ⭐ GOOGLE LOGIN
   ngAfterViewInit() {
-    // ✅ Inicializa Google Sign-In
     google.accounts.id.initialize({
       client_id: '123194794319-dgvffo1qkkf07csrqjim2hjfet5jqkiv.apps.googleusercontent.com',
       callback: (response: any) => this.handleGoogleLogin(response),
     });
 
-    // ✅ Renderiza botón
     google.accounts.id.renderButton(document.getElementById('googleBtn'), {
       theme: 'outline',
       size: 'large',
@@ -44,42 +48,18 @@ export class LoginAgendaComponent implements AfterViewInit {
     });
   }
 
-  // ✅ Login manual simple
-  submitLogin() {
-    if (!this.username.trim() || !this.password.trim()) {
-      alert('⚠️ Ingresa usuario y contraseña');
-      return;
-    }
-
-    const role: 'admin' | 'user' =
-      this.username.toLowerCase().includes('admin') ? 'admin' : 'user';
-
-    console.log(`✅ Login manual como ${role.toUpperCase()}`);
-
-    // 🔹 Simula login manual
-    this.loginSuccess.emit({
-      role,
-      provider: 'manual',
-      user: { name: this.username }
-    });
-  }
-
-  // ✅ Login con Google
   async handleGoogleLogin(response: any) {
     this.loading = true;
+
     try {
       const token = response.credential;
       const userData = this.decodeJwt(token);
 
-      console.log('✅ Usuario de Google:', userData);
+      const user = await this.authService.loginWithGoogle(
+        userData.email,
+        token
+      );
 
-     const user = await this.authService.loginWithGoogle(
-  userData.email,
-  token, // el JWT real
-);
-
-
-      // 🔹 Emitir evento al padre con los datos
       this.loginSuccess.emit({
         role: user.isAdmin ? 'admin' : 'user',
         provider: 'google',
@@ -87,16 +67,14 @@ export class LoginAgendaComponent implements AfterViewInit {
         user
       });
 
-      console.log('🎉 Sesión iniciada correctamente');
     } catch (error) {
-      console.error('❌ Error al iniciar sesión con Google:', error);
-      alert('Error al iniciar sesión. Intenta nuevamente.');
+      alert('Error con Google');
+      console.error(error);
     } finally {
       this.loading = false;
     }
   }
 
-  // 🔹 Decodifica el JWT de Google
   private decodeJwt(token: string): any {
     const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
     const jsonPayload = decodeURIComponent(
@@ -108,7 +86,60 @@ export class LoginAgendaComponent implements AfterViewInit {
     return JSON.parse(jsonPayload);
   }
 
-  // ✅ Cierra el modal
+  // ⭐ TELÉFONO → ENVIAR CÓDIGO
+async sendPhoneCode() {
+  if (!this.phone.trim()) {
+    alert('Ingresa tu número');
+    return;
+  }
+
+  try {
+    // 🔥 Ahora el backend manda el código por tu bot
+    await this.authService.sendPhoneCode(this.phone);
+
+    alert("Te enviamos un código por WhatsApp 📲");
+
+    this.mode = 'verify';
+
+  } catch (err) {
+    alert('Error enviando código');
+    console.error(err);
+  }
+}
+
+
+  // ⭐ TELÉFONO → VERIFICAR CÓDIGO
+  async verifyPhoneCode() {
+    if (!this.phoneCode.trim()) {
+      alert('Ingresa el código');
+      return;
+    }
+
+    try {
+      const res: any = await this.authService.verifyPhoneCode(
+        this.phone,
+        this.phoneCode
+      );
+
+      if (!res.success) {
+        alert(res.message);
+        return;
+      }
+
+      this.loginSuccess.emit({
+        role: res.user.isAdmin ? 'admin' : 'user',
+        provider: 'phone',
+        user: res.user
+      });
+
+      this.close();
+
+    } catch (err) {
+      alert('Error verificando código');
+      console.error(err);
+    }
+  }
+
   close() {
     this.closeModal.emit();
   }

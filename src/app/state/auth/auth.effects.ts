@@ -70,7 +70,10 @@ export class AuthEffects {
       this.actions$.pipe(
         ofType(AuthActions.logout),
         tap(() => {
-          localStorage.removeItem('auth');
+              localStorage.removeItem('auth');
+  localStorage.removeItem('token');
+          localStorage.removeItem('clienteId');  // 👈 importante
+
           console.log('🧹 Sesión eliminada de localStorage');
         })
       ),
@@ -92,4 +95,8 @@ export class AuthEffects {
       })
     )
   );
+
+
+
+  
 }

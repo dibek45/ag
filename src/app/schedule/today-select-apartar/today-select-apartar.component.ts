@@ -12,6 +12,7 @@ import { ConfirmarCitaModalComponent } from '../../android/features/cambiar-esta
 import { ActivatedRoute } from '@angular/router';
 import * as EventoActions from '../../state/evento/evento.actions';
 import { ReagendarCitaModalComponent } from '../../shared/modals/reagendar-cita-modal/reagendar-cita-modal.component';
+import { selectAuthState } from '../../state/auth/auth.selectors';
 
 @Component({
   selector: 'app-today-select-apartar',
@@ -47,51 +48,140 @@ horasDisponibles: {
     public citaService: CitaService,
     private route: ActivatedRoute
   ) {}
+ngOnInit(): void {
 
-  ngOnInit(): void {
+  // ======================================================
+  // 👂 1) Reaccionar a LOGIN / LOGOUT desde Redux (clave)
+  // ======================================================
+  this.store.select(selectAuthState).subscribe(auth => {
+    console.log("🔐 Auth cambió:", auth);
 
-    this.cargarClienteId();
-    window.addEventListener('storage', () => this.cargarClienteId());
+    // ------------------------
+    // 🟥 LOGOUT
+    // ------------------------
+if (!auth.isLoggedIn) {
+  console.log("🟥 Logout detectado — limpiando UI");
 
-    this.evento$ = this.store.select(selectAllEventos).pipe(map(evs => evs[0]));
+  // 🔥 Limpiar cliente en memoria
+  this.clienteIdActual = null;
 
-    this.evento$.subscribe(ev => {
-      if (!ev) return;
+  // 🔥 Cerrar modales
+  this.mostrarConfirmacion = false;
+  this.mostrarModalReagendar = false;
 
-      console.log('🎯 Evento recibido:', ev);
-      console.log('📅 Citas cargadas:', ev.citas);
+  // 🔥 Asegurar que servicio seleccionado NO cause render como logeado
+  this.servicioSeleccionado = undefined;
 
-      this.evento = ev;
-      this.diasVisibles = this.citaService.generarDias(this.indiceBase, ev);
+  // 🔄 Recargar días y horas como usuario NO logeado
+  if (this.evento) {
+    this.diasVisibles = this.citaService.generarDias(
+      this.indiceBase,
+      this.evento
+    );
 
-      if (!ev.citas || ev.citas.length === 0) {
-        console.log('⚠️ Evento sin citas, esperando...');
-        setTimeout(() => {
-          this.horasDisponibles = this.citaService.generarHoras(ev, this.servicioSeleccionado, this.diasVisibles);
-        }, 300);
-        return;
-      }
-
-      console.log('✅ Citas detectadas:', ev.citas);
-      this.horasDisponibles = this.citaService.generarHoras(ev, this.servicioSeleccionado, this.diasVisibles);
-    });
-
-    this.route.paramMap.subscribe(params => {
-      const dateStr = params.get('date');
-      if (dateStr) {
-        this.fechaSeleccionada = new Date(dateStr);
-        console.log('📅 Fecha seleccionada desde calendario:', this.fechaSeleccionada);
-      } else {
-        this.fechaSeleccionada = new Date();
-        console.log('📅 Usando fecha de hoy:', this.fechaSeleccionada);
-      }
-
-      if (this.evento && this.fechaSeleccionada) {
-        this.diasVisibles = this.citaService.generarDias(this.indiceBase, this.evento, this.fechaSeleccionada);
-        this.horasDisponibles = this.citaService.generarHoras(this.evento, this.servicioSeleccionado, this.diasVisibles);
-      }
-    });
+    // 💥 Pasar undefined (NO null)
+    this.horasDisponibles = this.citaService.generarHoras(
+      this.evento,
+      undefined,
+      this.diasVisibles
+    );
   }
+
+  // 🧽 Forzar repintado del grid (Angular cambia referencia)
+  this.horasDisponibles = { ...this.horasDisponibles };
+
+  return; // ← AHORA SÍ puedes usar return aquí
+}
+
+
+
+    // ------------------------
+    // 🟩 LOGIN
+    // ------------------------
+    this.cargarClienteId();
+
+    // 🔄 Recargar los días visibles
+    if (this.evento) {
+      this.diasVisibles = this.citaService.generarDias(
+        this.indiceBase,
+        this.evento
+      );
+    }
+
+    // 🔥 Recargar horas aunque NO elijas el servicio otra vez
+    if (this.evento && this.servicioSeleccionado) {
+      this.horasDisponibles = this.citaService.generarHoras(
+        this.evento,
+        this.servicioSeleccionado,
+        this.diasVisibles
+      );
+    }
+  });
+
+
+  // ======================================================
+  // 👂 2) Cambios en localStorage (otra pestaña)
+  // ======================================================
+  window.addEventListener('storage', () => this.cargarClienteId());
+
+
+  // ======================================================
+  // 📅 3) Cargar EVENTO desde Redux
+  // ======================================================
+  this.evento$ = this.store.select(selectAllEventos).pipe(
+    map(evs => evs[0])
+  );
+
+  this.evento$.subscribe(ev => {
+    if (!ev) return;
+
+    console.log('🎯 Evento recibido:', ev);
+    this.evento = ev;
+
+    // Generar días visibles
+    this.diasVisibles = this.citaService.generarDias(
+      this.indiceBase,
+      ev
+    );
+
+    // Generar las horas disponibles desde el inicio
+    this.horasDisponibles = this.citaService.generarHoras(
+      ev,
+      this.servicioSeleccionado,
+      this.diasVisibles
+    );
+  });
+
+
+  // ======================================================
+  // 📆 4) Cambiar fecha desde la URL
+  // ======================================================
+  this.route.paramMap.subscribe(params => {
+    const dateStr = params.get('date');
+
+    this.fechaSeleccionada = dateStr
+      ? new Date(dateStr)
+      : new Date();
+
+    if (this.evento && this.fechaSeleccionada) {
+      this.diasVisibles = this.citaService.generarDias(
+        this.indiceBase,
+        this.evento,
+        this.fechaSeleccionada
+      );
+
+      this.horasDisponibles = this.citaService.generarHoras(
+        this.evento,
+        this.servicioSeleccionado,
+        this.diasVisibles
+      );
+    }
+  });
+}
+
+
+
+
 
   seleccionarServicio(servicio: Servicio | null) {
     this.servicioSeleccionado = servicio || undefined;
@@ -112,30 +202,68 @@ horasDisponibles: {
       this.horasDisponibles = this.citaService.generarHoras(this.evento, this.servicioSeleccionado, this.diasVisibles);
     }
   }
+restarUnDia(fecha: Date): Date {
+  const f = new Date(fecha);
+  f.setDate(f.getDate() - 1);
+  return f;
+}
 
-  reservar(fecha: Date, hora: string) {
-    if (!this.evento || !this.servicioSeleccionado) {
-      alert('Selecciona un servicio primero.');
-      return;
-    }
+reservar(fecha: Date, hora: string) {
 
-    const duracion = this.servicioSeleccionado.duracionMin ?? 30;
-    const fechaUsar = this.fechaSeleccionada || fecha;
-    const inicio = new Date(`${fechaUsar.toISOString().substring(0, 10)}T${hora}`);
-    const fin = new Date(inicio.getTime() + duracion * 60000);
-
-    this.fechaSeleccionada = fecha;
-    this.horaSeleccionada = hora;
-    this.horaFin = fin.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
-    this.mostrarConfirmacion = true;
+  if (!this.validarFechaHora(fecha, hora)) {
+    alert("No puedes reservar en un horario que ya pasó.");
+    return;
   }
+
+  // Tu lógica normal
+  if (!this.evento || !this.servicioSeleccionado) {
+    alert('Selecciona un servicio primero.');
+    return;
+  }
+
+  const duracion = this.servicioSeleccionado.duracionMin ?? 30;
+
+  // Construcción normal de inicio/fin
+  const [h, m] = hora.split(':').map(Number);
+  const inicio = new Date(fecha.getFullYear(), fecha.getMonth(), fecha.getDate(), h, m, 0);
+  const fin = new Date(inicio.getTime() + duracion * 60000);
+
+  this.fechaSeleccionada = fecha;
+  this.horaSeleccionada = hora;
+  this.horaFin = fin.toLocaleTimeString('es-MX', { hour: '2-digit', minute: '2-digit' });
+
+  this.mostrarConfirmacion = true;
+}
+
+
+
+
+
+validarFechaHora(fechaSlot: Date, hora: string) {
+  console.log('--- VALIDACIÓN ---');
+
+  const fechaLocal = this.formatFechaLocal(fechaSlot);
+
+  // Construye fecha correcta sin UTC
+  const slot = new Date(`${fechaLocal}T${hora}`);
+
+  const ahora = new Date();
+
+  console.log('Fecha local:', fechaLocal);
+  console.log('Slot:', slot);
+  console.log('Ahora:', ahora);
+
+  return slot > ahora;
+}
+
+
+
 confirmarCita() {
   if (!this.evento || !this.servicioSeleccionado || !this.fechaSeleccionada || !this.horaSeleccionada) return;
+
   this.mostrarConfirmacion = false;
 
-  console.log('📤 Enviando clienteIdActual al servicio:', this.clienteIdActual);
-
-  this.citaService.crearCita({
+  const citaParcial = {
     nombreCliente: 'Cliente prueba',
     telefonoCliente: '0000000000',
     fecha: this.fechaSeleccionada.toISOString().substring(0, 10),
@@ -144,34 +272,18 @@ confirmarCita() {
     eventoId: this.evento.id,
     servicioId: this.servicioSeleccionado.id,
     clienteId: this.clienteIdActual ?? null,
-  }).subscribe({
-    next: (nuevaCita) => {
-      console.log('✅ Cita creada en backend:', nuevaCita);
+  } as any; // el backend rellenará id y demás
 
-      // 🧠 Actualiza el store local
-      this.store.dispatch(
-        EventoActions.addCita({
-          empresaId: 1,
-          eventoId: this.evento!.id,
-          cita: { ...nuevaCita, servicio: this.servicioSeleccionado },
-        })
-      );
-
-      // 🩵 Recalcula colores en tiempo real
-      this.horasDisponibles = this.citaService.generarHoras(
-        this.evento!,
-        this.servicioSeleccionado,
-        this.diasVisibles
-      );
-
-      console.log('🔄 Horas recalculadas tras guardar cita');
-    },
-    error: (err) => {
-      console.error('❌ Error al crear cita:', err);
-      alert('No se pudo crear la cita. Intenta de nuevo.');
-    },
-  });
+  this.store.dispatch(
+    EventoActions.addCita({
+      empresaId: 1,
+      eventoId: this.evento.id,
+      cita: citaParcial,
+    })
+  );
 }
+
+
 
 
 
@@ -235,6 +347,12 @@ esCitaDelCliente(fecha: Date, hora: string): boolean {
 }
 
 
+private formatFechaLocal(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
+}
 
 
 abrirEditarCita(fecha: Date, hora: string, event: MouseEvent) {
@@ -246,7 +364,7 @@ getClienteId(fecha: Date, hora: string): number | null {
   if (!this.evento?.citas) return null;
 
   // 🔹 Solo la parte "YYYY-MM-DD", sin new Date()
-  const fechaKey = fecha.toISOString().split('T')[0];
+  const fechaKey = this.formatFechaLocal(fecha);
   const cita = this.evento.citas.find(c => {
     const citaFecha = c.fecha.split('T')[0]; // evita new Date()
     const horaBase = c.hora.slice(0, 5);
@@ -257,27 +375,29 @@ getClienteId(fecha: Date, hora: string): number | null {
 }
 
 esMia(fecha: Date, hora: string): boolean {
-  if (!this.evento?.citas || !this.clienteIdActual) return false;
+  if (!this.evento?.citas) return false;
+
+  // 🔥 Si no hay cliente logueado → jamás puede ser “mía”
+  if (this.clienteIdActual === null || this.clienteIdActual === undefined) {
+    return false;
+  }
 
   const clienteId = this.clienteIdActual;
-  const fechaKey = fecha.toLocaleDateString('en-CA'); // ✅ sin UTC
+  const fechaKey = fecha.toLocaleDateString('en-CA');
 
   for (const cita of this.evento.citas) {
-    // 🔒 protección completa ante nulos
-    if (!cita || !cita.fecha || !cita.hora) continue;
+    if (!cita?.fecha || !cita?.hora) continue;
 
-    const citaFecha = (cita.fecha || '').split('T')[0];
-    if (!citaFecha || citaFecha !== fechaKey || cita.clienteId !== clienteId) continue;
+    const citaFecha = cita.fecha.split('T')[0];
+    if (citaFecha !== fechaKey) continue;
+
+    if (cita.clienteId !== clienteId) continue;
 
     const inicioCita = new Date(`${citaFecha}T${cita.hora}`);
-    const duracionCita =
-      cita.servicio?.duracionMin ??
-      this.evento?.servicios?.find(s => s.id === cita.servicioId)?.duracionMin ??
-      30;
-    const finCita = new Date(inicioCita.getTime() + duracionCita * 60000);
+    const duracion = cita.servicio?.duracionMin ?? 30;
+    const finCita = new Date(inicioCita.getTime() + duracion * 60000);
 
     const slotInicio = new Date(`${fechaKey}T${hora}:00`);
-    const slotFin = new Date(slotInicio.getTime() + 30 * 60000);
 
     if (slotInicio >= inicioCita && slotInicio < finCita) return true;
   }
@@ -290,16 +410,29 @@ esMia(fecha: Date, hora: string): boolean {
 
 
 
+
 cerrarModal() {
   this.mostrarModalReagendar = false;
 }
 
 confirmarReagendar() {
-  if (this.fechaModal && this.horaModal) {
-    this.reagendar(this.fechaModal, this.horaModal);
-    this.mostrarModalReagendar = false;
+  if (!this.fechaModal || !this.horaModal) return;
+
+  const hoy = new Date();
+  hoy.setHours(0,0,0,0);
+
+  const fechaClean = new Date(this.fechaModal);
+  fechaClean.setHours(0,0,0,0);
+
+  if (fechaClean < hoy) {
+    console.log("⛔ No puedes reagendar a un día pasado");
+    return;
   }
+
+  this.reagendar(this.fechaModal, this.horaModal);
+  this.mostrarModalReagendar = false;
 }
+
 
 cancelarReagendar() {
   this.modoReagendar = false;
@@ -344,18 +477,46 @@ reagendar(fecha: Date, hora: string) {
 
 
 abrirModalCita(fecha: Date, hora: string) {
-  if (!this.esMia(fecha, hora)) return;
+  const ahora = new Date();
 
-  // Abre el modal visualmente
+  // Normalizar
+  const hoy = new Date();
+  hoy.setHours(0,0,0,0);
+
+  const fechaClean = new Date(fecha);
+  fechaClean.setHours(0,0,0,0);
+
+  // 1) 🚫 No permitir abrir modal en días pasados
+  if (fechaClean < hoy) {
+    console.log("⛔ No se puede abrir modal para citas pasadas (día).");
+    return;
+  }
+
+  // 2) 🚫 No permitir abrir modal en horas pasadas del MISMO día
+  const inicioSlot = new Date(`${fechaClean.toISOString().split("T")[0]}T${hora}`);
+  if (fechaClean.getTime() === hoy.getTime() && inicioSlot < ahora) {
+    console.log("⛔ No se puede abrir modal para una hora que ya pasó.");
+    return;
+  }
+
+  // 3) Solo abrir si la cita es del cliente
+  if (!this.esMia(fecha, hora)) {
+    console.log("⛔ La cita no es tuya. No se abre modal.");
+    return;
+  }
+
+  // 4) Abrir modal si pasa validaciones
   this.fechaModal = fecha;
   this.horaModal = hora;
   this.mostrarModalReagendar = true;
 }
 
+
+
 onConfirmarReagendar() {
   // Activa el modo reagendar con parpadeo
   this.modoReagendar = true;
-  this.diaSeleccionado = this.fechaModal?.toISOString().split('T')[0];
+  this.diaSeleccionado = this.formatFechaLocal(this.fechaModal!);
   this.mostrarModalReagendar = false;
 
   // 🟩 Aquí ya entra el modo visual verde/parpadeo

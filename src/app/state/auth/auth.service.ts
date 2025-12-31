@@ -73,4 +73,74 @@ console.log('🗂️ clienteId guardado por separado:', clienteId);
 }
 
 
+
+
+
+async sendPhoneCode(phone: string) {
+  const query = `
+    mutation SendPhoneCode($phone: String!) {
+      sendPhoneCode(phone: $phone) {
+        whatsappLink
+      }
+    }
+  `;
+  return firstValueFrom(
+    this.http.post(this.apiUrl, { query, variables: { phone } })
+  ).then((r: any) => r.data.sendPhoneCode);
+}
+
+async verifyPhoneCode(phone: string, code: string) {
+  const query = `
+    mutation VerifyPhoneCode($phone: String!, $code: String!) {
+      verifyPhoneCode(phone: $phone, code: $code) {
+        success
+        message
+        user {
+          id
+          name
+          username
+          isAdmin
+        }
+      }
+    }
+  `;
+
+  const res: any = await firstValueFrom(
+    this.http.post(this.apiUrl, { query, variables: { phone, code } })
+  );
+
+  const data = res.data.verifyPhoneCode;
+  if (!data.success || !data.user) {
+    console.warn("⚠️ Código incorrecto o usuario no válido:", data);
+    return data;
+  }
+
+  const user = data.user;
+  const clienteId = Number(user.id);
+
+  let adminId: number | null = null;
+  const empresaData = localStorage.getItem('empresa');
+  if (empresaData) {
+    const empresa = JSON.parse(empresaData);
+    adminId = empresa.id ?? null;
+  }
+
+  // 🎯 MISMO FORMATO QUE LOGIN GOOGLE
+  const authData = {
+    role: user.isAdmin ? 'admin' : 'user',
+    adminId,
+    clienteId,
+    token: null,
+    isLoggedIn: true,
+  };
+
+  localStorage.setItem('clienteId', String(clienteId));
+  localStorage.setItem('auth', JSON.stringify(authData));
+
+  console.log('📲 Login exitoso por teléfono:', authData);
+
+  return data;
+}
+
+
 }

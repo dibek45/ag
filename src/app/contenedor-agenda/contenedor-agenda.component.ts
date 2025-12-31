@@ -23,7 +23,7 @@ import { LoginAgendaComponent } from './login-agenda/login-agenda.component';
 import * as AuthActions from '../state/auth/auth.actions';
 export interface LoginEvent {
   role: 'admin' | 'user';
-  provider?: 'google' | 'manual';
+provider?: 'google' | 'manual' | 'phone';
   token?: string;
   clienteId?: number;
   user?: {

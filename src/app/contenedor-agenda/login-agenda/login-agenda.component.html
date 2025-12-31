@@ -2,40 +2,41 @@
   <div class="modal">
     <h2 class="modal-title">Iniciar Sesión</h2>
 
-    <form (ngSubmit)="submitLogin()">
-      <!-- Usuario -->
+    <!-- TABS -->
+    <div class="login-tabs">
+      <button (click)="mode = 'google'" [class.active]="mode === 'google'">Google</button>
+      <button (click)="mode = 'phone'" [class.active]="mode === 'phone'">Teléfono</button>
+    </div>
+
+    <!-- GOOGLE -->
+<div 
+  [class.hidden]="mode !== 'google'" 
+  style="display:flex; justify-content:center;"
+>
+  <div id="googleBtn"></div>
+</div>
+
+
+    <!-- TELÉFONO: INGRESAR NÚMERO -->
+    <div *ngIf="mode === 'phone'">
       <div class="input-group">
-        <span class="icon">👤</span>
-        <input
-          type="text"
-          placeholder="Usuario o correo"
-          [(ngModel)]="username"
-          name="username"
-          required
-        />
+        <span class="icon">📱</span>
+        <input type="text" placeholder="Número de teléfono" [(ngModel)]="phone" />
       </div>
 
-      <!-- Contraseña -->
+      <button class="btn primary" (click)="sendPhoneCode()">Enviar código por WhatsApp</button>
+    </div>
+
+    <!-- TELÉFONO: CONFIRMAR CÓDIGO -->
+    <div *ngIf="mode === 'verify'">
       <div class="input-group">
-        <span class="icon">🔒</span>
-        <input
-          type="password"
-          placeholder="Contraseña"
-          [(ngModel)]="password"
-          name="password"
-          required
-        />
+        <span class="icon">🔢</span>
+        <input type="text" placeholder="Código recibido" [(ngModel)]="phoneCode" />
       </div>
 
-      <div class="actions">
-        <button type="submit" class="btn primary">Entrar</button>
-        <button type="button" class="btn secondary" (click)="close()">Cerrar</button>
-      </div>
-    </form>
+      <button class="btn primary" (click)="verifyPhoneCode()">Confirmar</button>
+    </div>
 
-    <hr style="margin: 1.5rem 0;" />
-
-    <!-- 🔹 Botón de Google -->
-    <div id="googleBtn" style="display: flex; justify-content: center;"></div>
+    <button class="btn secondary" (click)="close()">Cerrar</button>
   </div>
 </div>

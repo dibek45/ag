@@ -1,3 +1,4 @@
+/* 🟦 Fondo */
 .modal-overlay {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -9,113 +10,132 @@
   animation: fadeInBg 0.3s ease;
 }
 
+/* 🟦 Caja del modal */
 .modal {
   background: #fff;
   border-radius: 1rem;
   padding: 2rem;
   width: 90%;
-  max-width: 400px;
+  max-width: 420px;
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
   animation: fadeIn 0.35s ease;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
 }
 
+/* 🟦 Título */
 .modal-title {
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   margin-bottom: 1.5rem;
   font-weight: 600;
   color: #111;
 }
 
+/* 🟦 Tabs */
+.login-tabs {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1.4rem;
+  background: #f4f4f4;
+  border-radius: 0.7rem;
+  padding: 0.3rem;
+}
+
+.login-tabs button {
+  flex: 1;
+  padding: 0.55rem;
+  font-size: 0.95rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  transition: 0.2s ease;
+}
+
+.login-tabs button.active {
+  background: #3b82f6;
+  color: #fff;
+}
+
+/* 🟦 Input Group */
 .input-group {
   display: flex;
   align-items: center;
   background: #f4f4f4;
   padding: 0.6rem 0.8rem;
   border-radius: 0.6rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.2rem;
   border: 1px solid transparent;
   transition: 0.2s ease;
-
-  &:focus-within {
-    border-color: #3b82f6;
-    background: #fff;
-  }
-
-  .icon {
-    margin-right: 0.5rem;
-    font-size: 1.2rem;
-    color: #555;
-  }
-
-  input {
-    flex: 1;
-    border: none;
-    background: transparent;
-    outline: none;
-    font-size: 1rem;
-    color: #111;
-
-    &::placeholder {
-      color: #aaa;
-    }
-  }
 }
 
-.actions {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 1rem;
-
-  .btn {
-    padding: 0.7rem 1.4rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    font-size: 0.95rem;
-    transition: 0.2s ease;
-
-    &.primary {
-      background: #3b82f6;
-      color: #fff;
-      &:hover {
-        background: #2563eb;
-      }
-    }
-
-    &.secondary {
-      background: #e5e7eb;
-      color: #111;
-      &:hover {
-        background: #d1d5db;
-      }
-    }
-  }
+.input-group:focus-within {
+  border-color: #3b82f6;
+  background: #fff;
 }
 
-hr {
+.input-group .icon {
+  margin-right: 0.6rem;
+  font-size: 1.3rem;
+  color: #666;
+}
+
+.input-group input {
+  flex: 1;
   border: none;
-  border-top: 1px solid #e5e7eb;
+  background: transparent;
+  outline: none;
+  font-size: 1rem;
+  color: #111;
 }
 
+.input-group input::placeholder {
+  color: #aaa;
+}
+
+/* 🟦 Botones */
+.btn {
+  width: 100%;
+  padding: 0.75rem;
+  margin-top: 0.4rem;
+  border-radius: 0.6rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: 0.2s ease;
+}
+
+.btn.primary {
+  background: #3b82f6;
+  color: white;
+}
+
+.btn.primary:hover {
+  background: #2563eb;
+}
+
+.btn.secondary {
+  background: #e5e7eb;
+  color: #111;
+  margin-top: 1rem;
+}
+
+.btn.secondary:hover {
+  background: #d1d5db;
+}
+
+/* 🟦 Animaciones */
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInBg {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+.hidden {
+  display: none !important;
 }
